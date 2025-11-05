@@ -68,11 +68,13 @@
     - account: songchangxia_2026
     - account: liudan121212
     - account: hw_008615868109980_01
+    - account: hw_mengkehua_huawei.com_01
 - sig_name: TSC
   meeting_creators:
     - account: songchangxia_2026
     - account: liudan121212
     - account: hw_008615868109980_01
+    - account：cann_cm
 - sig_name: sig-hccl
   meeting_creators:
     - account: songchangxia_2026
@@ -87,3 +89,6 @@
     - account: songchangxia_2026
     - account: liudan121212
     - account: hw_yanyefeng_huawei.com_01
+-- sig_name: SIG-QA
+  meeting_creators:
+    - account: hw_mengkehua_huawei.com_01
