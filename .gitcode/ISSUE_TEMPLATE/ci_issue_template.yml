@@ -1,0 +1,51 @@
+name: 门禁/版本集成申请反馈
+description: 如果你贡献的代码仓需要集成持续构建流程，请使用此模板。流程集成指导可查看：https://gitcode.com/community/blob/master/contributor/repository/ci-guide.md
+title: "[代码仓流程集成]: "
+labels: ["CI，Continuous Integration"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你的反馈，请根据提示补充以下信息，以便我们能快速准确的部署代码仓门禁/版本集成能力
+  - type: input
+    attributes:
+      label: 代码仓地址
+      description: 需要配置门禁/版本流程的代码仓地址
+      placeholder: 请输入代码仓地址，例如：https://gitcode.com/cann/<repo_name>.git
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: 代码分支
+      description: 代码主分支
+      placeholder: 请输入主分支名称，如：main
+    validations:
+      required: true    
+  - type: input
+    attributes:
+      label: 代码编译指导
+      description: 请给出工程的编译脚本及运行方式
+      placeholder: 编译的脚本及运行方式，以ops-math仓编译为例，编译命令：bash build.sh --pkg
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: UT运行指导
+      description: 请给出UT代码运行的脚本及调用方式
+      placeholder: UT脚本及运行方式，以ops-math仓运行UT为例，UT执行命令：bash build.sh  -u --ophost
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: 门禁触发命令
+      description: 命令内容支持定制，默认在PR评论中使用/compile触发门禁
+      placeholder: /compile
+    validations:
+      required: false
+  - type: input
+    attributes:
+      label: CI工程师信息
+      description: 请反馈CI工程师gitcodeid及邮箱，gitcodeid用于配置过程中问题交流，邮箱用于接收流水线执行结果信息
+      placeholder: zhangshan;zhangshan@xxx.com
+    validations:
+      required: true
