@@ -5,3 +5,4 @@
 |CLA|https://clasign.osinfra.cn/sign/68cbd4a3dbabc050b436cdd4|[cla使用指南.md](./cla/cla使用指南.md)|
 |机器人服务|NA|[robot使用指南.md](./robot/robot使用指南.md)|
 |会议服务|https://meeting.osinfra.cn/cann|NA|
+|漏洞管理|NA|[漏洞管理使用指南.md](./cve-manager/manual.md)|
