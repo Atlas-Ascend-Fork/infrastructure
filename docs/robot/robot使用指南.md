@@ -14,7 +14,7 @@ CANN社区中所有项目均由Bot维护，这意味着开发人员可以在每�
 | /compile | compile | Pull Request | 触发编译CodeArts流水线。编译通过后，该Pull Request会被打上ci-pipeline-passed的标签。若编译失败，该Pull Request会被打上ci-pipeline-failed的标签。 | 所有开发者 | 所有仓库 |
 | /lgtm | /lgtm | Pull Request | 添加用于代表代码已经评审过的标签 lgtm。 | 仓库所属sig组的reviewers | 所有仓库 |
 | /lgtm cancel | /lgtm cancel | Pull Request | 移除用于代表代码已经评审过的标签 lgtm。 | 仓库所属sig组的reviewers | 所有仓库 |
-| /approve | /approve | Pull Request | 添加用于代表committers同意合并的标签 approved。 | 仓库所属sig组的committers | 所有仓库 |
+| /approve | /approve | Pull Request | 添加用于代表committers同意合并的标签 approved, 默认采取squash合并方式来合并PR。 | 仓库所属sig组的committers | 所有仓库 |
 | /approve cancel | /approve cancel | Pull Request | 移除用于代表committers同意合并的标签 approved。 | 仓库所属sig组的committers | 所有仓库 |
 | /check-pr | /check-pr | Pull Request | 检查Pull Request中的标签是否满足条件，如果满足条件，则合并Pull Request。 | 任何人都可以在Pull Request上触发此命令 | 所有仓库 |
 | /merge | /merge | Pull Request | 添加用于代表branch_keeper同意合并的标签 keeper_approved。 | 仓库对应分支的branch_keeper | 所有仓库 |
