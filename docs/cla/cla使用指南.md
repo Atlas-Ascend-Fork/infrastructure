@@ -1,12 +1,23 @@
-# CLA 签署指南
+# CLA使用指南
 
 根据你的身份，选择对应的操作流程，这是最快完成签署的方法。
 
+## [👉 CANN社区CLA签署首页](https://clasign.osinfra.cn/sign/68cbd4a3dbabc050b436cdd4)
+
 ![alt text](images/image-2.png)
+
+## [👉 我是个人开发者，为自己做贡献](#personal-contributor)
+
+## [👉 我是企业员工，代表公司做贡献](#employee-contributor)
+
+## [👉 我是企业代表，需要为公司签署](#company-representative)
 
 ---
 
+<a id="personal-contributor"></a>
 ## 🤔 我是个人开发者，为自己做贡献
+
+## [👉 签署个人CLA](https://clasign.osinfra.cn/sign-cla/68cbd4a3dbabc050b436cdd4/individual)
 
 ![alt text](images/image-3.png)
 
@@ -43,7 +54,11 @@
 
 ---
 
+<a id="employee-contributor"></a>
 ## 🏢 我是企业员工，代表公司做贡献
+
+## [👉 法人贡献者登记](https://clasign.osinfra.cn/sign-cla/68cbd4a3dbabc050b436cdd4/employee)
+
 ![alt text](images/image-4.png)
 
 **注意：如果您是学校师生，请根据您的贡献身份选择对应流程：**
@@ -72,7 +87,10 @@
 
 ---
 
+<a id="company-representative"></a>
 ## 🏛️ 我是企业代表，需要为公司签署 CLA
+
+## [👉 签署法人CLA](https://clasign.osinfra.cn/sign-cla/68cbd4a3dbabc050b436cdd4/corporation)
 
 ![alt text](images/image-5.png) 
 
@@ -95,13 +113,16 @@
 
 ![alt text](images/image-7.png)
 
-3.  **设置公司的审批人员（至关重要！超级管理员和普通管理员不能是同一个账号）**
+1.  **设置公司的审批人员（至关重要！超级管理员和普通管理员不能是同一个账号）**
     - 超级管理员在签署页面点击 企业管理员 按钮进入到超级管理员登录页面，使用之前获得的**超级管理员**帐号的用户名及初始密码进行登录（记得更新密码）
     - 作为超级管理员，您的首要任务是：**立即为公司创建几位「普通管理员」**（例如各研发团队的负责人），将 **审批员工申请** 的日常工作分配给他们，以确保公司内部的 CLA 流程顺畅
     - 普通管理员也会收到一封包含了**普通管理员**帐号的用户名及初始密码的邮件，其登录流程与超级管理员一致，
     - 之后，你就可以让你的员工进行法人贡献者登记了，然后让普通管理员进行审批了。
 
-4. **点击企业管理员，使用超级管理员或者普通管理员账号进行登录**
+2. **点击企业管理员，使用超级管理员或者普通管理员账号进行登录**
+
+## [👉 企业管理员](https://clasign.osinfra.cn/corporation-manager-login/68cbd4a3dbabc050b436cdd4)
+
 
 ![alt text](images/image-8.png)
 
@@ -121,9 +142,9 @@
 
 ## ✅ CLA 签署状态验证（个人以及企业员工）
 
-签署完成后，可以通过以下链接进行验证（将 `:community-link-id` 和邮箱替换为你签署 CLA 时的实际信息）：
+签署完成后，可以通过以下链接进行验证（将邮箱替换为你签署 CLA 时的实际信息）：
 
-https://clasign.osinfra.cn/api/v1/individual-signing/:community-link-id?email=your-email@example.com
+https://clasign.osinfra.cn/api/v1/individual-signing/68cbd4a3dbabc050b436cdd4?email=your-email@example.com
 
 
 **成功标志**：返回结果中必须包含两个 `true` 值
@@ -319,3 +340,18 @@ git push --force
 
 #### 5. 问：收不到来自社区发来的签署cla的邮件或找不到管理员怎么办？
 **答： 首先检查邮箱的垃圾邮件文件夹。如果仍无法找到，请在公司的技术交流群或直接向你的上级询问："我们公司开源 CLA 的审批负责人是谁？"**
+
+
+## 备注
+
+在使用过程中，如遇到任何问题或需要协助，欢迎通过以下方式联系我们：
+
+### 问题反馈渠道
+
+| 方式 | 说明 | 响应时间 |
+|------|------|----------|
+| 📝 **提交ISSUE** | 通过项目仓库的Issue板块反馈问题 | 1-5个工作日 |
+| 👥 **联系基础设施SIG** | 直接联系基础设施特别兴趣小组获取专业技术支持 | 及时响应 |
+| 💬 **社区讨论** | 参与相关技术社区讨论，与其他开发者交流经验 | 实时交流 |
+
+我们将竭诚为您提供帮助，确保使用过程顺畅无忧。
