@@ -25,7 +25,7 @@ CANN社区中所有项目均由Bot维护，这意味着开发人员可以在每�
 | /sig ** | /sig AI | Pull Request <br> Issue | 添加标签 sig/AI。 | 仓库管理员可以直接添加；其他人可以使用评论添加标签，如kind/AI，前提是仓库中必须存在此标签，否则添加不上 | 所有仓库 |
 | /remove-sig ** | /remove-sig AI | Pull Request <br> Issue | 移除标签 sig/AI。 | 所有人 | 所有仓库 |
 | /assign [[@]...] | /assign <br> /assign @cann-robot | Issue | 为Issue指派一位负责人。 | 所有人 | 所有仓库 |
-| /unassign [[@]...] | /assign <br> /assign @cann-robot | Issue | 取消Issue指派的负责人。 | 所有人 | 所有仓库 |
+| /unassign [[@]...] | /unassign <br> /unassign @cann-robot | Issue | 取消Issue指派的负责人。 | 所有人 | 所有仓库 |
 
 
 ## 🔍 FAQ
