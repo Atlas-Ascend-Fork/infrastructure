@@ -49,11 +49,11 @@ CANN社区SIG maintainer、committer拥有创建会议权限，您需要登录[�
 
 + 会议名称： 这场会议的主题
 + 所属SIG组：选择所需要开会议的SIG组
-+ 会议时间：选择对应的会议时间
++ 会议时间：选择对应的会议时间，会议时间包含单次会议与周期会议
 + 会议平台：社区的会议能力由第三方提供的，目前只支持WeLink会议（蓝版）
   + WeLink会议：详细内容见：https://www.huaweicloud.com/product/welink-download.html
 + 会议内容：请输入会议的议题或者大概内容，详细的议题内容后续可以在etherpad里面填写。
-+ 会议录制：开启此选项，会议会自动录制，会议结束后会自动保存在第三方会议平台中；如果后期增加会议回访，会在官网中显示已开启录制的视频。
++ 会议录制：开启此选项，会议会自动录制，会议结束后会自动保存在第三方会议平台中，一天之内会议回访会被同步上传至官网，在官网中显示已开启录制的视频与语音转文字结果。
 + 邮件地址：填写需要通知参加会议的核心人员和邮件列表，以“；”间隔，最多填写20个邮箱地址。发送成功后可以在对应的邮件列表归档中查看此通知邮件，如果没有则存储拦截情况，请联系基础设施 [chenglang11@huawei.com](mailto:chenglang11@huawei.com)处理；如果联系不上，请联系infrastructure SIG maintainer或者在CANN/infrastructure仓提交issue。
 
 创建的会议会在会议平台上进行公开。
@@ -80,6 +80,22 @@ CANN社区SIG maintainer、committer拥有创建会议权限，您需要登录[�
 2. 点击【取消会议】并在弹窗中【确认取消】
 
 ![](figures/meeting-cancel.png)
+
+### 5.会议回放
+
+在创建会议时可以勾选会议录制，勾选后会议内容会被录制并上传至平台。
+用户可以在官网日历处查看智能回放的内容。
+
+![](figures/page_recording_config.png)
+
+会议结束后一天内，会议视频会被处理并上传，可以在会议日历中查看回放链接。
+
+![](figures/meeting_recording_link.png)
+
+会议回放提供语音转文字功能。
+智能回放暂不支持人工二次编辑内容。
+
+![](figures/meeting_recording_page.png)
 
 
 ## 三、FAQ
