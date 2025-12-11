@@ -12,8 +12,8 @@ CANN社区中所有项目均由Bot维护，这意味着开发人员可以在每�
 | /check-cla | 	/check-cla | Pull Request | 强制重新检查Pull Request的CLA状态。如果Pull Request的提交者已经签署了CLA协议，则cann-cla/yes标签将会被添加到Pull Request中；如果没有，则标签cann-cla/no将被添加到Pull Request中。 | 所有开发者 | 所有仓库 |
 | /cla cancel |  cancel	/cla cancel | Pull Request | 强制删除cann-cla/yes标签。 | 仓库管理员 | 所有仓库 |
 | /compile | compile | Pull Request | 触发编译CodeArts流水线。编译通过后，该Pull Request会被打上ci-pipeline-passed的标签。若编译失败，该Pull Request会被打上ci-pipeline-failed的标签。 | 所有开发者 | 所有仓库 |
-| /lgtm | /lgtm | Pull Request | 添加用于代表代码已经评审过的标签 lgtm。 | 仓库所属sig组的reviewers | 所有仓库 |
-| /lgtm cancel | /lgtm cancel | Pull Request | 移除用于代表代码已经评审过的标签 lgtm。 | 仓库所属sig组的reviewers | 所有仓库 |
+| /lgtm | /lgtm | Pull Request | 添加用于代表代码已经评审过的标签 lgtm。 | 仓库所属sig组的committer | 所有仓库 |
+| /lgtm cancel | /lgtm cancel | Pull Request | 移除用于代表代码已经评审过的标签 lgtm。 | 仓库所属sig组的committer | 所有仓库 |
 | /approve | /approve | Pull Request | 添加用于代表committers同意合并的标签 approved, 默认采取squash合并方式来合并PR。 | 仓库所属sig组的committers | 所有仓库 |
 | /approve cancel | /approve cancel | Pull Request | 移除用于代表committers同意合并的标签 approved。 | 仓库所属sig组的committers | 所有仓库 |
 | /check-pr | /check-pr | Pull Request | 检查Pull Request中的标签是否满足条件，如果满足条件，则合并Pull Request。 | 任何人都可以在Pull Request上触发此命令 | 所有仓库 |
@@ -35,13 +35,13 @@ CANN社区中所有项目均由Bot维护，这意味着开发人员可以在每�
 请参考[cla使用指南](../cla/cla使用指南.md)
 
 #### 2.  **请问PR评论/lgtm和/approve后，没有自动打上lgtm和approved标签，需要怎么处理？**
-1. 首先请查看确认评论/lgtm和approve的人是否是对应模块的reviewer和committer，完整的reviewer和committer名单可以在PR的第一条评论点击对应的链接查看，如下图所示：
+1. 首先请查看确认评论/lgtm和approve的人是否是对应模块的maintainer和committer，完整的maintainer和committer名单可以在PR的第一条评论点击对应的链接查看，如下图所示：
     
     ![alt text](images/image-12.png)
 
     **注意：** 需要仔细对比评论人的gitcode-id 和 sig-info.yaml里填写的gitcode-id，并且id区分大小写；若id不一致，会导致无法打上对应的标签，请提PR修改sig-info.yaml里对应的id，PR合入10min后权限生效，权限生效后，重新给PR评论/lgtm和/approve即可
 
-2. 然后检查评论各模块/lgtm和/approve数量是否足够，一般情况下PR涉及的每个模块都需要1个reviewer评论/lgtm和1个committer评论/approve才能打上lgtm标签和approved标签；
+2. 然后检查评论各模块/lgtm和/approve数量是否足够，一般情况下PR涉及的每个模块都需要1个committer/maintainer评论/lgtm和1个committer评论/approve才能打上lgtm标签和approved标签；
 
 3. 对比检查评论/lgtm和/approve的时间和PR最新的一个commit的时间，如果评论时间早于commit的时间，则评论无效，如下图所示：
 

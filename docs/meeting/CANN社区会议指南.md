@@ -14,6 +14,7 @@ CANN社区在[社区会议平台](https://meeting.osinfra.cn/cann) 提供参与�
 1. 在日历中选中会议
 2. 点击会议连接
 3. 选择浏览器入会或者客户端入会（当前截图演示浏览器入会）
+
 ![](figures/meeting-join.png)
 
 
@@ -39,6 +40,7 @@ CANN社区SIG maintainer、committer拥有创建会议权限，您需要登录[�
 + 注意：<font color="red">权限每隔1小时刷新一次，配置后请耐心等待</font>
 
 当您拥有定会权限时，界面如下图所示：
+
 ![](figures/meeting-with-create.png)
 
 ### 2.创建会议
