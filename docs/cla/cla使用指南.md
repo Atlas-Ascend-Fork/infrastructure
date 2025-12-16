@@ -1,29 +1,5 @@
 # CLA使用指南
 
-## 目录
-
-### [👉 CLA签署流程图](#cla-signing-flowchart)
-
-### [👉 CANN社区CLA签署首页](#cann-homepage)
-
-### [👉 我是个人开发者，为自己做贡献](#personal-contributor)
-
-### [👉 我是企业员工，代表公司做贡献](#employee-contributor)
-
-### [👉 我是企业代表，需要为公司签署](#company-representative)
-
-### [✅ CLA 签署状态验证（个人以及企业员工）](#cla-signing-status-verification)
-
-### [⚠️ 重要注意事项](#important-notes)
-
-### [🔧 Git 邮箱配置](#git-email-configuration)
-
-### [❓ FAQ](#faq)
-
-### [💡 备注](#remark)
-
----
-
 <a id="cla-signing-flowchart"></a>
 ## 👉 CLA签署流程图
 
@@ -111,7 +87,7 @@
 ---
 
 <a id="company-representative"></a>
-### 🏛️ 我是企业代表，需要为公司签署 CLA
+## 🏛️ 我是企业代表，需要为公司签署 CLA
 
 ### [👉 签署法人CLA](https://clasign.osinfra.cn/sign-cla/68cbd4a3dbabc050b436cdd4/corporation)
 
@@ -144,6 +120,10 @@
 
 4. **点击企业管理员，使用超级管理员或者普通管理员账号进行登录**
 
+---
+<a id="company-manager"></a>
+## 👥 我是企业管理员，负责审批员工贡献权限
+
 ### [👉 企业管理员](https://clasign.osinfra.cn/corporation-manager-login/68cbd4a3dbabc050b436cdd4)
 
 
@@ -152,6 +132,14 @@
 - **超级管理员登录后页面**
 
 ![alt text](images/image-9.png)
+
+- **点击邮箱域名后页面**
+
+![alt text](images/image8.png)
+
+- **点击重置密码后页面**
+
+![alt text](images/image9.png)
 
 - **普通管理员登陆后页面**
 
