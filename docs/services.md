@@ -8,7 +8,7 @@
 - 社区邮件列表
 - 社区会议
 
-| 支撑项     | 服务地址 | 使用指导 | 支撑人账号 | 支撑人邮箱 |  
+| 支撑项     | 服务地址 | 使用指导 | GITCODE账号 | 邮箱 |  
 | --------------| ---------- | ---------- | ---------- | ---------------------- |
 | 新建流水线  | NA |  [使用指导](https://gitcode.com/cann/community/blob/master/contributor/repository/ci-guide.md)  | [@tanghaoran7](https://gitcode.com/tanghaoran7)   | tanghaoran7@huawei.com   |
 | CLA 签署    | [跳转](https://clasign.osinfra.cn/sign/68cbd4a3dbabc050b436cdd4) | [使用指导](./cla/cla使用指南.md)  | [@yajie_caroline](https://gitcode.com/yajie_caroline)        | chenyajie6@huawei.com       |
@@ -27,13 +27,13 @@
 - 静态检查结果屏蔽审核
 - 代码合入异常 
 
-| 模块 | 仓名 | CIE账号 | 邮箱 |
+| 模块 | 仓名 | GITCODE账号 | 邮箱 |
 |------|------|---------|------|
 | 算子 | cann/opbase | [@songkai111](https://gitcode.com/songkai111) | songkai16@huawei.com |
 | | cann/ops-cv | [@liu-wei](https://gitcode.com/liu-wei) | lovline.liuwei@huawei.com |
 | | cann/ops-math | [@songkai111](https://gitcode.com/songkai111) | songkai16@huawei.com |
 | | cann/ops-nn | [@yangyang016](https://gitcode.com/yangyang016) | yangyang306@hisilicon.com |
-| | cann/ops-transformer | [@xtqh](https://gitcode.com/xtqh) | quxuetong@huawei.com |
+| | cann/ops-transformer | [@CoderChenxi](https://gitcode.com/CoderChenxi) | chenxi116@huawei.com |
 | | cann/atvoss | [@Sunee](https://gitcode.com/Sunee) | sunyi35@huawei.com |
 | AscendC | cann/asc-devkit | [@DragonBornHD84](https://gitcode.com/DragonBornHD84)<br>[@chenyiyuan](https://gitcode.com/chenyiyuan) | huangduo4@hisilicon.com<br>chenyiyuan5@huawei.com |
 | | cann/asc-tools | [@DragonBornHD84](https://gitcode.com/DragonBornHD84)<br>[@chenyiyuan](https://gitcode.com/chenyiyuan) | huangduo4@hisilicon.com<br>chenyiyuan5@huawei.com |
