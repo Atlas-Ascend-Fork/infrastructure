@@ -20,6 +20,16 @@ CANN社区在[社区会议平台](https://meeting.osinfra.cn/cann) 提供参与�
 
 + 注意：你也可以下载蓝版welink后通过客户端入会，入会的时候输入会议ID， 比如截图的会议ID: 987098521
 
++ 在手机端可以通过Welink入会，流程如下：
+  1. 打开Welink会议链接
+      ![](figures/meeting_phone_1.png)
+  2. 首次入会需要下载Welink App，点击客户端入会
+      ![](figures/meeting_phone_2.png)
+  3. 安装完成后，需要输入手机号与接受验证码登录Welink App
+      ![](figures/meeting_phone_3.png)
+  4. 验证通过后，自动跳转至目标会议入会
+      ![](figures/meeting_phone_4.png)
+
 
 4. 进会后请修改你的个人信息，<font color="red">注意不要泄露较敏感个人信息，例如工号。</font>
 
