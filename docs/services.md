@@ -7,6 +7,7 @@
 - 流水线启动异常、任务排队等问题
 - 社区邮件列表
 - 社区会议
+- 漏洞管理服务（cve-manager）
 
 | 支撑项     | 服务地址 | 使用指导 | GITCODE账号 | 邮箱 |  
 | --------------| ---------- | ---------- | ---------- | ---------------------- |
@@ -15,6 +16,7 @@
 | CANN-robot  | NA | [使用指导](./robot/robot使用指南.md)  | [@Coopermassaki](https://gitcode.com/Coopermassaki)      | fuyong29@h-partners.com     |
 | 社区邮件列表 | [跳转](https://mailweb.cann.osinfra.cn/) | [使用指导](./mail-list/邮件列表使用指南.md)  | [@weixin_43493709](https://gitcode.com/weixin_43493709)      | zhuchao50@h-partners.com     |
 | 社区会议服务 | [跳转](https://meeting.osinfra.cn/cann) | [使用指导](./meeting/CANN社区会议指南.md) | [@ZeesangPie](https://gitcode.com/ZeesangPie)      | chenglang11@huawei.com     |
+| 漏洞管理服务 | NA | [使用指导](./cve-manager/manual.md) | [@yangwei999](https://gitcode.com/yangwei999)      | yangwei266@h-partners.com   |
 
 ---
 
