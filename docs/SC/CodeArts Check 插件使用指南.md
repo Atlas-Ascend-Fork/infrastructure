@@ -31,6 +31,12 @@
 
 ## 4、插件登录
 
+### 离线模式
+插件支持离线模式，初次使用时，可按照下图步骤进行设置：
+
+![alt text](images/image-16.png)
+
+### 登录模式
 初次登录，点击"CodeArts Check"——"CONFIGURATION"——"You are not logged in, please log in first"，弹出登陆界面
 
 ![alt text](images/image-6.png)
@@ -68,7 +74,7 @@
 
 规则导入：基于导出模板的格式规范，根据实际需求修改规则内容，点击"Rule Configuration"——"Upload"，选择待导入的.xlsx规则文件，即可完成规则导入。
 
-当前开源项目使用的规则集文件请参看当前目录下的“rule.xlsx”
+当前开源项目使用的规则集文件请参看当前目录下的“rule_en.xlsx”和“rule_ch.xlsx”
 
 ![alt text](images/image-14.png)
 
