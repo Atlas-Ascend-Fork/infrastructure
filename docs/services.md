@@ -58,3 +58,5 @@
 | | cann/cann-recipes-spatial-intelligence | [@lushirui22](https://gitcode.com/lushirui22) | lushirui@hisilicon.com |
 | | cann/cann-recipes-train | [@zhanghz1](https://gitcode.com/zhanghz1) | zhanghaozhuo1@hisilicon.com |
 | PTO | cann/pto-tile-lib | [@y30038433](https://gitcode.com/y30038433) | yefei37@h-partners.com |
+| | cann/pto-isa | [@y30038433](https://gitcode.com/y30038433) | yefei37@h-partners.com |
+| | cann/pypto | [@DCGDDD](https://gitcode.com/DCGDDD) | yangxu14@huawei.com |
