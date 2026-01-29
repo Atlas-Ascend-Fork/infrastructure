@@ -64,3 +64,8 @@
 | PTO | cann/pto-tile-lib | [@y30038433](https://gitcode.com/y30038433) | <yefei37@h-partners.com> |
 | | cann/pto-isa | [@y30038433](https://gitcode.com/y30038433) | <yefei37@h-partners.com> |
 | | cann/pypto | [@DCGDDD](https://gitcode.com/DCGDDD) | <yangxu14@huawei.com> |
+| 扩展 | cann/ascend-transformer-boost | [@overfitting_zh](https://gitcode.com/overfitting_zh) | zhanghan72@huawei.com |
+| | cann/shmem | [@overfitting_zh](https://gitcode.com/overfitting_zh) | zhanghan72@huawei.com |
+| | cann/catlass | [@overfitting_zh](https://gitcode.com/overfitting_zh) | zhanghan72@huawei.com |
+| | cann/ascend-boost-comm | [@overfitting_zh](https://gitcode.com/overfitting_zh) | zhanghan72@huawei.com |
+| | cann/ascend-transformer-boost | [@overfitting_zh](https://gitcode.com/overfitting_zh) | zhanghan72@huawei.com |
