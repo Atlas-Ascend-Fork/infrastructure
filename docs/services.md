@@ -68,4 +68,4 @@
 | | cann/shmem | [@overfitting_zh](https://gitcode.com/overfitting_zh) | zhanghan72@huawei.com |
 | | cann/catlass | [@overfitting_zh](https://gitcode.com/overfitting_zh) | zhanghan72@huawei.com |
 | | cann/ascend-boost-comm | [@overfitting_zh](https://gitcode.com/overfitting_zh) | zhanghan72@huawei.com |
-| | cann/ascend-transformer-boost | [@overfitting_zh](https://gitcode.com/overfitting_zh) | zhanghan72@huawei.com |
+| | cann/sip | [@overfitting_zh](https://gitcode.com/overfitting_zh) | zhanghan72@huawei.com |
