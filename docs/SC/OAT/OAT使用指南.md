@@ -1,74 +1,228 @@
 # OAT开源审查工具
 
-## 简介
+## 目的
 
-OAT（OSS Audit Tool）是从OpenHarmony社区引入的自动化开源审视工具，用于帮助开发人员基于自定义的规则自动扫描开源仓代码，识别不符合预定规则的代码并输出扫描报告。
-工具详细的特性说明及使用方法请参考：<https://gitcode.com/openharmony-sig/tools_oat/blob/master/README_zh.md>
+本文档旨在为开发者提供明确的指引，当社区门禁系统中**code_check**扫描任务检测到由[OAT（OSS Audit Tool）](https://gitcode.com/openharmony-sig/tools_oat)发出的开源合规告警时，应如何理解、分析并采取正确的操作步骤进行处理。
 
-当前CodeArts check中已经集成了OAT检查的能力，用户在提交代码时门禁会自动做license检查和二进制检查。
+---
 
-## 开源仓规则配置
+## 范围
 
-工具仓的resources/OAT-Default.xml中的定义了默认规则，如果默认规则不满足业务要求，需要在被扫描的开源仓根目录放置一个命名为 "OAT.xml"的文件作为开源仓规则，文件模版请参考：<https://gitcode.com/cann/infrastructure/blob/main/docs/SC/OAT/OAT.xml>
+本指导适用于所有参与CANN社区的贡献者，项目适用范围包含：[CANN](https://gitcode.com/cann)下代码仓。
 
-### license 检查配置
+---
 
-#### 步骤一：新增license
+## OAT问题确认
 
-licensematcher name：此处定义一个名称，后续配置中需要用到
+开源仓代码扫描时候会根据[OAT默认规则](https://gitcode.com/openharmony-sig/tools_oat#%E9%BB%98%E8%AE%A4%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE)进行分析，不满足则会在OAT扫描报告中呈现出如下的问题。
 
-licensetext name：此处填写开源仓定义的license内容
+具体处理流程如下：
 
-说明：当需要支持多个license时，则在此处配置多个记录
+![image](./images/image.png)
+
+---
+
+具体分析操作如下：
+
+### 问题一：为什么测试文件/配置文件也被报出许可证问题？
+
+#### 告警示例：
+
+![image](./images/example_1.png)
+![image](./images/example_2.png)
+
+#### 问题原因：
+
+OAT 工具默认会对仓库中所有文件进行扫描。但某些文件（如 `tests/` 目录下的单元测试脚本、`pyproject.toml` 等构建配置文件）本身不涉及核心功能或不具备版权敏感性，无需纳入许可证合规检查。
+
+这类文件若被扫描，容易误报为“无许可证头”或“未知许可证”，增加无效告警负担。
+
+#### 正确做法：
+
+将这些**非源码类或无需审计的文件/目录**加入屏蔽列表，在项目根目录的 `OAT.xml` 中配置过滤规则。
+
+##### 操作示例：
+
+1. **屏蔽整个测试目录**
 
 ```xml
-<licensematcher name &zwnj**="cann License" desc="If the scanning result is InvalidLicense, you can define matching rules here. Note that quotation marks must be escaped.">
-    <licensetext name="
-        Copyright (c) 2025 Huawei Technologies Co., Ltd.
-        This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
-        CANN Open Software License Agreement Version 2.0 (the &quot;License&quot;).
-        Please refer to the License for details. You may not use this file except in compliance with the License.
-        THIS SOFTWARE IS PROVIDED ON AN &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
-        INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
-        See LICENSE in the root of the software repository for the full text of the License." 
-    desc=""/>
-</licensematcher>
+<filefilter name="defaultFilter" desc="Files not to check">
+    <filteritem type="filepath" name="tests/.*" desc="Test files do not require license check"/>
+</filefilter>
 ```
 
-#### 步骤二：配置license策略
+2. **屏蔽特定配置文件（如 toml 文件）**
 
-policyitem type：此处填写"license"
+```xml
+<filefilter name="defaultFilter" desc="Files not to check">
+    <filteritem type="filename" name="pyproject.toml" desc="Configuration file, no license required"/>
+</filefilter>
+```
 
-name：此处需要配置为与步骤一种的"licensematcher name"一样
+> ⚠️ 注意：
+>
+> * 使用 `filepath` 可匹配路径正则；
+> * 使用 `filename` 匹配具体文件名；
+> * 修改后需提交至主干并同步到 CI 环境才生效。
 
-path：此条license策略适用的范围
+---
 
-filefilter：屏蔽策略，配置屏蔽策略时需要用到
+### 问题二：告警说用了某个许可证（如 CANN-2.0），但确认是可以用的，怎么办？
+
+#### 告警示例：
+
+![image](./images/example_3.png)
+
+#### 问题原因：
+
+OAT 扫描发现代码中声明使用了某个许可证（例如 `CANN-2.0`），但由于该许可证未在当前项目的白名单中注册，系统无法识别其合法性，因此标记为风险项。
+这并不意味着许可证不能用，而是工具“不认识它”。
+
+#### 正确做法：
+
+明确告知 OAT：这个许可证是允许使用的。你需要在项目根目录的  `OAT.xml` 中将其添加到许可策略中。
+
+##### 操作示例：
 
 ```xml
 <policylist>
-    <policy name="projectPolicy" desc="">
-        <!--policyitem type="compatibility" name="GPL-2.0+" path="abc/.*" desc="Process that runs independently, invoked by the X process."/-->
-        <policyitem type="license" name="cann License" path=".*" filefilter ="licenseFileNamePolicyFilter" desc=""/>
-        <policyitem type="license" name="cann License - 2026" path=".*" filefilter ="licenseFileNamePolicyFilter" desc=""/>
+    <policy name="projectPolicy" desc="Project allowed licenses">
+        <policyitem type="license" name="CANN-2.0" path=".*" desc="Approved CANN license"/>
     </policy>
 </policylist>
 ```
 
-#### 步骤三：配置屏蔽策略
+> ✅ 要求：
+> 
+> * `name` 字段必须与扫描报告中的许可证名称​**完全一致**​；
+> * `path=".*"` 表示适用于全仓文件，也可按需限定路径。<br>
+>   ✅ 完成后，下次扫描将不再提示该许可证为非法
 
-filefilter name：屏蔽策略，与步骤二中的"filefilter"保持一致
+---
 
-filteritem type：过滤类型，支持filename、filepath两种过滤类型。
+### 问题三：为什么提示“NoLicenseHeader”？
 
-name：定义过滤条件，对于filename类型，此处定义文件名通配符，支持以"|"分隔，对于filepath类型，此处定义路径通配符。
+#### 告警示例：
 
-过滤器配置如下所示：
+![image](./images/example_4.png)
+
+#### 问题原因：
+
+“NoLicenseHeader” 表示该文件缺少标准的许可证声明头部注释。常见于以下两类情况：
+
+| 类型                                           | 是否需要补头      |
+| -----------------------------------------------|-------------------|
+| 自研代码文件（`.c`,`.h`,`.py`等）              | ✅ 建议补充       |
+| 上游引入的第三方开源文件                       | ❌ 不应修改原内容 |
+
+如果你的文件属于第二种（比如从上游社区 copy 的代码），原始就没有许可证头，此时报错是合理的误报。
+
+#### 正确做法：
+
+根据文件性质选择处理方式：
+
+##### ✅ 场景 A：这是自研代码 → 补充许可证头
+
+在文件顶部添加如下标准声明（以 CANN-2.0 为例）：
+
+```c++
+/*
+* This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+* CANN Open Software License Agreement Version 2.0 (the "License").
+* Please refer to the License for details. You may not use this file except in compliance with the License.
+* THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+* INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+* See LICENSE in the root of the software repository for the full text of the License.
+  */
+```
+
+##### ✅ 场景 B：这是上游引入文件 → 屏蔽检查
+
+保持原始内容不变，在项目根目录的 `OAT.xml` 中通过 `defaultPolicyFilter` 忽略该文件的许可证头检查。
 
 ```xml
-<filefilter name="licenseFileNamePolicyFilter" desc="Filters for LICENSE file policies">
-    <!--filteritem type="filename" name="*.uvwxyz" desc="Describe the reason for filtering scan results"/-->
-    <!--filteritem type="filepath" name="abcdefg/.*.uvwxyz" desc="Describe the reason for filtering scan results"/-->
-    <!--filteritem type="filepath" name="projectroot/[a-zA-Z0-9]{20,}.sh" desc="Temp files"/-->
+<filefilter name="defaultPolicyFilter" desc="Files exempt from license header checks">
+    <filteritem type="filepath" name="/example/atb_aclnn/memory/memory_utils.h" desc="Third-party upstream file without license header"/>
+    <filteritem type="filename" name="memorypool.cpp" desc="Imported code, no header modification allowed"/>
 </filefilter>
 ```
+
+> 📝 原因说明建议写清楚，便于后续审计追溯。
+
+---
+
+### 问题四：出现“InvalidLicense”告警，工具识别不出许可证？
+
+#### 告警示例：
+
+![image](./images/example_5.png)
+
+#### 问题原因：
+
+OAT 无法匹配到已知许可证库中的条目，可能因为：
+
+* 许可证文本格式有微小差异（空格、换行、标点等）；
+* 使用了新定义或定制化的许可证（如 CANN-2.0 尚未收录）；
+* 文本编码或大小写导致特征不匹配。
+  此时会报 `InvalidLicense`，表示“识别失败”，而非“禁止使用”。
+
+#### 正确做法：
+
+先人工确认许可证内容是否合法 → 再决定如何让工具能识别它。
+
+##### 步骤 1：人工分析 + 法务确认
+
+* 查看告警文件中的许可证声明原文；
+* 提交法务团队确认该许可证是否可用于本项目；
+* 若不可用 → 需替换或移除相关代码；
+* 若可用 → 继续下一步。
+
+##### 步骤 2：选择一种方式让 OAT 能识别该许可证
+
+###### 方式 A：向 OAT 工具提交许可证定义（推荐长期使用）
+
+> 👉 提交流程：[OAT Gitcode 仓库](https://gitcode.com/openharmony-sig/tools_oat)
+
+要求：
+
+* 提取许可证正文，转为小写，去除所有符号和空格；
+* 填入 JSON 格式的 license definition。
+
+###### 示例：
+
+```json
+{
+"licenseHeaderText": "thisprogramisfreesoftwareyoucanredistributeitandormodifyitunderthetermsandconditionsofcannopensoftwarelicenseagreementversion20thelicensepleaserefertothelicensefordetailsyoumaynotusethisfileexceptincompliancewiththelicensethissoftwareisprovidedonanasisbasiswithoutwarrantiesofanykindeitherexpressorimpliedincludingbutnottononinfringementmerchantabilityorfitnessforaparticularpurposeseelicenseintherootofthesoftwarerepositoryforthefulltextofthelicense",
+"licenseHeaderTextLength": 450,
+"licenseId": "CANN-2.0",
+"licenseName": "CANN Open Software License Agreement Version 2.0",
+"licenseText": "...same as above...",
+"urls": []
+}
+```
+
+> ✅ 优点：一次提交，多仓受益<br>
+> ❗ 缺点：需等待工具版本发布才能生效
+
+###### 方式 B：在当前仓配置本地匹配规则（快速生效）
+
+直接在项目根目录的 `OAT.xml` 中添加 `<licensematcher>` 规则，​**原样复制许可证头/文本内容**​（**注意**：转义引号，**Copyright版权信息**不要写入）。
+
+```xml
+<licensematcherlist>
+    <licensematcher name="CANN-2.0" desc="Custom license matcher for InvalidLicense fix">
+        <licensetext name="
+             * This program is free software, you can redistribute it and/or modify it under the terms and conditions of
+             * CANN Open Software License Agreement Version 2.0 (the &quot;License&quot;).
+             * Please refer to the License for details. You may not use this file except in compliance with the License.
+             * THIS SOFTWARE IS PROVIDED ON AN &quot;AS IS&quot; BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED,
+             * INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+             * See LICENSE in the root of the software repository for the full text of the License.
+         " desc="Match CANN-2.0 license header"/>
+    </licensematcher>
+</licensematcherlist>
+```
+
+> ✅ 优点：提交即生效，适合紧急修复<br>
+> ❗ 缺点：每个仓库都要重复配置，维护成本高<br><br>
+> 💡 建议：优先走方式 A 提交公共库，方式 B 作为过渡方案
