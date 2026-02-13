@@ -156,7 +156,7 @@
 
 签署完成后，可以通过以下链接进行验证（将邮箱替换为你签署 CLA 时的实际信息）：
 
-https://clasign.osinfra.cn/api/v1/individual-signing/690ca9ddf91c03dee6082ab1?email=your-email@example.com
+https://clasign.osinfra.cn/api/v1/individual-signing/68cbd4a3dbabc050b436cdd4?email=your-email@example.com
 
 
 **成功标志**：返回结果中必须包含两个 `true` 值
