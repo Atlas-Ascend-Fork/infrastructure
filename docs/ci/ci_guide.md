@@ -33,7 +33,9 @@
 ![executor_result](images/001.png)
 - 点击FAILED任务项，可查看任务执行结果。
 ![executor_result](images/003.png)
-- 当API_Check任务执行状态为WARNING时，会标识api_ckeck_failed标签，该标签不影响PR合入。Committer需要关注检查结果，并充分评估接口变更影响后再确定代码是否合入
+- 当API_Check任务执行状态为WARNING时，会标识api_ckeck_failed标签，该标签不影响PR合入。
+![executor_result](images/api_check.png)
+- Committer需要关注检查结果，并充分评估接口变更影响后再确定代码是否合入。
 ![executor_result](images/007.png)
 #### 2. 跳转查看流水线日志
 在 PR 评论区的运行结果表格中，找到对应任务行的链接并点击，即可跳转至流水线运行详情页面。  
