@@ -1,0 +1,16 @@
+bot-issue-manage:
+  # 标签名称配置
+  label_resolve: "resolved"
+  label_stale: "stale"
+  label_wait_feedback: "wait-feedback"
+
+  # 时间配置（天）
+  resolve_to_stale_days: 7
+  stale_to_close_days: 14
+  wait_feedback_to_warn_days: 7
+  wait_feedback_to_close_days: 14
+
+  # 评论内容
+  stale_comment: "您好，当前Issue标记为resolved且有一段时间未进一步更新，因此我们将其标记为'stale'（闲置）状态。若您认为这是误操作，可通过添加任意评论来去除'stale'标签。标记为stale的Issue在14天内无更新活动将自动关闭。"
+  wait_feedback_warn_comment: "您好，为了更准确地定位和解决问题，我们需要您提供上述提到的相关信息。如果 14 天内没有进一步更新，我们将暂时关闭此 Issue。感谢您的理解与配合。"
+  wait_feedback_close_comment: "您好，由于该 Issue 已有一段时间没有更新，我们先将其关闭。如果您后续有新的进展或诉求，欢迎随时重新开启此 Issue 或提交新的 Issue，我们会继续为您跟进。"
