@@ -26,6 +26,8 @@ CANN社区中所有项目均由Bot维护，这意味着开发人员可以在每�
 | /remove-sig ** | /remove-sig AI | Pull Request <br> Issue | 移除标签 sig/AI。 | 所有人 | 所有仓库 |
 | /assign [[@]...] | /assign <br> /assign @cann-robot | Issue | 为Issue指派一位负责人。 | 所有人 | 所有仓库 |
 | /unassign [[@]...] | /unassign <br> /unassign @cann-robot | Issue | 取消Issue指派的负责人。 | 所有人 | 所有仓库 |
+| /label add ** | /label add bug <br> 支持一次添加多个标签，标签名之间用空格分隔，比如/label add bug resolved  | Pull Request <br> Issue | 添加指定的标签。 | 所有人 | 所有仓库 |
+| /label remove ** | /label remove bug <br> 支持一次删除多个标签，标签名之间用空格分隔，比如/label remove bug resolved  | Pull Request <br> Issue | 删除指定的标签。 | 所有人 | 所有仓库 |
 
 
 ## 🔍 FAQ

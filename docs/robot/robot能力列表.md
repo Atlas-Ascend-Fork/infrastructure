@@ -21,6 +21,7 @@
 | **代码评审与合并 (PR)** | 检查并合并 PR | 用户评论 `/check-pr` | 检查 PR 标签是否满足条件，若满足则执行合并。 | 合并 PR |
 | **代码评审与合并 (PR)** | 守护者审核 | 用户评论 `/merge` | 为 PR 添加 `keeper_approved` 标签。 | `keeper_approved` |
 | **通用标签管理 (Issue/PR)** | 标签增删 | 用户评论 `/kind`, `/priority`, `/sig` 等指令 | 为 Issue 或 PR 添加/移除对应的分类、优先级或 SIG 标签。 | `kind/**`, `priority/**`, `sig/**` |
+| **通用标签管理 (Issue/PR)** | 标签增删 | 用户评论 `/label add **`, `/label remove **`等指令 | 为 Issue 或 PR 添加/移除对应的指定标签。 | `/label add bug` 添加 `bug` 标签, `/label remove bug` 移除 `bug` 标签 |
 | **负责人管理 (Issue)** | 指派/取消负责人 | 用户评论 `/assign` 或 `/unassign` | 为 Issue 指派或取消负责人。 | 指派状态 |
 
 
