@@ -1,8 +1,31 @@
 #!/bin/sh
-#
+# -----------------------------------------------------------------------------------------------------------
+# Copyright (c) 2025 Huawei Technologies Co., Ltd.
+# This program is free software, you can redistribute it and/or modify it under the terms and conditions of 
+# CANN Open Software License Agreement Version 2.0 (the "License").
+# Please refer to the License for details. You may not use this file except in compliance with the License.
+# THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, 
+# INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT, MERCHANTABILITY, OR FITNESS FOR A PARTICULAR PURPOSE.
+# See LICENSE in the root of the software repository for the full text of the License.
+# -----------------------------------------------------------------------------------------------------------
 # OAT Pre-commit Check Script (for pre-commit framework)
 # This script is called by pre-commit framework automatically
 #
+
+# --- Self-healing: strip Windows CRLF line endings ---
+# When this script is edited on Windows, Git may introduce \r\n line endings
+# which cause "command not found" or syntax errors on Linux/macOS.
+# Solution: detect and strip \r in-place, then re-exec with a clean copy.
+# This block intentionally runs before 'set -e'.
+_SCRIPT="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
+if sed 's/\r//' "$_SCRIPT" | diff -q - "$_SCRIPT" >/dev/null 2>&1; then
+    : # No CRLF found, continue normally
+else
+    echo "[OAT] CRLF line endings detected, auto-fixing script and re-running..."
+    _TMP="${_SCRIPT}.lf"
+    sed 's/\r//' "$_SCRIPT" > "$_TMP" && mv "$_TMP" "$_SCRIPT"
+    exec sh "$_SCRIPT" "$@"
+fi
 
 set -e
 
@@ -80,47 +103,51 @@ if ! command -v java >/dev/null 2>&1; then
     
     JAVA_INSTALLED=false
     
-    # Linux: 使用 apt
+    # Linux: 使用 apt / yum
     if [ "$OS_TYPE" = "linux" ]; then
         if command -v apt-get >/dev/null 2>&1; then
-            echo "[OAT] 使用 apt 安装 OpenJDK 11..."
+            echo "[OAT] 使用 apt 安装 OpenJDK 21..."
             echo "[OAT] 可能需要输入管理员密码"
             echo ""
             
             sudo apt-get update -qq >/dev/null 2>&1
-            sudo apt-get install -y openjdk-11-jre >/dev/null 2>&1
+            sudo apt-get install -y openjdk-21-jre >/dev/null 2>&1
             
             if [ $? -eq 0 ]; then
                 JAVA_INSTALLED=true
-                echo "[OAT] [OK] OpenJDK 11 安装成功"
+                echo "[OAT] [OK] OpenJDK 21 安装成功"
             else
                 echo "[OAT] [ERROR] 自动安装失败"
             fi
         elif command -v yum >/dev/null 2>&1; then
-            echo "[OAT] 使用 yum 安装 OpenJDK 11..."
-            sudo yum install -y java-11-openjdk >/dev/null 2>&1
+            echo "[OAT] 使用 yum 安装 OpenJDK 21..."
+            sudo yum install -y java-21-openjdk >/dev/null 2>&1
             
             if [ $? -eq 0 ]; then
                 JAVA_INSTALLED=true
-                echo "[OAT] [OK] OpenJDK 11 安装成功"
+                echo "[OAT] [OK] OpenJDK 21 安装成功"
             fi
         fi
     
     # macOS: 使用 Homebrew
     elif [ "$OS_TYPE" = "macos" ]; then
         if command -v brew >/dev/null 2>&1; then
-            echo "[OAT] 使用 Homebrew 安装 OpenJDK 11..."
+            echo "[OAT] 使用 Homebrew 安装 OpenJDK 21..."
             echo "[OAT] 这可能需要几分钟..."
             echo ""
             
-            brew install openjdk@11 >/dev/null 2>&1
+            brew install openjdk@21 >/dev/null 2>&1
             
             if [ $? -eq 0 ]; then
                 JAVA_INSTALLED=true
-                echo "[OAT] [OK] OpenJDK 11 安装成功"
+                echo "[OAT] [OK] OpenJDK 21 安装成功"
                 
-                # Add to PATH for current session
-                export PATH="/usr/local/opt/openjdk@11/bin:$PATH"
+                # Add to PATH for current session (Intel & Apple Silicon)
+                if [ -d "/usr/local/opt/openjdk@21/bin" ]; then
+                    export PATH="/usr/local/opt/openjdk@21/bin:$PATH"
+                elif [ -d "/opt/homebrew/opt/openjdk@21/bin" ]; then
+                    export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"
+                fi
             else
                 echo "[OAT] [ERROR] 自动安装失败"
             fi
@@ -132,12 +159,17 @@ if ! command -v java >/dev/null 2>&1; then
     # Windows: 提供下载链接（无法自动安装）
     elif [ "$OS_TYPE" = "windows" ]; then
         echo "[OAT] Windows 系统无法自动安装 Java"
-        echo "[OAT] 请手动下载并安装："
+        echo "[OAT] 请手动下载并安装 Java 23："
         echo ""
-        echo "  1. 访问: https://adoptium.net/"
-        echo "  2. 下载: Eclipse Temurin JRE 11 (x64)"
-        echo "  3. 安装后重启 Git Bash"
-        echo "  4. 验证: java -version"
+        echo "  方式一（推荐）- Oracle JDK 23 官方安装包："
+        echo "    https://www.oracle.com/java/technologies/downloads/#java23-windows"
+        echo "    下载 Windows x64 Installer (.exe) 直接安装"
+        echo ""
+        echo "  方式二 - Scoop（命令行安装）："
+        echo "    scoop bucket add java"
+        echo "    scoop install temurin23-jdk"
+        echo ""
+        echo "  安装后重启 Git Bash，验证: java -version"
         echo ""
         echo "[OAT] 跳过 OAT 检查，继续提交..."
         echo "[OAT] 建议安装 Java 后再次运行检查"
@@ -169,9 +201,9 @@ if ! command -v java >/dev/null 2>&1; then
         echo "[OAT] 自动安装失败，跳过 OAT 检查"
         echo ""
         echo "手动安装方法:"
-        echo "  Linux:   sudo apt install openjdk-11-jre"
-        echo "  macOS:   brew install openjdk@11"
-        echo "  Windows: https://adoptium.net/"
+        echo "  Linux:   sudo apt install openjdk-21-jre"
+        echo "  macOS:   brew install openjdk@21"
+        echo "  Windows: https://www.oracle.com/java/technologies/downloads/#java23-windows"
         echo ""
         echo "[OAT] 继续提交（未进行合规性检查）..."
         echo "[OAT] 建议安装 Java 后再次运行: pre-commit run oat-check"
@@ -336,7 +368,13 @@ if [ -z "$OAT_JAR" ]; then
     echo "[OAT] This may take a few minutes (first time only)..."
     
     cd "$OAT_DIR"
-    mvn package -q -DskipTests 2>&1 | grep -E "(Building|BUILD SUCCESS|BUILD FAILURE|ERROR)" || true
+    # Force UTF-8 for entire Maven JVM process (fixes GBK default on Java 11/Windows)
+    JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8" \
+    mvn package -q -DskipTests \
+        -Dfile.encoding=UTF-8 \
+        -Dproject.build.sourceEncoding=UTF-8 \
+        -Dproject.reporting.outputEncoding=UTF-8 \
+        2>&1 | grep -E "(Building|BUILD SUCCESS|BUILD FAILURE|ERROR)" || true
     BUILD_RESULT=${PIPESTATUS[0]}
     cd - >/dev/null
     
@@ -378,6 +416,28 @@ echo "  [OK] OAT JAR: $OAT_JAR"
 
 # --- 6. Run OAT scan in INCREMENTAL mode ---
 mkdir -p "$OAT_REPORT_DIR"
+
+# --- Ensure OAT output dirs are in .gitignore (after dirs are created) ---
+GITIGNORE_FILE="$REPO_ROOT/.gitignore"
+for _entry in "oat_reports" "log"; do
+    # Strip \r before grep to handle CRLF files (Windows)
+    if ! sed 's/\r//' "$GITIGNORE_FILE" 2>/dev/null | grep -qE "^${_entry}/?$"; then
+        # Use awk to safely append: ensures a leading newline if file doesn't end with one.
+        # This is fully POSIX-compatible and works on both Windows (Git Bash) and Linux.
+        awk -v entry="${_entry}/" '
+            BEGIN { needs_newline = 0 }
+            { last_line = $0; has_content = 1 }
+            END {
+                if (has_content && last_line !~ /^[[:space:]]*$/) {
+                    printf "\n"
+                }
+                printf "%s\n", entry
+            }
+        ' "$GITIGNORE_FILE" >> "$GITIGNORE_FILE" 2>/dev/null \
+        || printf "\n%s/\n" "$_entry" >> "$GITIGNORE_FILE"
+        echo "[OAT] 已将 ${_entry}/ 添加到 .gitignore"
+    fi
+done
 
 echo ""
 echo "[OAT] Running compliance scan..."
