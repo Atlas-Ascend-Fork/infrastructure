@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=64.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "OSSinfo_extraction"
+version = "2.0"
+description = "OSS Notice toolkit based on ScanCode Toolkit"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+
+authors = [
+    { name = "IceT_5", email = "liutuo10@huawei.com" }
+]
+
+dependencies = [
+    "scancode-toolkit==32.5.0",
+]
+
+[project.urls]
+Source = "https://gitcode.com/cann/infrastructure"
+Issues = "https://gitcode.com/cann/infrastructure/issues"
+
+[project.scripts]
+cret = "ossinfo_extraction.main:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
