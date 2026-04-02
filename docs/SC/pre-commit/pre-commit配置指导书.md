@@ -115,8 +115,8 @@ git commit --allow-empty -m "test pre-commit"
 
 | 软件 | 版本要求 | 用途 | 安装方式 |
 |------|---------|------|----------|
-| **Java** | JRE 8+ | 运行 OAT |  **自动安装**（Linux/macOS）<br> 手动安装（Windows）|
-| **Maven** | 3.5+ | 打包 OAT |  **自动安装**（Linux/macOS）<br> 手动安装（Windows）|
+| **Java** | JDK 21+ | 运行 OAT |  **自动安装**（Linux/macOS）<br> 手动安装（Windows）|
+| **Maven** | 3.6+ | 打包 OAT |  **自动安装**（Linux/macOS）<br> 手动安装（Windows）|
 | **Git** | 2.0+ | 版本控制 | 通常已安装 |
 | **pre-commit** | 2.0+ | Hook 框架 | `pip install pre-commit` |
 
@@ -223,8 +223,6 @@ lib/libtest.so: BINARY_FILE_TYPE
 -----------------------------------
 License Header Invalid Total Count: 0
 
-===================================
-Full report: oat_reports/single/PlainReport_CANN.txt
 ===================================
 ```
 
@@ -344,8 +342,6 @@ Invalid File Type Total Count: 0
 License Header Invalid Total Count: 0
 
 ===================================
-Full report: oat_reports/single/PlainReport_CANN.txt
-===================================
 ```
 
 #### 3.2.8 环境问题
@@ -378,8 +374,8 @@ Full report: oat_reports/single/PlainReport_CANN.txt
 [OAT] Windows 系统无法自动安装 Java
 [OAT] 请手动下载并安装：
 
-  1. 访问: https://adoptium.net/
-  2. 下载: Eclipse Temurin JRE 11 (x64)
+  1. 访问: https://adoptium.net/zh-CN/temurin/releases/
+  2. 下载: Eclipse Temurin JDK 21 (x64)
   3. 安装后重启 Git Bash
   4. 验证: java -version
 
@@ -389,10 +385,73 @@ Full report: oat_reports/single/PlainReport_CANN.txt
 
 **行为**: **跳过检查，允许提交**
 
-**后续操作**: 
-1. 按提示手动安装 Java
-2. 重启终端
-3. 运行 `pre-commit run oat-check` 验证环境
+**后续操作**：请参考以下 Windows 环境 Java 安装指导，安装完成后重启终端，运行 `pre-commit run oat-check` 验证环境。
+
+##### Windows 环境 Java 安装指导
+
+OAT 工具需要 **Java 21+**，以下提供三种安装方式。
+
+**方式一：使用 Scoop 包管理器（推荐，适合开发者）**
+
+[Scoop](https://scoop.sh/) 是 Windows 命令行包管理器，安装软件无需管理员权限、自动配置 PATH。
+
+在 **PowerShell**（普通用户）中执行：
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
+```
+![Scoop 安装步骤 1](img/scoop-1.png)
+![Scoop 安装步骤 2](img/scoop-2.png)
+安装 Java：
+```powershell
+# 添加 Java bucket
+scoop bucket add java
+
+# 安装 Eclipse Temurin JDK 21
+scoop install temurin21-jdk
+```
+![安装JAVA](img/scoop-3.png)
+
+安装完成后立即生效（无需重启终端），验证：
+```powershell
+java -version
+```
+
+**方式二：手动安装（步骤清晰）**
+
+1. 访问 [https://adoptium.net/zh-CN/temurin/releases/](https://adoptium.net/zh-CN/temurin/releases/)
+
+2. 筛选条件选择：
+   - **Operating System**：Windows
+   - **Architecture**：x64
+   - **Package Type**：JDK
+   - **Version**：21（LTS）
+
+3. 下载 `.msi` 安装包（如 `OpenJDK21U-jdk_x64_windows_hotspot_21.x.x_x.msi`）
+
+![msi安装](img/msi-1.png)
+
+
+4. 双击安装包，**全程保持默认选项**，安装向导会自动：
+   - 设置 `JAVA_HOME` 环境变量
+   - 将 `java` 命令添加到系统 `PATH`
+
+5. 安装完成后，打开新的命令行窗口（CMD 或 Git Bash），验证：
+   ```bash
+   java -version
+   # 预期: openjdk version "21.0.x" ...
+   ```
+
+> **国内网络备用下载**：  
+> 华为镜像站：[https://mirrors.huaweicloud.com/java/jdk/](https://mirrors.huaweicloud.com/java/jdk/)  
+> 阿里云镜像：[https://dragonwell-jdk.io/](https://dragonwell-jdk.io/)（Alibaba Dragonwell，兼容 OpenJDK 21）
+
+**方式三：使用 Winget（Windows 11 / Windows 10 内置）**
+
+```powershell
+# 安装 Eclipse Temurin JDK 21
+winget install EclipseAdoptium.Temurin.21.JDK
+```
 
 ---
 
@@ -407,9 +466,9 @@ Full report: oat_reports/single/PlainReport_CANN.txt
 [OAT] 自动安装失败，跳过 OAT 检查
 
 手动安装方法:
-  Linux:   sudo apt install openjdk-11-jre
-  macOS:   brew install openjdk@11
-  Windows: https://adoptium.net/
+  Linux:   sudo apt install temurin-21-jdk
+  macOS:   brew install openjdk@21
+  Windows: https://adoptium.net/zh-CN/temurin/releases/
 
 [OAT] 继续提交（未进行合规性检查）...
 [OAT] 建议安装 Java 后再次运行: pre-commit run oat-check
@@ -427,11 +486,11 @@ Full report: oat_reports/single/PlainReport_CANN.txt
 ```bash
 # Linux
 sudo apt update
-sudo apt install openjdk-11-jre
+sudo apt install temurin-21-jdk
 
 # macOS - 先安装 Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install openjdk@11
+brew install openjdk@21
 
 # 验证
 java -version
@@ -482,7 +541,97 @@ pre-commit run oat-check
 
 **行为**: **跳过检查，允许提交**
 
-**后续操作**: 按提示手动安装 Maven，然后运行 `pre-commit run oat-check`
+**后续操作**：请参考以下 Windows 环境 Maven 安装指导，安装完成后运行 `pre-commit run oat-check` 验证环境。
+
+##### Windows 环境 Maven 安装指导
+
+OAT 工具需要 **Apache Maven 3.6+**，以下提供三种安装方式。
+
+**方式一：使用 Scoop 包管理器（推荐，已安装 Scoop 时）**
+
+```powershell
+# 安装 Maven
+scoop install maven
+```
+![安装MVN](img/scoop-4.png)
+
+安装完成后立即生效，验证：
+```powershell
+mvn -version
+```
+
+**方式二：手动安装（步骤清晰）**
+
+1. 访问 [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)
+
+2. 在 **Files** 区域下载 Binary zip archive，如：  
+   `apache-maven-3.9.x-bin.zip`
+
+ ![msi安装](img/msi-2.png)  
+
+3. 解压到一个**不含空格和中文**的路径，例如：  
+   `C:\dev\apache-maven-3.9.x`
+
+4. 配置环境变量（**以下操作需管理员权限**）：
+
+   - 右键「此电脑」→「属性」→「高级系统设置」→「环境变量」
+   - 在「系统变量」中新建：
+
+     | 变量名 | 变量值 |
+     |--------|--------|
+     | `MAVEN_HOME` | `C:\dev\apache-maven-3.9.x` |
+
+   - 在「系统变量」中找到 `Path`，点击「编辑」，新增一行：
+     ```
+     %MAVEN_HOME%\bin
+     ```
+   - 点击「确定」保存，**关闭所有命令行窗口后重新打开**
+
+    ![msi安装](img/msi-3.png)
+    ![msi安装](img/msi-4.png)
+    ![msi安装](img/msi-5.png)
+
+
+5. 打开新的命令行窗口验证：
+   ```bash
+   mvn -version
+   # 预期: Apache Maven 3.9.x ..., Java version: 21.0.x ...
+   ```
+
+> **国内网络备用下载**：  
+> 华为镜像：[https://mirrors.huaweicloud.com/apache/maven/](https://mirrors.huaweicloud.com/apache/maven/)  
+> 阿里云镜像：[https://maven.aliyun.com/](https://maven.aliyun.com/)
+
+**方式三：使用 Winget（Windows 11 / Windows 10 内置）**
+
+```powershell
+# 安装 Apache Maven（需重启终端后 PATH 生效）
+winget install Apache.Maven
+```
+
+**（可选）配置 Maven 国内镜像加速**
+
+首次构建 OAT 工具时需要从中央仓库下载依赖，国内网络较慢。  
+编辑文件 `%USERPROFILE%\.m2\settings.xml`（若不存在则新建），添加阿里云镜像：
+
+```xml
+<settings>
+  <mirrors>
+    <mirror>
+      <id>aliyun-central</id>
+      <mirrorOf>central</mirrorOf>
+      <name>阿里云 Maven 中央仓库镜像</name>
+      <url>https://maven.aliyun.com/repository/central</url>
+    </mirror>
+    <mirror>
+      <id>aliyun-public</id>
+      <mirrorOf>*</mirrorOf>
+      <name>阿里云 Maven 公共镜像</name>
+      <url>https://maven.aliyun.com/repository/public</url>
+    </mirror>
+  </mirrors>
+</settings>
+```
 
 ---
 
@@ -612,7 +761,7 @@ git config --global http.proxy http://proxy.example.com:8080
      rm ../tools_oat/target/ohos_ossaudittool-*.jar
      cd ../tools_oat && mvn clean package -DskipTests
 
-  2. 检查 Java 版本（需要 Java 8+）：
+  2. 检查 Java 版本（需要 Java 21+）：
      java -version
 
 [OAT] 继续提交（未进行合规性检查）...
