@@ -20,11 +20,13 @@
    **方法1：**
    - 将插件安装包拖入WebIDE窗口
    - 右键点击插件包，选择"Install from VSIX"（安装扩展）
+
      <img src="images/离线安装1.png" alt="离线安装1" width="80%">
 
    **方法2：**
    - 远程搜索本地扩展VSIX包
    - 点击安装按钮完成安装
+
      <img src="images/离线安装2.png" alt="离线安装2" width="70%">
 
 **在线安装**
@@ -32,9 +34,12 @@
 2. 在搜索框中输入 `CANNBot`
 3. 点击安装按钮完成安装
 
-<img src="images/vscode.png" alt="VSCode" width="80%">
+- VSCode插件市场安装
 
-<img src="images/webide.png" alt="OPENVSX" width="80%">
+    <img src="images/VSCode.png" alt="VSCode" width="80%">
+- WebIDE插件市场安装
+
+    <img src="images/webide.png" alt="OPENVSX" width="80%">
 
 ### 登录
 
@@ -59,7 +64,7 @@ CANNBot 默认模式是专为华为 CANN 开发生态定制的 AI 助手。
 
 | 模型类型 | 模型名称 | 用途 |
 |---------|---------|------|
-| 对话模型 | DeepSeek-V3、Qwen3-Max、GLM-5、Kimi-K2.5 | 代码对话、问题解答 |
+| 对话模型 | DeepSeek-V3.2、Qwen3-Max、GLM-5、Kimi-K2.5、Qwen3.6-Plus、MiniMax-M2.5 | 代码对话、问题解答 |
 | 补全模型 | Seed-Coder-8B、AIXCoder-7B-Base | Tab 自动补全 |
 
 ##### 根据模型提供商添加模型
