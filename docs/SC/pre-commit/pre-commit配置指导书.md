@@ -7,6 +7,24 @@
 
 本指导书主要用于指导CNAN社区在代码仓中部署pre-commit能力（主要包括代码格式化及OAT扫描能力），并指导社区贡献者如何在本地使用。
 
+### 1.1 GitCode 镜像仓库说明
+
+**重要**: 由于国内网络环境，访问 GitHub 可能受限，CANN 社区已将常用的 pre-commit hooks 仓库镜像到 GitCode。
+
+**常用镜像仓库对照表**:
+
+| GitHub 原仓库 | GitCode 镜像仓库 | 说明 |
+|--------------|-----------------|------|
+| `https://github.com/pre-commit/pre-commit-hooks` | `https://gitcode.com/pre-commit/pre-commit-hooks` | 基础检查 hooks |
+| `https://github.com/pre-commit/mirrors-clang-format` | `https://gitcode.com/pre-commit-clang/mirrors-clang-format` | C++ 格式化 |
+| `https://github.com/astral-sh/ruff-pre-commit` | `https://gitcode.com/gh_mirrors/ru/ruff-pre-commit` | Python lint/format |
+| `https://github.com/codespell-project/codespell` | `https://gitcode.com/gh_mirrors/co/codespell` | 拼写检查 |
+| `https://github.com/crate-ci/typos` | `https://gitcode.com/gh_mirrors/ty/typos` | typos 检查 |
+| `https://github.com/pylint-dev/pylint` | `https://gitcode.com/gh_mirrors/pyl/pylint` | Python 代码检查 |
+| `https://github.com/PyCQA/bandit` | `https://gitcode.com/gh_mirrors/ba/bandit` | Python 安全检查 |
+
+**使用建议**: 在国内开发时，推荐使用 GitCode 镜像仓库，避免网络访问问题。
+
 ## 2 代码仓中部署pre-commit能力指导
 
 1、在代码仓根目录下创建“.pre-commit-config.yaml”文件，如果已经存在，表示该代码仓中已经启用pre-commit能力，可参考后续步骤配置代码格式化及OAT检查能力；
@@ -17,14 +35,17 @@
 
 ```
 repos:
-  - repo: https://github.com/pre-commit/mirrors-clang-format
-    rev: v16.0.0
+  - repo: https://gitcode.com/pre-commit-clang/mirrors-clang-format
+    rev: v18.1.8
     hooks:
       - id: clang-format
-        types_or: [c++, c]
+        files: \.(c|h|cpp|hpp|cc|hh|cxx|hxx)$
 ```
 
-**说明**：对于空的“.pre-commit-config.yaml”直接拷贝上述内容，如果已经有配置，请忽略首行的“repos:”；
+**说明**：
+- 对于空的".pre-commit-config.yaml"直接拷贝上述内容
+- 如果已经有配置，请忽略首行的"repos:"
+- **重要**: 使用 GitCode 镜像仓库替代 GitHub 仓库，避免国内网络访问问题
 
 - **将“.clang-format”配置文件拷贝至代码仓根目录下**
 配套提供的“.clang-format”为与CANN社区编程规范配套的格式化模板文件，如果代码仓有与规范不匹配的代码风格，可自主调整配置参数。
