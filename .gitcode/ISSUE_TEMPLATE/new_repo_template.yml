@@ -1,0 +1,167 @@
+name: 新建仓申请
+description: 如希望新建仓库向社区贡献，请在TSC会议评审通过后使用此模板申请执行仓库创建。建仓流程指导可查看：https://gitcode.com/cann/community/blob/master/contributor/repository/new-repo-operation-guide.md
+title: "[新建仓申请]: "
+labels: ["新建仓", "infrastructure"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您向CANN社区贡献代码仓！请确保已完成以下前置条件：
+        - ✅ 已在TSC会议申报建仓议题并获得审批通过
+        - ✅ 已准备好仓库基础信息和技术方案
+        
+        详细流程请参考：[新建仓操作指引](https://gitcode.com/cann/community/blob/master/contributor/repository/new-repo-operation-guide.md)
+
+  - type: input
+    attributes:
+      label: 仓库名称
+      description: 新建仓库名称，建议使用小写字母和连字符，不超过3个单词
+      placeholder: 例如：my-new-repo
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: 仓库完整地址
+      description: 建仓后的完整GitCode地址（由基础设施团队填写）
+      placeholder: https://gitcode.com/cann/<repo_name>.git
+    validations:
+      required: false
+
+  - type: dropdown
+    attributes:
+      label: 所属SIG
+      description: 仓库归属的SIG组
+      options:
+        - ops-math
+        - ops-nn
+        - ops-transformer
+        - ops-cv
+        - ops-basic
+        - runtime
+        - ge
+        - hccl
+        - ascendc
+        - pto
+        - driver
+        - infrastructure
+        - security
+        - QA
+        - doc
+        - tools
+        - framework-adapter
+        - recipes
+        - 其它（请在备注说明）
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: TSC评审纪要链接
+      description: 请提供TSC会议评审通过的纪要链接+截图（必须）
+      placeholder: 例如：https://etherpad-cann.meeting.osinfra.cn/p/TSC#2026-04-XX
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 仓库描述
+      description: 请简要描述仓库的功能定位和目标
+      placeholder: |
+        例如：
+        本仓库用于XXX功能的实现，主要包含：
+        1. XXX模块
+        2. XXX算法
+        3. XXX工具
+        
+        技术栈：C++/Python
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Maintainer名单
+      description: 请提供仓库Maintainer信息（GitCode ID + 邮箱）
+      placeholder: |
+        例如：
+        - 张三 @zhangsan, zhangsan@example.com
+        - 李四 @lisi, lisi@example.com
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Committer名单
+      description: 请提供仓库Committer信息（GitCode ID + 邮箱），如有
+      placeholder: |
+        例如：
+        - 王五 @wangwu, wangwu@example.com
+        - 赵六 @zhaoliu, zhaoliu@example.com
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: 技术依赖说明
+      description: 请说明仓库的技术依赖（依赖的其他CANN仓库、三方件等）
+      placeholder: |
+        例如：
+        CANN依赖：
+        - runtime (>= 9.0.0)
+        - metadef (>= 9.0.0)
+        
+        三方件：
+        - boost (1.75.0)
+        - gtest (1.10.0)
+    validations:
+      required: false
+
+  - type: checkboxes
+    attributes:
+      label: 后续CI配置确认
+      description: 仓库创建完成后，是否需要立即配置CI门禁？
+      options:
+        - label: 是，建仓完成后立即提交CI集成申请
+        - label: 否，稍后自行提交CI集成申请
+
+  - type: input
+    attributes:
+      label: 申请人GitCode ID
+      description: 申请人的GitCode账号ID（不带@符号）
+      placeholder: your_gitcode_id
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: 申请人邮箱
+      description: 用于接收建仓进度通知
+      placeholder: your_email@example.com
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 备注
+      description: 其他需要说明的信息
+      placeholder: 如有特殊需求或说明，请在此填写
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: |
+        ---
+        
+        ### 后续流程
+        
+        1. 申请者通过[CANN数字化平台](https://digital.hicann.cn/#/repo_manage/all_repo)提交建仓申请，基础设施团队同步审批
+        2. 建仓完成后，如需CI配置，请使用「门禁/版本集成申请」模板提交CI Issue
+        3. 如需配置权限，请在CANN/community仓库提交PR修改org-info.yaml和sig-info.yaml（详见：[org-info.yaml指导](https://gitcode.com/cann/community/blob/master/CANN/org-info-guidance.md)、[sig-info.yaml指导](https://gitcode.com/cann/community/blob/master/CANN/sig-info-guidance.md)）
+        
+        ### 相关链接
+        
+        - [新建仓申报PPT模板](https://gitcode.com/cann/community/blob/master/templates/新建仓申报模板%20v0.1.pptx)
+        - [TSC会议白板](https://etherpad-cann.meeting.osinfra.cn/p/TSC)
+        - [CI集成指南](https://gitcode.com/cann/community/blob/master/contributor/repository/ci-guide.md)
+        - [邮件列表订阅](https://mailweb.cann.osinfra.cn/mailman3/lists/infrastructure.cann.osinfra.cn/)
