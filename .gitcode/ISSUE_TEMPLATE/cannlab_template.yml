@@ -1,0 +1,46 @@
+name: CANNLab问题咨询与反馈
+description: 当您在使用CANNLab时，有问题需要咨询或者缺陷需要反馈时，请使用此模板。
+title: "[CANNLab]: "
+labels: [""]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for sending an issue! Please fill in the following template to help quickly solve your problem.
+  - type: textarea
+    attributes:
+      label: Describe the current behavior / 问题描述 (Mandatory / 必填)
+      description: 提供尽可能多的信息描述产生了什么问题
+      placeholder: ""
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Environment / 云开发环境信息 (Mandatory / 必填)
+      description: 请提供申请的CANNLab云开发环境信息，包括开发环境名称、描述、模板名称等（可截图）
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Steps to reproduce the issue / 使用场景与重现步骤 (Mandatory / 必填)
+      description: 提供尽可能多的信息描述您的使用场景，如何重现正在咨询的问题
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Describe the expected behavior / 预期结果 (Optional / 选填)
+      description: 描述期望的行为应该是什么样子的
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Related log / screenshot / 日志 / 截图 (Optional / 选填)
+      description: 提供尽可能多的日志/结果信息
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Special notes for this issue/备注 (Optional / 选填)
+      description: 补充下其他您认为需要提供的信息
+    validations:
+      required: false
