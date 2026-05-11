@@ -5,29 +5,20 @@
 ### 安装
 
 **离线安装**（适用于WebIDE）
-1. 下载离线包到本地
 
-   - [linux-arm64] [packages/1.0.3/linux-arm64/cannbot-toolkit-linux-arm64-1.0.3.vsix](https://cannbot.obs.cn-north-4.myhuaweicloud.com/packages/1.0.3/linux-arm64/cannbot-toolkit-linux-arm64-1.0.3.vsix?Expires=2091087747&AccessKeyId=HPUANYAXOY5QYKEQIMQE&Signature=tLE7FHyfyNLmOp293CXh57oJtUA%3D)
+> 以下任选一种，在 WebIDE 终端中执行即可。
+ 
+方式一：curl（推荐）
 
-   - [linux-x64] [packages/1.0.3/linux-x64/cannbot-toolkit-linux-x64-1.0.3.vsix](https://cannbot.obs.cn-north-4.myhuaweicloud.com/packages/1.0.3/linux-x64/cannbot-toolkit-linux-x64-1.0.3.vsix?Expires=2091087747&AccessKeyId=HPUANYAXOY5QYKEQIMQE&Signature=Dy60iF%2BQDguPfGQrK2TxIRMrY64%3D)
+```bash
+curl -fsSL https://cannbot.hicann.cn/docs/api/download/CANNBot/scripts/cannbot-update.sh | bash
+```
 
-   - [win32-arm64] [packages/1.0.3/win32-arm64/cannbot-toolkit-win32-arm64-1.0.3.vsix](https://cannbot.obs.cn-north-4.myhuaweicloud.com/packages/1.0.3/win32-arm64/cannbot-toolkit-win32-arm64-1.0.3.vsix?Expires=2091087747&AccessKeyId=HPUANYAXOY5QYKEQIMQE&Signature=gQbqcgx83YN9h0qDCM9/46/MeJY%3D)
-
-   - [win32-x64] [packages/1.0.3/win32-x64/cannbot-toolkit-win32-x64-1.0.3.vsix](https://cannbot.obs.cn-north-4.myhuaweicloud.com/packages/1.0.3/win32-x64/cannbot-toolkit-win32-x64-1.0.3.vsix?Expires=2091087747&AccessKeyId=HPUANYAXOY5QYKEQIMQE&Signature=N%2BOb11jskM81o8OSZ/C/LJuOCv0%3D)
-
-2. 扩展安装方法（二选一即可）
-
-   **方法1：**
-   - 将插件安装包拖入WebIDE窗口
-   - 右键点击插件包，选择"Install from VSIX"（安装扩展）
-
-     <img src="images/离线安装1.png" alt="离线安装1" width="80%">
-
-   **方法2：**
-   - 远程搜索本地扩展VSIX包
-   - 点击安装按钮完成安装
-
-     <img src="images/离线安装2.png" alt="离线安装2" width="70%">
+方式二：wget
+ 	 
+```bash
+wget -qO- https://cannbot.hicann.cn/docs/api/download/CANNBot/scripts/cannbot-update.sh | bash
+```
 
 **在线安装**
 1. 点击左侧扩展
