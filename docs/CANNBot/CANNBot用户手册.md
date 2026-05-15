@@ -11,13 +11,13 @@
 方式一：curl（推荐）
 
 ```bash
-curl -fsSL https://cannbot.hicann.cn/docs/api/download/CANNBot/scripts/cannbot-update.sh | bash
+curl -fsSL https://raw.gitcode.com/cann/infrastructure/raw/main/docs/CANNBot/scripts/cannbot-update.sh | bash
 ```
 
 方式二：wget
  	 
 ```bash
-wget -qO- https://cannbot.hicann.cn/docs/api/download/CANNBot/scripts/cannbot-update.sh | bash
+wget -qO- https://raw.gitcode.com/cann/infrastructure/raw/main/docs/CANNBot/scripts/cannbot-update.sh | bash
 ```
 
 **在线安装**
