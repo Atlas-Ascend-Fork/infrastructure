@@ -5,7 +5,8 @@
 
 ## 1 概述
 
-本指导书主要用于指导CNAN社区在代码仓中部署pre-commit能力（主要包括代码格式化及OAT扫描能力），并指导社区贡献者如何在本地使用。
+本指导书主要用于指导CANN社区在代码仓中部署pre-commit能力（主要包括代码格式化及OAT扫描能力），并指导社区贡献者如何在本地使用。
+
 
 ### 1.1 GitCode 镜像仓库说明
 
@@ -27,11 +28,11 @@
 
 ## 2 代码仓中部署pre-commit能力指导
 
-1、在代码仓根目录下创建“.pre-commit-config.yaml”文件，如果已经存在，表示该代码仓中已经启用pre-commit能力，可参考后续步骤配置代码格式化及OAT检查能力；
+1、在代码仓根目录下创建".pre-commit-config.yaml"文件，如果已经存在，表示该代码仓中已经启用pre-commit能力，可参考后续步骤配置代码格式化及OAT检查能力；
 
-2、在“.pre-commit-config.yaml”文件中配置C++代码格式化能力：
+2、在".pre-commit-config.yaml"文件中配置C++代码格式化能力：
 
-- **在“.pre-commit-config.yaml”文件添加如下配置：**
+- **在".pre-commit-config.yaml"文件添加如下配置：**
 
 ```
 repos:
@@ -47,31 +48,31 @@ repos:
 - 如果已经有配置，请忽略首行的"repos:"
 - **重要**: 使用 GitCode 镜像仓库替代 GitHub 仓库，避免国内网络访问问题
 
-- **将“.clang-format”配置文件拷贝至代码仓根目录下**
-配套提供的“.clang-format”为与CANN社区编程规范配套的格式化模板文件，如果代码仓有与规范不匹配的代码风格，可自主调整配置参数。
+- **将".clang-format"配置文件拷贝至代码仓根目录下**
+配套提供的".clang-format"为与CANN社区编程规范配套的格式化模板文件，如果代码仓有与规范不匹配的代码风格，可自主调整配置参数。
 
-3、在“.pre-commit-config.yaml”文件中配置OAT扫描能力：
+3、在".pre-commit-config.yaml"文件中配置OAT扫描能力：
 
-- **在“.pre-commit-config.yaml”文件添加如下配置：**
+- **在".pre-commit-config.yaml"文件添加如下配置：**
 
-```
+```yaml
   - repo: local
     hooks:
       - id: oat-check
-        name: OAT Compliance Check
+        name: OAT Compliance Check (Python)
         entry: bash scripts/oat_check.sh
         language: system
         pass_filenames: true
         types: [file]
-        stages: [commit]
+        stages: [pre-commit]
         verbose: true
 ```
 
-- **将“oat_check.sh”脚本拷贝至代码仓中的`scripts/`目录下；**
+- **将"oat_check.sh"脚本拷贝至代码仓中的`scripts/`目录下；**
 
-**说明**：“oat_check.sh”脚本如果放在其他路径下，需要在“.pre-commit-config.yaml”中的oat-check配置中同步调整执行“oat_check.sh”脚本路径信息。
+**说明**："oat_check.sh"脚本如果放在其他路径下，需要在".pre-commit-config.yaml"中的oat-check配置中同步调整执行"oat_check.sh"脚本路径信息。
 
-4、至此将完成在代码仓中配置pre-commit机制下的代码格式化、OAT检查配置，如果还需要其他功能，可继续在“.pre-commit-config.yaml”中配置。
+4、至此将完成在代码仓中配置pre-commit机制下的代码格式化、OAT检查配置，如果还需要其他功能，可继续在".pre-commit-config.yaml"中配置。
 
 ## 3 社区贡献者使用pre-commit能力
 
@@ -117,7 +118,7 @@ git commit --allow-empty -m "test pre-commit"
 
 ### 3.2 OAT使用指导
 
-**OAT（Open Source Audit Tool）** 是一个开源合规性检查工具，自动集成到 Git 提交流程中。
+**OAT（Open Source Audit Tool）Python 版** 是一个开源合规性检查工具，自动集成到 Git 提交流程中。仅依赖 **Python 3.9+**，`oat-py` 包在首次运行时自动安装。
 
 #### 3.2.1 检查内容
 
@@ -126,59 +127,55 @@ git commit --allow-empty -m "test pre-commit"
 
 #### 3.2.2 核心特点
 
--  **增量检查** - 仅检查待提交文件，速度快（< 5 秒）
--  **自动触发** - 每次 `git commit` 自动运行
--  **详细报告** - 自动生成 `result.txt` 摘要和完整报告
--  **零配置** - Java 和 Maven 自动安装（Linux/macOS）
--  **跨平台** - Windows/Linux/macOS 全支持
+- **增量检查** - 仅检查待提交文件，速度快（通常 < 2 秒）
+- **自动触发** - 每次 `git commit` 自动运行
+- **详细报告** - 自动生成 `oat_reports/result.txt` 摘要报告
+- **零配置** - 首次运行自动安装 `oat-py`（需可访问 PyPI 或内部镜像）
+- **跨平台** - Windows / Linux / macOS 全支持（只需 Python 3.9+）
 
 #### 3.2.3 必需软件
 
 | 软件 | 版本要求 | 用途 | 安装方式 |
 |------|---------|------|----------|
-| **Java** | JDK 21+ | 运行 OAT |  **自动安装**（Linux/macOS）<br> 手动安装（Windows）|
-| **Maven** | 3.6+ | 打包 OAT |  **自动安装**（Linux/macOS）<br> 手动安装（Windows）|
+| **Python** | 3.9+ | 运行 OAT | 通常已安装；参见下方安装指导 |
+| **oat-py** | >=1.0.0 | OAT 核心包 | **首次运行自动安装** |
 | **Git** | 2.0+ | 版本控制 | 通常已安装 |
 | **pre-commit** | 2.0+ | Hook 框架 | `pip install pre-commit` |
 
 #### 3.2.4 自动安装支持
 
-| 平台 | Java | Maven | 包管理器 | 首次安装时间 |
-|------|------|-------|---------|-------------|
-| **Linux (Ubuntu/Debian)** | 自动 |  自动 | apt | 5-8 分钟 |
-| **Linux (CentOS/RHEL)** |  自动 |  自动 | yum | 5-8 分钟 |
-| **macOS** |  自动 |  自动 | Homebrew | 8-10 分钟 |
-| **Windows** |  手动 |  手动 | - | 需手动安装 |
+`oat_check.sh` 脚本在运行时会自动检测并安装 `oat-py`：
+
+| 平台 | Python 检测 | oat-py 安装 | 首次安装时间 |
+|------|------------|------------|-------------|
+| **Linux** | 自动检测 `python3/python/py` | 自动（`pip install`） | < 30 秒 |
+| **macOS** | 自动检测 `python3/python/py` | 自动（`pip install`） | < 30 秒 |
+| **Windows（Git Bash）** | 自动检测 `python3/python/py` | 自动（`pip install`） | < 30 秒 |
 
 #### 3.2.5 重要提示：环境问题自动跳过
 
-**友好的设计**：如果无法安装 Java/Maven 或遇到环境问题，OAT 检查会**自动跳过**，提交仍会继续。
+**友好的设计**：如果 Python 未找到或 `oat-py` 安装失败，OAT 检查会**自动跳过**，提交仍会继续。
 
 **会自动跳过的场景**
 
 | 场景 | 行为 | 提示 |
 |------|------|------|
-| Java/Maven 未安装（Windows） |  跳过检查，允许提交 | 提供手动安装指引 |
-| Java/Maven 自动安装失败 |  跳过检查，允许提交 | 提示手动安装方法 |
-| Maven 打包失败 |  跳过检查，允许提交 | 提供解决方案 |
-| OAT 扫描执行失败 |  跳过检查，允许提交 | 提示重新打包 |
+| Python 3.9+ 未安装 | 跳过检查，允许提交 | 提供安装指引 |
+| oat-py 自动安装失败 | 跳过检查，允许提交 | 提示手动安装方法 |
+| OAT 扫描执行异常（退出码非 0/1） | 跳过检查，允许提交 | 提示手动运行命令排查 |
 
-** 仍会阻止提交的场景**
+**仍会阻止提交的场景**
 
 | 场景 | 行为 | 原因 |
 |------|------|------|
-| **发现二进制文件** |  阻止提交 | 真正的合规性问题 |
+| **发现二进制文件** | 阻止提交 | 真正的合规性问题 |
 | **许可证头缺失/错误** | 阻止提交 | 真正的合规性问题 |
 
 **跳过检查的提示示例**
 
 ```
-[OAT] Windows 系统无法自动安装 Java
-[OAT] 请手动下载并安装：
-  ...（安装步骤）...
-
-[OAT] 跳过 OAT 检查，继续提交...
-[OAT] 建议安装 Java 后再次运行检查
+[OAT] [ERROR] Python 3.9+ is required but not found. Please install Python 3.9 or later.
+[OAT] Skipping OAT check, continuing commit...
 ```
 
 **后续手动运行检查**
@@ -204,28 +201,25 @@ bash scripts/oat_check.sh
 **输出**:
 ```
 ====================================================================
-  发现合规性问题
+  OAT: Compliance issues found. Commit blocked.
 ====================================================================
 
 [OAT] Found 1 compliance issue(s):
-  - Invalid File Type: 1
-  - License Header Invalid: 0
+  - Invalid File Type:       1
+  - License Header Invalid:  0
 
-[OAT] Details saved to: oat_reports/single/result.txt
-[OAT] Please check the report and fix the issues.
+[OAT] Details:
+  cat oat_reports/result.txt
 
-To view the summary:
-  cat oat_reports/single/result.txt
-
-To skip this check temporarily:
+Fix the issues and recommit, or skip with:
   git commit --no-verify
 ```
 
-**行为**:**阻止提交，必须修复**
+**行为**: **阻止提交，必须修复**
 
 **查看详情**:
 ```bash
-cat oat_reports/single/result.txt
+cat oat_reports/result.txt
 ```
 
 **报告内容示例**:
@@ -269,21 +263,22 @@ git commit -m "update: add binary files to gitignore"
 **输出**:
 ```
 ====================================================================
-  发现合规性问题
+  OAT: Compliance issues found. Commit blocked.
 ====================================================================
 
 [OAT] Found 2 compliance issue(s):
-  - Invalid File Type: 0
-  - License Header Invalid: 2
+  - Invalid File Type:       0
+  - License Header Invalid:  2
 
-[OAT] Details saved to: oat_reports/single/result.txt
+[OAT] Details:
+  cat oat_reports/result.txt
 ```
 
 **行为**: **阻止提交，必须修复**
 
 **查看详情**:
 ```bash
-cat oat_reports/single/result.txt
+cat oat_reports/result.txt
 ```
 
 **报告内容示例**:
@@ -333,17 +328,19 @@ git commit -m "fix: add license headers"
 
 | 报告类型 | 文件路径 | 内容 |
 |---------|---------|------|
-| **摘要报告** | `oat_reports/single/result.txt` | 关键问题汇总  |
+| **摘要报告** | `oat_reports/result.txt` | 关键问题汇总 |
+
+> `oat_reports/` 目录会被脚本自动加入 `.gitignore`，无需手动维护。
 
 **查看命令**
 
 ```bash
 # 查看报告
-cat oat_reports/single/result.txt
+cat oat_reports/result.txt
 
 # 使用编辑器查看
-code oat_reports/single/result.txt
-vim oat_reports/single/result.txt
+code oat_reports/result.txt
+vim oat_reports/result.txt
 ```
 
 **摘要报告内容**
@@ -367,154 +364,45 @@ License Header Invalid Total Count: 0
 
 #### 3.2.8 环境问题
 
-**1) Java 未安装（Linux/macOS 自动安装）**
+**1) Python 未安装或版本过低**
 
-**场景**: 首次提交，系统未安装 Java。
-
-**输出**:
-```
-====================================================================
-  Java 未安装 - 正在尝试自动安装
-====================================================================
-
-[OAT] 检测到系统未安装 Java，开始自动安装...
-[OAT] 使用 apt 安装 OpenJDK 11...
-[OAT] [OK] OpenJDK 11 安装成功
-```
-
-**处理**: 自动安装，可能需要输入 sudo 密码。
-
----
-
-**2) Java 未安装（Windows 手动安装）**
-
-**场景**: Windows 系统无法自动安装 Java。
+**场景**: 系统未安装 Python，或版本低于 3.9。
 
 **输出**:
 ```
-[OAT] Windows 系统无法自动安装 Java
-[OAT] 请手动下载并安装：
-
-  1. 访问: https://adoptium.net/zh-CN/temurin/releases/
-  2. 下载: Eclipse Temurin JDK 21 (x64)
-  3. 安装后重启 Git Bash
-  4. 验证: java -version
-
-[OAT] 跳过 OAT 检查，继续提交...
-[OAT] 建议安装 Java 后再次运行检查
+[OAT] [ERROR] Python 3.9+ is required but not found. Please install Python 3.9 or later.
+[OAT] Skipping OAT check, continuing commit...
 ```
 
 **行为**: **跳过检查，允许提交**
 
-**后续操作**：请参考以下 Windows 环境 Java 安装指导，安装完成后重启终端，运行 `pre-commit run oat-check` 验证环境。
-
-##### Windows 环境 Java 安装指导
-
-OAT 工具需要 **Java 21+**，以下提供三种安装方式。
-
-**方式一：使用 Scoop 包管理器（推荐，适合开发者）**
-
-[Scoop](https://scoop.sh/) 是 Windows 命令行包管理器，安装软件无需管理员权限、自动配置 PATH。
-
-在 **PowerShell**（普通用户）中执行：
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-irm get.scoop.sh | iex
-```
-![Scoop 安装步骤 1](img/scoop-1.png)
-![Scoop 安装步骤 2](img/scoop-2.png)
-安装 Java：
-```powershell
-# 添加 Java bucket
-scoop bucket add java
-
-# 安装 Eclipse Temurin JDK 21
-scoop install temurin21-jdk
-```
-![安装JAVA](img/scoop-3.png)
-
-安装完成后立即生效（无需重启终端），验证：
-```powershell
-java -version
-```
-
-**方式二：手动安装（步骤清晰）**
-
-1. 访问 [https://adoptium.net/zh-CN/temurin/releases/](https://adoptium.net/zh-CN/temurin/releases/)
-
-2. 筛选条件选择：
-   - **Operating System**：Windows
-   - **Architecture**：x64
-   - **Package Type**：JDK
-   - **Version**：21（LTS）
-
-3. 下载 `.msi` 安装包（如 `OpenJDK21U-jdk_x64_windows_hotspot_21.x.x_x.msi`）
-
-![msi安装](img/msi-1.png)
-
-
-4. 双击安装包，**全程保持默认选项**，安装向导会自动：
-   - 设置 `JAVA_HOME` 环境变量
-   - 将 `java` 命令添加到系统 `PATH`
-
-5. 安装完成后，打开新的命令行窗口（CMD 或 Git Bash），验证：
-   ```bash
-   java -version
-   # 预期: openjdk version "21.0.x" ...
-   ```
-
-> **国内网络备用下载**：  
-> 华为镜像站：[https://mirrors.huaweicloud.com/java/jdk/](https://mirrors.huaweicloud.com/java/jdk/)  
-> 阿里云镜像：[https://dragonwell-jdk.io/](https://dragonwell-jdk.io/)（Alibaba Dragonwell，兼容 OpenJDK 21）
-
-**方式三：使用 Winget（Windows 11 / Windows 10 内置）**
-
-```powershell
-# 安装 Eclipse Temurin JDK 21
-winget install EclipseAdoptium.Temurin.21.JDK
-```
+**解决方案**：安装 Python 3.9+，参见下方《Python 安装指导》。安装完成后运行 `pre-commit run oat-check` 验证。
 
 ---
 
-**3)  Java 自动安装失败**
+**2) oat-py 自动安装失败**
 
-**场景**: Linux/macOS 自动安装 Java 失败。
+**场景**: `pip install oat-py>=1.0.0` 执行失败（网络问题或权限问题）。
 
 **输出**:
 ```
-[OAT] [ERROR] 自动安装失败
-
-[OAT] 自动安装失败，跳过 OAT 检查
-
-手动安装方法:
-  Linux:   sudo apt install temurin-21-jdk
-  macOS:   brew install openjdk@21
-  Windows: https://adoptium.net/zh-CN/temurin/releases/
-
-[OAT] 继续提交（未进行合规性检查）...
-[OAT] 建议安装 Java 后再次运行: pre-commit run oat-check
+[OAT] oat-py not found. Installing oat-py>=1.0.0 ...
+[OAT] [ERROR] Failed to install oat-py. Please run: pip install oat-py>=1.0.0
+[OAT] Skipping OAT check, continuing commit...
 ```
 
 **行为**: **跳过检查，允许提交**
-
-**可能原因**:
-- 网络连接问题
-- 包管理器未配置
-- 权限不足
-- macOS 未安装 Homebrew
 
 **解决方案**:
 ```bash
-# Linux
-sudo apt update
-sudo apt install temurin-21-jdk
+# 手动安装
+pip install oat-py>=1.0.0
 
-# macOS - 先安装 Homebrew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install openjdk@21
+# 国内网络使用镜像加速
+pip install oat-py>=1.0.0 -i https://mirrors.huaweicloud.com/repository/pypi/simple/
 
-# 验证
-java -version
+# 验证安装
+python -m oat -v
 
 # 手动运行检查
 pre-commit run oat-check
@@ -522,288 +410,96 @@ pre-commit run oat-check
 
 ---
 
-**4) Maven 未安装（Linux/macOS 自动安装）**
+**3) OAT 扫描执行异常**
 
-**场景**: 首次提交，系统未安装 Maven。
-
-**输出**:
-```
-====================================================================
-  Maven 未安装 - 正在尝试自动安装
-====================================================================
-
-[OAT] 使用 apt 安装 Maven...
-[OAT] [OK] Maven 安装成功
-```
-
-**处理**: 自动安装，可能需要输入 sudo 密码。
-
----
-
-**5) Maven 未安装（Windows 手动安装）**
-
-**场景**: Windows 系统无法自动安装 Maven。
+**场景**: `oat` 命令运行时出现意外错误（退出码非 0 或 1）。
 
 **输出**:
 ```
-[OAT] Windows 系统无法自动安装 Maven
-[OAT] 请手动下载并安装：
-
-  1. 访问: https://maven.apache.org/download.cgi
-  2. 下载: apache-maven-3.x.x-bin.zip
-  3. 解压到 C:\Program Files\apache-maven-3.x.x
-  4. 添加到系统 PATH
-  5. 重启 Git Bash
-  6. 验证: mvn -version
-
-[OAT] 跳过 OAT 检查，继续提交...
-[OAT] 建议安装 Maven 后再次运行检查
+[OAT] [ERROR] oat exited with unexpected code 2.
+[OAT] Try re-running manually:
+  python -m oat -mode s -s /path/to/repo -r /path/to/repo/oat_reports -n REPO_NAME -w 1 -f file1,file2
+[OAT] Skipping OAT check, continuing commit...
 ```
 
 **行为**: **跳过检查，允许提交**
 
-**后续操作**：请参考以下 Windows 环境 Maven 安装指导，安装完成后运行 `pre-commit run oat-check` 验证环境。
+**解决方案**:
+```bash
+# 步骤 1: 手动执行输出的命令，查看详细报错
+python -m oat -mode s -s . -r oat_reports -n CANN -w 1 -f src/foo.cpp
 
-##### Windows 环境 Maven 安装指导
+# 步骤 2: 检查 oat-py 版本
+python -m oat -v
 
-OAT 工具需要 **Apache Maven 3.6+**，以下提供三种安装方式。
+# 步骤 3: 重装 oat-py
+pip install --upgrade oat-py
 
-**方式一：使用 Scoop 包管理器（推荐，已安装 Scoop 时）**
-
-```powershell
-# 安装 Maven
-scoop install maven
-```
-![安装MVN](img/scoop-4.png)
-
-安装完成后立即生效，验证：
-```powershell
-mvn -version
+# 步骤 4: 验证
+pre-commit run oat-check
 ```
 
-**方式二：手动安装（步骤清晰）**
+---
 
-1. 访问 [https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)
+##### Python 安装指导
 
-2. 在 **Files** 区域下载 Binary zip archive，如：  
-   `apache-maven-3.9.x-bin.zip`
+OAT Python 版需要 **Python 3.9+**，以下提供各平台安装方式。
 
- ![msi安装](img/msi-2.png)  
+**Linux**
 
-3. 解压到一个**不含空格和中文**的路径，例如：  
-   `C:\dev\apache-maven-3.9.x`
+```bash
+# Ubuntu / Debian
+sudo apt update && sudo apt install python3 python3-pip
 
-4. 配置环境变量（**以下操作需管理员权限**）：
+# CentOS / RHEL
+sudo yum install python3 python3-pip
 
-   - 右键「此电脑」→「属性」→「高级系统设置」→「环境变量」
-   - 在「系统变量」中新建：
+# 验证
+python3 --version
+```
 
-     | 变量名 | 变量值 |
-     |--------|--------|
-     | `MAVEN_HOME` | `C:\dev\apache-maven-3.9.x` |
+**macOS**
 
-   - 在「系统变量」中找到 `Path`，点击「编辑」，新增一行：
-     ```
-     %MAVEN_HOME%\bin
-     ```
-   - 点击「确定」保存，**关闭所有命令行窗口后重新打开**
+```bash
+# 推荐使用 Homebrew
+brew install python@3.11
 
-    ![msi安装](img/msi-3.png)
-    ![msi安装](img/msi-4.png)
-    ![msi安装](img/msi-5.png)
+# 验证
+python3 --version
+```
 
+**Windows**
 
-5. 打开新的命令行窗口验证：
-   ```bash
-   mvn -version
-   # 预期: Apache Maven 3.9.x ..., Java version: 21.0.x ...
+**方式一：官网安装包（推荐）**
+
+1. 访问 [https://www.python.org/downloads/windows/](https://www.python.org/downloads/windows/)
+2. 下载最新 Python 3.x（3.9 及以上均可）的 **Windows installer (64-bit)**
+3. 双击安装，**务必勾选"Add Python to PATH"**
+4. 安装完成后重启终端，验证：
+   ```powershell
+   python --version
+   pip --version
    ```
 
-> **国内网络备用下载**：  
-> 华为镜像：[https://mirrors.huaweicloud.com/apache/maven/](https://mirrors.huaweicloud.com/apache/maven/)  
-> 阿里云镜像：[https://maven.aliyun.com/](https://maven.aliyun.com/)
+**方式二：使用 Scoop 包管理器**
+
+```powershell
+# 安装 Scoop（首次使用）
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
+
+# 安装 Python
+scoop install python
+
+# 验证
+python --version
+```
 
 **方式三：使用 Winget（Windows 11 / Windows 10 内置）**
 
 ```powershell
-# 安装 Apache Maven（需重启终端后 PATH 生效）
-winget install Apache.Maven
+winget install Python.Python.3.11
 ```
 
-**（可选）配置 Maven 国内镜像加速**
-
-首次构建 OAT 工具时需要从中央仓库下载依赖，国内网络较慢。  
-编辑文件 `%USERPROFILE%\.m2\settings.xml`（若不存在则新建），添加阿里云镜像：
-
-```xml
-<settings>
-  <mirrors>
-    <mirror>
-      <id>aliyun-central</id>
-      <mirrorOf>central</mirrorOf>
-      <name>阿里云 Maven 中央仓库镜像</name>
-      <url>https://maven.aliyun.com/repository/central</url>
-    </mirror>
-    <mirror>
-      <id>aliyun-public</id>
-      <mirrorOf>*</mirrorOf>
-      <name>阿里云 Maven 公共镜像</name>
-      <url>https://maven.aliyun.com/repository/public</url>
-    </mirror>
-  </mirrors>
-</settings>
-```
-
----
-
-**6) Maven 打包失败**
-
-**场景**: Maven 打包 OAT JAR 失败。
-
-**输出**:
-```
-====================================================================
-  Maven 打包失败
-====================================================================
-
-[OAT] 无法打包 OAT JAR，跳过 OAT 检查
-
-可能原因:
-  1. Maven 配置问题
-  2. 网络连接问题（无法下载依赖）
-  3. pom.xml 配置错误
-
-建议解决方案:
-  1. 手动打包：
-     cd ../tools_oat
-     mvn clean package -DskipTests
-
-  2. 配置 Maven 镜像（国内网络）：
-     编辑 ~/.m2/settings.xml 添加阿里云镜像
-
-[OAT] 继续提交（未进行合规性检查）...
-[OAT] 建议修复打包问题后运行: pre-commit run oat-check
-```
-
-**行为**:  **跳过检查，允许提交**
-
-**解决方案**:
-
-**方法 1: 手动打包**
-```bash
-cd ../tools_oat
-mvn clean package -DskipTests
-
-# 查看输出，应该看到 BUILD SUCCESS
-```
-
-**方法 2: 配置阿里云镜像（国内网络）**
-```bash
-mkdir -p ~/.m2
-cat > ~/.m2/settings.xml <<'EOF'
-<settings>
-  <mirrors>
-    <mirror>
-      <id>aliyun</id>
-      <mirrorOf>central</mirrorOf>
-      <name>Aliyun Maven Mirror</name>
-      <url>https://maven.aliyun.com/repository/public</url>
-    </mirror>
-  </mirrors>
-</settings>
-EOF
-
-# 重新打包
-cd ../tools_oat
-mvn clean package -DskipTests
-```
-
-**方法 3: 从团队获取 JAR**
-```bash
-# 如果团队已有编译好的 JAR，直接复制
-# 将 JAR 文件复制到 ../tools_oat/target/ 目录
-```
-
-**验证修复**:
-```bash
-pre-commit run oat-check
-```
-
----
-
-**7) tools_oat 克隆失败**
-
-**输出**:
-```
-[OAT] tools_oat not found. Cloning...
-[OAT] [ERROR] Failed to clone tools_oat.
-[OAT] You can manually clone from: https://gitcode.com/openharmony-sig/tools_oat.git
-```
-
-**原因**: 网络连接问题。
-
-**解决方案**:
-```bash
-# 方法 1: 检查网络
-ping gitcode.com
-
-# 方法 2: 手动克隆
-cd ..
-git clone https://gitcode.com/openharmony-sig/tools_oat.git
-
-# 方法 3: 配置代理
-git config --global http.proxy http://proxy.example.com:8080
-
-# 方法 4: 从团队成员复制
-# 让已克隆的同事打包 tools_oat 文件夹给你
-```
-
----
-
-**8) OAT 扫描执行失败**
-
-**场景**: OAT JAR 运行失败。
-
-**输出**:
-```
-====================================================================
-  OAT 扫描执行失败
-====================================================================
-
-[OAT] 扫描失败，跳过 OAT 检查
-
-可能原因:
-  1. JAR 文件损坏
-  2. Java 版本不兼容
-  3. OAT 配置问题
-
-建议解决方案:
-  1. 删除并重新打包 JAR：
-     rm ../tools_oat/target/ohos_ossaudittool-*.jar
-     cd ../tools_oat && mvn clean package -DskipTests
-
-  2. 检查 Java 版本（需要 Java 21+）：
-     java -version
-
-[OAT] 继续提交（未进行合规性检查）...
-[OAT] 建议修复扫描问题后运行: pre-commit run oat-check
-```
-
-**行为**: **跳过检查，允许提交**
-
-**解决方案**:
-```bash
-# 步骤 1: 删除旧 JAR
-rm ../tools_oat/target/ohos_ossaudittool-*.jar
-
-# 步骤 2: 重新打包
-cd ../tools_oat
-mvn clean package -DskipTests
-
-# 步骤 3: 验证 JAR
-ls -lh target/ohos_ossaudittool-*.jar
-
-# 步骤 4: 运行检查
-cd -
-pre-commit run oat-check
-```
+> **国内网络备用下载**：  
+> 华为镜像：[https://mirrors.huaweicloud.com/python/](https://mirrors.huaweicloud.com/python/)
