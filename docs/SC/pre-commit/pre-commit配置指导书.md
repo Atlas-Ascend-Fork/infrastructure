@@ -118,7 +118,7 @@ git commit --allow-empty -m "test pre-commit"
 
 ### 3.2 OAT使用指导
 
-**OAT（Open Source Audit Tool）Python 版** 是一个开源合规性检查工具，自动集成到 Git 提交流程中。仅依赖 **Python 3.9+**，`oat-py` 包在首次运行时自动安装。
+**OAT（Open Source Audit Tool）Python 版** 是一个开源合规性检查工具，自动集成到 Git 提交流程中。仅依赖 **Python 3.7+**，`oat-py` 包在首次运行时自动安装。
 
 #### 3.2.1 检查内容
 
@@ -131,13 +131,13 @@ git commit --allow-empty -m "test pre-commit"
 - **自动触发** - 每次 `git commit` 自动运行
 - **详细报告** - 自动生成 `oat_reports/result.txt` 摘要报告
 - **零配置** - 首次运行自动安装 `oat-py`（需可访问 PyPI 或内部镜像）
-- **跨平台** - Windows / Linux / macOS 全支持（只需 Python 3.9+）
+- **跨平台** - Windows / Linux / macOS 全支持（只需 Python 3.7+）
 
 #### 3.2.3 必需软件
 
 | 软件 | 版本要求 | 用途 | 安装方式 |
 |------|---------|------|----------|
-| **Python** | 3.9+ | 运行 OAT | 通常已安装；参见下方安装指导 |
+| **Python** | 3.7+ | 运行 OAT | 通常已安装；参见下方安装指导 |
 | **oat-py** | >=1.0.0 | OAT 核心包 | **首次运行自动安装** |
 | **Git** | 2.0+ | 版本控制 | 通常已安装 |
 | **pre-commit** | 2.0+ | Hook 框架 | `pip install pre-commit` |
@@ -160,7 +160,7 @@ git commit --allow-empty -m "test pre-commit"
 
 | 场景 | 行为 | 提示 |
 |------|------|------|
-| Python 3.9+ 未安装 | 跳过检查，允许提交 | 提供安装指引 |
+| Python 3.7+ 未安装 | 跳过检查，允许提交 | 提供安装指引 |
 | oat-py 自动安装失败 | 跳过检查，允许提交 | 提示手动安装方法 |
 | OAT 扫描执行异常（退出码非 0/1） | 跳过检查，允许提交 | 提示手动运行命令排查 |
 
@@ -174,7 +174,7 @@ git commit --allow-empty -m "test pre-commit"
 **跳过检查的提示示例**
 
 ```
-[OAT] [ERROR] Python 3.9+ is required but not found. Please install Python 3.9 or later.
+[OAT] [WARNING] Python 3.7+ is required but not found. Please install Python 3.7 or later.
 [OAT] Skipping OAT check, continuing commit...
 ```
 
@@ -366,17 +366,17 @@ License Header Invalid Total Count: 0
 
 **1) Python 未安装或版本过低**
 
-**场景**: 系统未安装 Python，或版本低于 3.9。
+**场景**: 系统未安装 Python，或版本低于 3.7。
 
 **输出**:
 ```
-[OAT] [ERROR] Python 3.9+ is required but not found. Please install Python 3.9 or later.
+[OAT] [WARNING] Python 3.7+ is required but not found. Please install Python 3.7 or later.
 [OAT] Skipping OAT check, continuing commit...
 ```
 
 **行为**: **跳过检查，允许提交**
 
-**解决方案**：安装 Python 3.9+，参见下方《Python 安装指导》。安装完成后运行 `pre-commit run oat-check` 验证。
+**解决方案**：安装 Python 3.7+，参见下方《Python 安装指导》。安装完成后运行 `pre-commit run oat-check` 验证。
 
 ---
 
@@ -387,7 +387,7 @@ License Header Invalid Total Count: 0
 **输出**:
 ```
 [OAT] oat-py not found. Installing oat-py>=1.0.0 ...
-[OAT] [ERROR] Failed to install oat-py. Please run: pip install oat-py>=1.0.0
+[OAT] [WARNING] Failed to install oat-py. Please run: pip install oat-py>=1.0.0
 [OAT] Skipping OAT check, continuing commit...
 ```
 
@@ -416,7 +416,7 @@ pre-commit run oat-check
 
 **输出**:
 ```
-[OAT] [ERROR] oat exited with unexpected code 2.
+[OAT] [WARNING] oat exited with unexpected code 2.
 [OAT] Try re-running manually:
   python -m oat -mode s -s /path/to/repo -r /path/to/repo/oat_reports -n REPO_NAME -w 1 -f file1,file2
 [OAT] Skipping OAT check, continuing commit...
@@ -443,7 +443,7 @@ pre-commit run oat-check
 
 ##### Python 安装指导
 
-OAT Python 版需要 **Python 3.9+**，以下提供各平台安装方式。
+OAT Python 版需要 **Python 3.7+**，以下提供各平台安装方式。
 
 **Linux**
 
@@ -473,7 +473,7 @@ python3 --version
 **方式一：官网安装包（推荐）**
 
 1. 访问 [https://www.python.org/downloads/windows/](https://www.python.org/downloads/windows/)
-2. 下载最新 Python 3.x（3.9 及以上均可）的 **Windows installer (64-bit)**
+2. 下载最新 Python 3.x（3.7 及以上均可）的 **Windows installer (64-bit)**
 3. 双击安装，**务必勾选"Add Python to PATH"**
 4. 安装完成后重启终端，验证：
    ```powershell

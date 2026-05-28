@@ -4,7 +4,7 @@
 
 本文档旨在为开发者提供明确的指引，当社区门禁系统中**code_check**扫描任务检测到由 OAT（OSS Audit Tool）Python 版发出的开源合规告警时，应如何理解、分析并采取正确的操作步骤进行处理。
 
-OAT Python 版是原版 Java OAT 的 Python 重写版本，**无需 Java/JDK 环境**，仅依赖 Python 3.9+，与原版完全兼容同一套 `OAT.xml` 配置格式。
+OAT Python 版是原版 Java OAT 的 Python 重写版本，**无需 Java/JDK 环境**，仅依赖 Python 3.7+，与原版完全兼容同一套 `OAT.xml` 配置格式。
 
 ---
 
@@ -444,7 +444,7 @@ oat -mode s -s /path/to/repo -r /path/to/reports -n MyRepo \
 
 | 特性 | Java 版 | Python 版 |
 |------|---------|-----------|
-| 运行环境 | JDK 8+ | Python 3.9+ |
+| 运行环境 | JDK 8+ | Python 3.7+ |
 | 安装方式 | Maven 构建 / 预编译 jar | `pip install` |
 | 扫描速度（143 个文件） | ~15s | ~0.6s（快约 25 倍） |
 | 项目 OAT.xml 支持 | ✅ | ✅ |
