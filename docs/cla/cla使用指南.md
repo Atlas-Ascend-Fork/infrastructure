@@ -295,8 +295,6 @@ git log --pretty=fuller
 # 修正最后一次提交
 git -c user.name="正确姓名" -c user.email="正确邮箱" commit --amend --reset-author
 
-git commit --amend --author="正确姓名 <正确邮箱>" --no-edit
-
 # 强制推送
 git push --force
 
@@ -305,7 +303,7 @@ git push --force
 git rebase -i <commit_id>~n
 
 # 2. 将pick改为edit，逐一执行：
-git commit --amend --author="正确姓名 <正确邮箱>" --no-edit
+git -c user.name="正确姓名" -c user.email="正确邮箱" commit --amend --reset-author
 git rebase --continue
 
 # 3. 强制推送
