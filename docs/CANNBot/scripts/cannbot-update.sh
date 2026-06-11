@@ -18,7 +18,7 @@ warn()    { echo -e "${YELLOW}[WARN]${NC}  $*"; }
 error()   { echo -e "${RED}[ERROR]${NC} $*"; exit 1; }
 
 # ---------- 配置 ----------
-VERSION_URL="https://turing-assitant-config.obs.cn-north-4.myhuaweicloud.com/packages/version.txt"
+VERSION_URL="https://cannbot-obs.obs.cn-north-4.myhuaweicloud.com/package/version.txt"
 
 # 自动获取最新版本号
 info "正在获取最新版本号..."
@@ -38,7 +38,7 @@ fi
 info "最新版本号：$VSIX_VERSION"
 
 VSIX_FILENAME="cannbot-toolkit-linux-arm64-${VSIX_VERSION}.vsix"
-VSIX_URL="https://turing-assitant-config.obs.cn-north-4.myhuaweicloud.com/packages/${VSIX_VERSION}/${VSIX_FILENAME}"
+VSIX_URL="https://cannbot-obs.obs.cn-north-4.myhuaweicloud.com/package/${VSIX_VERSION}/${VSIX_FILENAME}"
 VSIX_PATH="/tmp/${VSIX_FILENAME}"
 CODEARTS_BIN="$HOME/codearts/bin/codearts-server"
 
