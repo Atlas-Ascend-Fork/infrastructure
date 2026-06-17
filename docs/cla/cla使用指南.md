@@ -15,6 +15,8 @@
 ---
 根据你的身份，选择对应的操作流程，这是最快完成签署的方法。
 
+> ⚠️ **在签署 CLA 之前，请先配置你的 Git 提交邮箱**，详见下方「🔧 Git 邮箱配置」章节。
+
 <a id="personal-contributor"></a>
 ## 🤔 我是个人开发者，为自己做贡献
 
@@ -46,6 +48,16 @@
 | 公司邮箱（公司已签CLA） | ❌ 不可用 | 必须走企业员工流程 |
 
 **最佳实践**：无论公司当前是否签署 CLA，都建议使用个人邮箱进行个人贡献者签署，一劳永逸。
+
+### 配置个人提交邮箱
+签署个人 CLA 时使用个人邮箱，提交代码时也必须使用**相同的个人邮箱**。请根据以下指引配置：
+1. 在 [GitCode](https://gitcode.com) **设置 → 邮箱管理** 中添加你的个人邮箱并设为提交邮箱
+2. 使用 `git config --global user.email "你的个人邮箱"` 配置本地 Git 邮箱
+3. ⚠️ 以下场景会导致提交代码时自动使用 `****@noreply.gitcode.com` 匿名邮箱，此邮箱无法通过 CLA 验证：
+    - 未在 GitCode 平台将个人邮箱设为提交邮箱，通过网页端直接编辑文件并提交 PR
+    - 本地未配置 `git config user.email`，直接执行 `git commit`
+    - 使用 AI 辅助工具（如 Copilot 等）生成代码并提交时，未指定使用个人邮箱
+> 更多详细配置步骤，请参阅本文档「🔧 Git 邮箱配置」章节。
 
 ### 重要提示：
 
@@ -85,6 +97,15 @@
     - **只有在他审批通过后，你的签署才会正式生效**
 
 ![企业员工签署流程](images/image5.png)
+### 配置企业提交邮箱
+签署企业员工 CLA 时使用公司邮箱，提交代码时也必须使用**相同的公司邮箱**。请根据以下指引配置：
+1. 在 [GitCode](https://gitcode.com) **设置 → 邮箱管理** 中添加你的公司邮箱并设为提交邮箱
+2. 使用 `git config user.email "your-name@your-company.com"` 配置本地 Git 邮箱（建议使用 --local 仅对当前仓库生效）
+3. ⚠️ 以下场景会导致提交代码时自动使用 `****@noreply.gitcode.com` 匿名邮箱，此邮箱无法通过 CLA 验证：
+    - 未在 GitCode 平台将公司邮箱设为提交邮箱，通过网页端直接编辑文件并提交 PR
+    - 本地未配置 `git config user.email`，直接执行 `git commit`
+    - 使用 AI 辅助工具（如 Copilot 等）生成代码并提交时，未指定使用公司邮箱
+> 更多详细配置步骤，请参阅本文档「🔧 Git 邮箱配置」章节。
 
 ---
 
@@ -183,9 +204,21 @@ https://clasign.osinfra.cn/api/v1/individual-signing/68cbd4a3dbabc050b436cdd4?em
 <a id="git-email-configuration"></a>
 ## 🔧 Git 邮箱配置
 
+> ⚠️ **以下场景会导致提交代码时自动使用 `****@noreply.gitcode.com` 匿名邮箱，此邮箱无法通过 CLA 验证，会导致 CLA 检查始终失败：**
+> - 未在 GitCode 平台将个人邮箱设为提交邮箱，通过网页端直接编辑文件并提交 PR
+> - 本地未配置 `git config user.email`，直接执行 `git commit`
+> - 使用 AI 辅助工具（如 Copilot 等）生成代码并提交时，未指定使用个人邮箱
+
 ### 基本原则
 
 **签署 CLA 时使用什么邮箱，提交代码时也必须使用相同的邮箱**
+
+### GitCode 邮箱设置
+
+1. 登录 [GitCode](https://gitcode.com)，进入 **设置 → 邮箱管理**
+2. 点击 **添加邮箱**，输入你签署 CLA 时使用的邮箱（如 Gmail、Outlook、QQ 邮箱等）
+3. 查收验证邮件并完成验证
+4. 将已验证的邮箱**设为提交邮箱**（取代默认的 `****@noreply.gitcode.com`）
 
 ### 提交前检查与配置
 
@@ -222,6 +255,8 @@ git config --system user.email
 
   - Git 会按优先级使用第一个找到的配置
 
+  - ⚠️ 如果邮箱包含 `@noreply.gitcode.com`，说明使用了 GitCode 默认匿名邮箱，必须修改为签署 CLA 时使用的真实邮箱
+
 #### 配置 Git 邮箱信息
 
 根据你的需求选择合适的配置级别：
@@ -239,10 +274,9 @@ git config --global user.email "签署CLA的邮箱"
 #### 配置建议
 
   - 如果你主要在个人项目贡献，使用 --global 配置
-
   - 如果你在公司项目贡献，建议在项目目录中使用 --local 配置
-
   - 使用 git config --list --show-origin 验证配置是否生效
+  - ⚠️ 确保配置的邮箱与签署 CLA 时使用的邮箱完全一致，且不是 `****@noreply.gitcode.com` 格式
 
 <a id="faq"></a>
 ## ❓ FAQ
@@ -283,8 +317,17 @@ git log --pretty=fuller
 
 子情况B1：commit邮箱与CLA邮箱不一致
 
+**常见触发 `****@noreply.gitcode.com` 邮箱的场景：**
+
+**以下场景会导致提交代码时自动使用 `****@noreply.gitcode.com` 匿名邮箱，导致 CLA 检查失败：**
+
+- 未在 GitCode 平台将个人邮箱设为提交邮箱，通过网页端直接编辑文件并提交 PR
+- 本地未配置 `git config user.email`，直接执行 `git commit`
+- 使用 AI 辅助工具（如 Copilot 等）生成代码并提交时，未指定使用个人邮箱
+
 | 场景 | 选择方案 | 操作步骤 |
 |------|----------|----------|
+| commit邮箱为`****@noreply.gitcode.com`默认匿名邮箱 | 修改GitCode和本地Git邮箱 | 1. 在GitCode设置中添加个人邮箱并设为提交邮箱<br>2. 使用`git config user.email "签署CLA的邮箱"`修改本地配置<br>3. 修正已有commit邮箱后重新推送 |
 | commit邮箱与Gitcode提交邮箱一致 | 使用该邮箱重新签署 | 用commit邮箱重新签署CLA |
 | 希望使用commit邮箱签署 | 调整Gitcode设置 | 在Gitcode设置中添加commit邮箱并设为提交邮箱 |
 | 希望使用Gitcode提交邮箱签署 | 调整本地git配置 | 使用`git config --global user.email "邮箱"`修改配置 |
