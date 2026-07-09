@@ -225,6 +225,18 @@ Run 'cret --guide' for detailed usage instructions.
         help="Output directory for results / 输出目录 (default: same as target)"
     )
     parser.add_argument(
+        "-j", "--jobs",
+        type=int,
+        default=4,
+        help="Number of parallel ScanCode processes / ScanCode并行进程数 (default: 4)"
+    )
+    parser.add_argument(
+        "--max-in-memory",
+        type=int,
+        default=2000,
+        help="Max files cached in memory by ScanCode / ScanCode内存缓存文件数 (default: 2000)"
+    )
+    parser.add_argument(
         "--guide",
         action="store_true",
         help="Show detailed usage guide / 显示详细使用指南"
@@ -253,7 +265,7 @@ def main():
         output_dir = Path(args.output_dir).resolve()
         output_dir.mkdir(parents=True, exist_ok=True)
     else:
-        output_dir = target.parent if target.is_file() else target
+        output_dir = target.parent
     
     # 输出文件路径
     result_json = output_dir / "result.json"
@@ -302,12 +314,19 @@ def main():
     try:
         if target.is_file():
             extract_dir = run_extractcode(target)
-            # 检测嵌套目录：如果解压根目录下只有一个子目录，进入该目录作为真正的根目录
+            # 检测嵌套目录：循环递归，只要当前目录下只有一个子目录就继续深入，
+            # 直到找到真正的项目根目录（包含多个文件/子目录的层级）
             scan_target = extract_dir
             try:
-                items = list(extract_dir.iterdir())
-                if len(items) == 1 and items[0].is_dir():
-                    scan_target = items[0]
+                current = extract_dir
+                while True:
+                    items = list(current.iterdir())
+                    if len(items) == 1 and items[0].is_dir():
+                        current = items[0]
+                    else:
+                        break
+                if current != extract_dir:
+                    scan_target = current
                     info(f"Detected nested directory, using as root: {scan_target}")
             except Exception:
                 pass
@@ -326,12 +345,8 @@ def main():
         
         # 执行scancode扫描（始终扫描license，用于校验用户提供的参数）
         check_scancode_available()
-        run_scancode(scan_target, result_json, scan_license=True)
-        
-        # 读取scancode结果JSON文件（只读取一次，避免重复IO）
-        import json
-        with result_json.open("r", encoding="utf-8") as f:
-            scan_data = json.load(f)
+        scan_data = run_scancode(scan_target, result_json, scan_license=True,
+                                 jobs=args.jobs, max_in_memory=args.max_in_memory)
         
         # 提取copyright信息
         copyright_records = extract_and_duplicate_copyright(scan_data, output_copyright)
