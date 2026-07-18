@@ -61,8 +61,7 @@
       - [Q4：页面弹窗报"连接错误"，报错："云开发环境网络连接不稳定，您可以再次尝试连接（或者重启）以恢复连接。"](#q4页面弹窗报连接错误报错云开发环境网络连接不稳定您可以再次尝试连接或者重启以恢复连接)
     - [4.2 VSCode 连接类问题](#42-vscode-连接类问题)
       - [Q1：VSCode右下角报错："WebSocket connection failed"](#q1vscode右下角报错websocket-connection-failed)
-      - [Q2：VSCode窗口弹窗：无法与"xxx"建立连接：端口转发已禁用（Port forwarding is disabled）](#q2vscode窗口弹窗无法与xxx建立连接端口转发已禁用port-forwarding-is-disabled)
-      - [Q3：VSCode 隔一段时间不操作会断连，且需要再次进行 GitCode 授权](#q3vscode-隔一段时间不操作会断连且需要再次进行-gitcode-授权)
+      - [Q2：VSCode 隔一段时间不操作会断连，且需要再次进行 GitCode 授权](#q3vscode-隔一段时间不操作会断连且需要再次进行-gitcode-授权)
     - [4.3 其它问题](#43-其它问题)
       - [Q1：编译算子时提示找不到头文件](#q1编译算子时提示找不到头文件)
       - [Q2：创建实例时提示资源不足](#q2创建实例时提示资源不足)
@@ -526,27 +525,7 @@ VSCode右下角报错："WebSocket 连接失败"
 - 确认是否为首次使用 VSCode 方式连接开发环境；
 - 若是，检查 AtomGit Dev Space 插件的 proxy 和 remote-ssh 的配置是否正确。
 
-#### Q2：VSCode窗口弹窗：无法与"xxx"建立连接：端口转发已禁用（Port forwarding is disabled）
-
-错误提示一：
-
-![端口转发已禁用](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/17_vscode_port_forwarding.png)
-
-错误提示二：
-
-![端口转发已禁用2](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/18_vscode_port_forwarding2.png)
-
-**【解决思路】**
-当前版本已知问题，问题详情：https://gitcode.com/cann/Dev-experience/issues/487
-
-如果是1.2.1及以前的版本可以尝试使用以下方式解决：
-
-1. 升级插件版本到1.3.1版本及以上。升级完，打开文件`C:\Users\账号目录\.atomgitdevenv\.ssh\config`，确认配置：`UserKnownHostsFile /dev/null`
-
-2. 如果配置是：`UserKnownHostsFile NUL`，请尝试在该目录创建known_hosts目录后，再次升级。
-![known_hosts配置](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/19_vscode_known_hosts.png)
-
-#### Q3：VSCode 隔一段时间不操作会断连，且需要再次进行 GitCode 授权
+#### Q2：VSCode 隔一段时间不操作会断连，且需要再次进行 GitCode 授权
 
 **【功能说明】**
 

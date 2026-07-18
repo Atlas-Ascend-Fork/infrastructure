@@ -70,28 +70,7 @@ Error prompt 2:
 - Confirm whether this is the first time using VSCode to connect to the development environment.
 - If so, check whether the proxy and remote-ssh configurations of the AtomGit Dev Space plugin are correct.
 
-### Q2: VSCode popup: unable to establish connection with "xxx": Port forwarding is disabled
-
-Error prompt 1:
-
-![Port Forwarding Disabled](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/17_vscode_port_forwarding.png)
-
-Error prompt 2:
-
-![Port Forwarding Disabled 2](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/18_vscode_port_forwarding2.png)
-
-**【Troubleshooting】**
-This is a known issue in the current version. Issue details: https://gitcode.com/cann/Dev-experience/issues/487
-
-For version 1.2.1 and earlier, try the following solutions:
-
-1. Upgrade the plugin to version 1.3.1 or later. After upgrading, open `C:\Users\account\.atomgitdevenv\.ssh\config` and check that it contains `UserKnownHostsFile /dev/null`.
-
-2. If the configuration is `UserKnownHostsFile NUL`, try creating a known_hosts directory under that path, and then upgrade again.
-
-![known_hosts Configuration](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/19_vscode_known_hosts.png)
-
-### Q3: VSCode disconnects after a period of inactivity and requires GitCode authorization again
+### Q2: VSCode disconnects after a period of inactivity and requires GitCode authorization again
 
 **【Feature Description】**
 
