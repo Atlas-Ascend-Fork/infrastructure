@@ -140,15 +140,19 @@ CANNLab 是 CANN 社区推出的基于云开发者空间提供 NPU 算力资源�
 
 ![CANN 开源组织](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/01_cannlab_portal_v2.png)
 
-3. 左侧导航栏切换到**我的环境**，点击**新建环境**可创建 NPU 环境或 CPU 环境
+3. 左侧导航栏切换到**我的环境**，点击**新建环境**可创建 NPU 环境，
 
 ![CANNLab 入口](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/02_cannlab_create_v2.png)
 
-当您选择创建一个 NPU 开发环境，即选 **NPU A2** 或者 **NPU A3**，如果选择分设版镜像模板，系统会自动帮您同时创建一对 CPU & NPU 环境，这两个环境指向同一个物理环境，可供用户按需灵活切换 NPU 环境和 CPU 环境。
+根据需要选择 A2 或者 A3 环境，选择模板和 NPU 规格，
+
 ![CANNLab 入口](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/03_cannlab_createnpuenv_v2.png)
 
-环境创建完成后，CPU 环境会自动启动，NPU 环境按需手动启动，启动后即可连接进入开发环境
+环境创建完成后，NPU 环境会自动启动，可以在**我的环境**页面进行开机/关机/连接/CANN包升级/删除操作。
+
 ![CANNLab 入口](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/04_cannlab_trnon_connectenv_v2.png)
+
+4. 通过以上方式可以创建 CPU 环境。
 
 #### 2.2.2 使用环境
 

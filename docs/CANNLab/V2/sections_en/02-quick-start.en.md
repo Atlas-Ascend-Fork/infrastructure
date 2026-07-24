@@ -21,17 +21,19 @@
 
 ![CANN Open-Source Organization](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/01_cannlab_portal_v2.png)
 
-3. In the left navigation bar, switch to **My Environments** and click **New Environment** to create an NPU environment or a CPU environment.
+3. In the left navigation bar, switch to **My Environments** and click **New Environment** to create an NPU environment.
 
 ![CANNLab Entry](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/02_cannlab_create_v2.png)
 
-When creating an NPU development environment, select **NPU A2** or **NPU A3**. If you select a split image template, the system automatically creates a pair of CPU and NPU environments. These two environments point to the same physical environment, allowing you to switch between the NPU and CPU environments as needed.
+Please select the A2 or A3 environment as needed, and then choose the template and NPU specifications.
 
 ![CANNLab Entry](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/03_cannlab_createnpuenv_v2.png)
 
-After the environment is created, the CPU environment starts automatically. The NPU environment must be started manually when needed. After startup, you can connect to the development environment.
+After the environment is created, the NPU environment start automatically. You can perform operations such as power on/off, connect, CANN package upgrade, and delete on the **My Environment**.
 
 ![CANNLab Entry](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/04_cannlab_trnon_connectenv_v2.png)
+
+4. Through the above methods, you can create a CPU environment.
 
 ### 2.2.2 Use the Environment
 
