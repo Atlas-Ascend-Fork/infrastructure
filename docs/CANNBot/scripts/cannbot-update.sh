@@ -1,8 +1,8 @@
  #!/bin/bash
 # ============================================================
-#  update-cannbot.sh
+#  cannbot-update.sh
 #  自动下载并安装最新版 cannbot-toolkit 插件
-#  用法：bash update-cannbot.sh
+#  用法：bash cannbot-update.sh
 # ============================================================
 
 set -e
@@ -18,7 +18,7 @@ warn()    { echo -e "${YELLOW}[WARN]${NC}  $*"; }
 error()   { echo -e "${RED}[ERROR]${NC} $*"; exit 1; }
 
 # ---------- 配置 ----------
-VERSION_URL="https://turing-assitant-config.obs.cn-north-4.myhuaweicloud.com/packages/version.txt"
+VERSION_URL="https://cannbot-obs.obs.cn-north-4.myhuaweicloud.com/packages/version.txt"
 
 # 自动获取最新版本号
 info "正在获取最新版本号..."
@@ -37,8 +37,23 @@ if [ -z "$VSIX_VERSION" ]; then
 fi
 info "最新版本号：$VSIX_VERSION"
 
-VSIX_FILENAME="cannbot-toolkit-linux-arm64-${VSIX_VERSION}.vsix"
-VSIX_URL="https://turing-assitant-config.obs.cn-north-4.myhuaweicloud.com/packages/${VSIX_VERSION}/${VSIX_FILENAME}"
+# -------------- 检测系统架构 --------------
+ARCH=$(uname -m)
+case "$ARCH" in
+    aarch64|arm64)
+        VSIX_ARCH="arm64"
+        ;;
+    x86_64|amd64)
+        VSIX_ARCH="x64"
+        ;;
+    *)
+        error "不支持的系统架构：$ARCH（仅支持arm64 / x64）"
+        ;;
+esac
+info "系统架构：${ARCH} -> ${VSIX_ARCH}"
+
+VSIX_FILENAME="cannbot-toolkit-linux-${VSIX_ARCH}-${VSIX_VERSION}.vsix"
+VSIX_URL="https://cannbot-obs.obs.cn-north-4.myhuaweicloud.com/packages/${VSIX_VERSION}/${VSIX_FILENAME}"
 VSIX_PATH="/tmp/${VSIX_FILENAME}"
 CODEARTS_BIN="$HOME/codearts/bin/codearts-server"
 
