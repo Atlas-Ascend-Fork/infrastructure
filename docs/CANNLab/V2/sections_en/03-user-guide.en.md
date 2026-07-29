@@ -8,7 +8,6 @@ CANNLab instances have the following states:
 | **Stopped** | Instance is stopped, `/mnt/workspace` and `/home` data retained | No |
 | **Sleeping** | Auto-suspended after prolonged inactivity, data retained | No |
 | **Deleted** | Instance is destroyed, data unrecoverable | - |
-|
 
 **Operations:**
 
@@ -31,7 +30,6 @@ CANNLab instances have the following states:
 | **NPU (A3)** | Ascend A3 | 1-card: 40vCPUs/240GiB | 100 card-hours | High-end NPU computing |
 | | | 8-card: 320vCPUs/1920GiB | | |
 | **CPU (ARM)** | Kunpeng | 16vCPUs/32GiB | 720 core-hours | ARM only, x86 not supported |
-|
 
 ### 3.2.2 Usage Rules
 
@@ -64,7 +62,7 @@ cat /home/developer/Ascend/ascend-toolkit/latest/opp/version.info
 
 ### 3.3.2 Check Driver Version
 
-The current driver version is **25.5.1**, installed at `/usr/local/Ascend/driver`.
+The current driver versions are **25.5.0 (A2) and 25.5.5 (A3)**, located at `/usr/local/Ascend/driver`.
 
 ```bash
 cat /usr/local/Ascend/driver/version.info | grep Version
@@ -91,7 +89,7 @@ After connecting via WebIDE or VSCode, manually download and install in the term
 
 ### 3.3.4 Driver Version Upgrade
 
-Personal instance driver version upgrades are not currently supported; upgrades are managed uniformly by the platform. If you have driver version dependencies, please submit an Issue in the [Dev-experience](https://gitcode.com/cann/Dev-experience/issues) repository.
+Personal instance driver version upgrades are not currently supported; upgrades are managed uniformly by the platform. If you have driver version dependencies, please submit an Issue in the [infrastructure](https://gitcode.com/cann/infrastructure/issues) repository.
 
 ## 3.4 Data Management
 
@@ -102,7 +100,6 @@ Personal instance driver version upgrades are not currently supported; upgrades 
 | `/mnt/workspace` | ✅ Yes | Data retained after instance shutdown, cleared upon instance **deletion** |
 | `/home` | ✅ Yes | Data retained after instance shutdown, cleared upon instance **deletion** |
 | Other system directories | ❌ No | Data lost after instance deletion |
-|
 
 > **Important Notes**
 > - Store important files such as code projects, datasets, and model files under `/mnt/workspace` or `/home`.
@@ -132,7 +129,7 @@ The platform automatically configures SSH public/private keys based on GitCode a
 
 ## 3.6 Built-in Development Tools
 
-### 3.6.1 Huawei OP DevTools (Operator Development Plugin)
+### 3.6.1 Ascend C Toolkit (Operator Development Plugin)
 
 Pre-installed in the cloud development environment, providing:
 
@@ -145,11 +142,10 @@ Pre-installed in the cloud development environment, providing:
 | **Performance Tuning** | Performance swimlane analysis and result charting |
 | **Accuracy Comparison** | DumpTensor data visualization for accuracy comparison |
 | **UT Testing** | Unit testing for standard custom operators |
-|
 
 **Upgrade Method**
 
-After connecting to the environment, search for "Huawei OP DevTools" in the left sidebar "Extensions". If an "Update" icon appears on the "Huawei OP DevTools" plugin, a new version has been released. Update the version on the plugin details page. To simplify future operations, it is recommended to enable "Auto Update" on the plugin details page so later plugin versions are upgraded silently.
+After connecting to the environment, search for "Ascend C Toolkit" in the left sidebar "Extensions". If an "Update" icon appears on the "Ascend C Toolkit" plugin, a new version has been released. Update the version on the plugin details page. To simplify future operations, it is recommended to enable "Auto Update" on the plugin details page so later plugin versions are upgraded silently.
 
 ### 3.6.2 PyPTO Toolkit
 
@@ -163,7 +159,6 @@ Pre-installed in the cloud development environment, a high-performance programmi
 | **Layered Abstraction** | Tensor layer for algorithm developers, Tile layer for performance experts, Block layer for system developers |
 | **Accuracy Verification** | Golden reference generation, accuracy comparison and localization, binary comparison |
 | **Performance Tuning** | Measured performance data analysis, bottleneck localization, iterative optimization |
-|
 
 **Use Cases**
 
@@ -175,45 +170,9 @@ Pre-installed in the cloud development environment, a high-performance programmi
 
 After connecting to the environment, search for "PyPTO Toolkit" in the left sidebar "Extensions". If an "Update" icon appears on the "PyPTO Toolkit" plugin, a new version has been released. Update the version on the plugin details page. To simplify future operations, it is recommended to enable "Auto Update" on the plugin details page so later plugin versions are upgraded silently.
 
-### 3.6.3 OpenCode
+### 3.6.3 CANNBot Plugin
 
-The OpenCode tool is built into the terminal, supporting natural language interactive coding assistance.
-
-**Configuration Method**
-
-1. Verify that opencode is built into the environment:
-
-```bash
-opencode --version
-```
-
-2. Open the configuration file:
-
-```
-/home/developer/.config/opencode/opencode.json
-```
-
-3. Add provider configuration to the file (using GLM-4-7 as an example):
-
-```json
-"provider": {
-    "myprovider": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "volcengine",
-      "options": {
-        "baseURL": "https://ark.cn-beijing.volces.com/api/v3",
-        "apiKey": "***"
-      },
-      "models": {
-        "<END_POINT_ID>": {
-          "name": "GLM-4-7-<END_POINT_ID>"
-        }
-      }
-    }
-}
-```
-
-4. Run `opencode` in the terminal and enter `/models` to select a model and start using.
+The CANNBot tool is built into the terminal, supporting natural language interactive coding assistance and providing free token usage. For details, see the [CANNBot User Guide](https://gitcode.com/cann/infrastructure/blob/master/docs/CANNBot/CANNBot-User-Guide.md).
 
 **Upgrade Method**
 
@@ -238,7 +197,5 @@ cat /home/developer/image-version.txt
 | Need a fresh environment | Stop -> Delete instance -> Recreate (back up data first) |
 | Upgrade CANN package only | Use the "CANN Package Upgrade" button |
 | Upgrade operator plugin only | Search for the plugin name in "Extensions" and update |
-| Upgrade OpenCode only | Search for "CANNBot Toolkit" in "Extensions" and update |
-|
 
 > **Note:** Direct image upgrade is not currently supported.

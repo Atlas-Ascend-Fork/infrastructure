@@ -47,9 +47,9 @@
       - [3.5.2 分支管理](#352-分支管理)
       - [3.5.3 Git 免密操作](#353-git-免密操作)
     - [3.6 内置开发工具](#36-内置开发工具)
-      - [3.6.1 Huawei OP DevTools（算子开发插件）](#361-huawei-op-devtools算子开发插件)
+      - [3.6.1 Ascend C Toolkit（算子开发插件）](#361-ascend-c-toolkit算子开发插件)
       - [3.6.2 PyPTO Toolkit](#362-pypto-toolkit)
-      - [3.6.3 OpenCode](#363-opencode)
+      - [3.6.3 CANNBot 插件](#363-cannbot-插件)
     - [3.7 镜像管理](#37-镜像管理)
       - [3.7.1 查看当前镜像版本](#371-查看当前镜像版本)
       - [3.7.2 镜像版本更新](#372-镜像版本更新)
@@ -79,7 +79,7 @@
 
 ### 1.1 概述
 
-CANNLab 是 CANN 社区推出的基于云开发者空间提供 NPU 算力资源的一站式云开发平台。平台面向 CANN 生态的算子开发、模型训练与推理、AI 应用构建等场景，为开发者提供**开箱即用**的云端开发环境。
+CANNLab 是 CANN 社区推出的基于云开发者空间提供 NPU 算力资源的一站式云开发平台。平台面向 CANN 生态的算子开发、模型训练与推理、AI 应用开发等场景，为开发者提供**开箱即用**的云端开发环境。
 
 开发者无需在本地安装 CANN 工具链，通过 [GitCode](https://gitcode.com/cann) 上的 CANN 开源仓库入口即可进入平台，按需申请算力，使用 WebIDE 或本地 VSCode 远程连接进行开发。
 
@@ -88,21 +88,25 @@ CANNLab 是 CANN 社区推出的基于云开发者空间提供 NPU 算力资源�
 | 特点 | 说明 |
 |:---|:---|
 | **零配置开发环境** | 预装 WebIDE、Git、CANN 基础包（当前为 9.0.0 正式版本）及算子开发插件，开箱即用 |
-| **多种算力规格** | 支持 A2、A3 昇腾算力实例以及 950 CPU仿真实例 |
+| **多种算力规格** | 支持 A2、A3 昇腾算力实例以及 950 CPU 仿真实例 |
 | **双端连接** | 支持 WebIDE（浏览器直接使用）与本地 VSCode Remote-SSH 远程连接 |
 | **数据持久化** | 持久化目录 `/mnt/workspace` 和 `/home` 在实例关机后数据保留，保障代码安全 |
 | **免费算力** | 开发者享有初始 100 卡时免费额度，后续可以通过积分兑换卡时 |
-| **工具链集成** | 内置 Huawei OP DevTools 算子开发插件，PyPTO Toolkit、CANNBot Toolkit 等辅助工具 |
+| **工具链集成** | 内置 Ascend C Toolkit 算子开发插件，PyPTO Toolkit、CANNBot Toolkit 等辅助工具 |
 
 ### 1.3 应用场景
 
 **场景一：昇腾算子开发**
 
-基于预置的 CANN 环境和 Huawei OP DevTools 插件，在云端完成 Ascend C 自定义算子的开发、编译、调试与性能调优。支持标准自定义算子和 pyasc 算子的新建、编译、异常检测与性能分析。
+基于预置的 CANN 环境和 Ascend C Toolkit 插件，在云端完成 Ascend C 自定义算子的开发、编译、调试与性能调优。支持标准自定义算子和 pyasc 算子的新建、编译、异常检测与性能分析。
 
 **场景二：模型训练与推理**
 
-利用 A2/A3 NPU 算力，进行轻量级大模型的 SFT 微调、推理部署及模型评估。支持1卡和8卡两种规格。
+利用 A2/A3 NPU 算力，进行轻量级大模型的 SFT 微调、推理部署及模型评估。支持 1 卡和 8 卡两种规格。
+
+**场景三：AI 应用开发（规划中）**
+
+基于 CANNLab 云端环境，构建 RAG 检索增强生成、AI Agent 智能体编排、多模态应用等 AI 应用场景。
 
 ### 1.4 基本概念
 
@@ -110,7 +114,7 @@ CANNLab 是 CANN 社区推出的基于云开发者空间提供 NPU 算力资源�
 |:---|:---|
 | **实例（Instance）** | CANNLab 提供的云端计算单元，包含 CANN 软件栈及开发工具 |
 | **镜像（Image）** | 预装好开发环境的模板，包含 CANN 基础包、Python 环境及其他内置工具 |
-| **卡时（Card-Hours）** | 算力资源的计量单位，1卡时 = NPU 卡数量 × 使用时长（小时） |
+| **卡时（Card-Hours）** | 算力资源的计量单位，1 卡时 = NPU 卡数量 × 使用时长（小时） |
 | **工作空间** | 挂载在 `/mnt/workspace` 和 `/home` 的持久化存储目录，实例关机后数据保留 |
 | **NPU 实例** | 搭载昇腾 NPU 卡的计算实例，支持 A2 和 A3 |
 | **CPU 仿真环境** | 搭载 ARM CPU 的计算环境，用于无 NPU 依赖的算子逻辑验证与 UT 测试 |
@@ -280,7 +284,7 @@ cat /home/developer/Ascend/ascend-toolkit/latest/opp/version.info
 
 #### 3.3.2 查询驱动版本
 
-当前驱动版本为 **25.5.1**，安装路径为 `/usr/local/Ascend/driver`。
+当前驱动版本为 **25.5.0（A2）、25.5.5（A3）**，路径为 `/usr/local/Ascend/driver`。
 
 ```bash
 cat /usr/local/Ascend/driver/version.info | grep Version
@@ -307,7 +311,7 @@ cd /home/developer/.cann
 
 #### 3.3.4 驱动版本升级
 
-暂不支持个人实例的驱动版本升级，由平台统一规划。如有驱动版本依赖，欢迎在 [Dev-experience](https://gitcode.com/cann/Dev-experience/issues) 仓库提 Issue 反馈。
+暂不支持个人实例的驱动版本升级，由平台统一规划。如有驱动版本依赖，欢迎在 [infrastructure](https://gitcode.com/cann/infrastructure/issues) 仓库提 Issue 反馈。
 
 ### 3.4 数据管理
 
@@ -347,7 +351,7 @@ cd /home/developer/.cann
 
 ### 3.6 内置开发工具
 
-#### 3.6.1 Huawei OP DevTools（算子开发插件）
+#### 3.6.1 Ascend C Toolkit（算子开发插件）
 
 预装于云开发环境中，提供：
 
@@ -363,7 +367,7 @@ cd /home/developer/.cann
 
 **升级方式**
 
-连接到环境后，左侧栏"扩展"中搜索 "Huawei OP DevTools"，在搜索到的 "Huawei OP DevTools" 插件上如果有"更新"图标，说明发布了新版本，在插件详情页面更新版本。为了简化操作，建议在插件详情页面勾选"自动更新"选项，后续插件将静默升级。
+连接到环境后，左侧栏"扩展"中搜索 "Ascend C Toolkit"，在搜索到的 "Ascend C Toolkit" 插件上如果有"更新"图标，说明发布了新版本，在插件详情页面更新版本。为了简化操作，建议在插件详情页面勾选"自动更新"选项，后续插件将静默升级。
 
 #### 3.6.2 PyPTO Toolkit
 
@@ -388,45 +392,9 @@ cd /home/developer/.cann
 
 连接到环境后，左侧栏"扩展"中搜索 "PyPTO Toolkit"，在搜索到的 "PyPTO Toolkit" 插件上如果有"更新"图标，说明发布了新版本，在插件详情页面更新版本。为了简化操作，建议在插件详情页面勾选"自动更新"选项，后续插件将静默升级。
 
-#### 3.6.3 OpenCode
+#### 3.6.3 CANNBot 插件
 
-终端内置 OpenCode 工具，支持自然语言交互式编码辅助。
-
-**配置方法**
-
-1. 验证环境是否已内置 opencode：
-
-```bash
-opencode --version
-```
-
-2. 打开配置文件：
-
-```
-/home/developer/.config/opencode/opencode.json
-```
-
-3. 在配置文件中添加 provider 配置（以 GLM-4-7 为例）：
-
-```json
-"provider": {
-    "myprovider": {
-      "npm": "@ai-sdk/openai-compatible",
-      "name": "volcengine",
-      "options": {
-        "baseURL": "https://ark.cn-beijing.volces.com/api/v3",
-        "apiKey": "***"
-      },
-      "models": {
-        "<END_POINT_ID>": {
-          "name": "GLM-4-7-<END_POINT_ID>"
-        }
-      }
-    }
-}
-```
-
-4. 终端执行 `opencode`，输入 `/models` 选择模型即可开始使用。
+终端内置 CANNBot 工具，支持自然语言交互式编码辅助，提供免费token使用，具体可参考 [CANNBot用户手册](https://gitcode.com/cann/infrastructure/blob/master/docs/CANNBot/CANNBot-User-Guide.md) 。
 
 **升级方式**
 
@@ -451,7 +419,6 @@ cat /home/developer/image-version.txt
 | 需要全新环境 | 关机 -> 删除实例 -> 重新创建（注意备份数据） |
 | 仅升级 CANN 包 | 使用"CANN包升级"按钮 |
 | 仅升级算子插件 | 在"扩展"中搜索插件名称更新 |
-| 仅升级 OpenCode | 在"扩展"中搜索 "CANNBot Toolkit" 更新 |
 
 > **注意：** 暂不支持直接升级镜像。
 
@@ -578,7 +545,7 @@ source /home/developer/Ascend/ascend-toolkit/set_env.sh
 | 约束项 | 说明 |
 |:---|:---|
 | **浏览器** | 推荐使用 Chrome 最新版，不支持 Firefox |
-| **用户权限** | 操作用户为 `developer`，不支持直接使用 root 登录。可通过 `sudo` 命令切换到 root |
+| **用户权限** | 操作用户为 `developer`，不支持直接使用 `root` 登录。可通过 `sudo` 命令切换到 `root` 权限 |
 | **NPU 资源** | NPU 和 CPU 资源可各申请一个，不支持直接切换资源类型 |
 | **镜像升级** | 暂不支持直接升级镜像，需关机、删除实例后重新创建 |
 | **驱动升级** | 暂不支持个人实例的驱动版本升级，由平台统一规划 |
