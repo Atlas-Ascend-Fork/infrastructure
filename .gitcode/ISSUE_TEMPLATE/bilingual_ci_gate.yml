@@ -1,0 +1,76 @@
+name: 双语校验模板 | Bilingual Documentation Gate Application
+description: 各仓库申请新增 Markdown 文件英文化质量拦截门禁。Apply to add bilingual documentation quality gate for Markdown files.
+title: "[双语校验门禁 | Bilingual Doc Gate]: "
+labels: ["双语校验", "CI", "infrastructure"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 双语校验门禁申请 | Bilingual Documentation Gate Application
+
+        本模板用于仓库申请新增 Markdown 文件的英文化质量拦截。
+        This template is for applying to add a bilingual documentation quality gate for Markdown files.
+
+  - type: input
+    attributes:
+      label: 仓库地址 | Repository URL (Mandatory / 必填)
+      description: 申请新增双语校验门禁的仓库地址 / Repository URL to add bilingual doc gate
+      placeholder: https://gitcode.com/cann/<repo_name>.git
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: 申请分支 | Target Branch (Mandatory / 必填)
+      description: 需要新增双语校验门禁的分支 / Branch to add bilingual doc gate
+      placeholder: master
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: 申请人 | Applicant (Mandatory / 必填)
+      description: GitCode ID 及邮箱 / GitCode ID and email
+      placeholder: your-gitcode-id;your-name@xxx.com
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: 英文文档存放模式 | English Doc Storage Mode (Mandatory / 必填)
+      description: |
+        选择英文文档的存放模式：
+        Select the storage mode for English documentation:
+      multiple: false
+      options:
+        - 中英文并列存放 | Bilingual in same file (zh + en side by side)
+        - 中英文分目录存放 | Separate directories (e.g. docs/zh + docs/en)
+        - 两者都有 | Both modes coexist
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 需要翻译的文档目录 | Doc Directories to Translate (Mandatory / 必填)
+      description: |
+        列出需要英文化的文档目录。
+        List documentation directories that need English translation.
+      placeholder: |
+        中英文并列存放 / Bilingual in same file:
+        - docs/guide/getting-started.md
+        - docs/guide/installation.md
+
+        中英文分目录存放 / Separate directories:
+        - docs/zh/ → docs/en/
+        - README.zh-CN.md → README.en.md
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 验证说明 | Verification Notes (Optional / 选填)
+      description: |
+        补充验证信息或其他需要说明的内容。
+        Additional verification info or notes.
+    validations:
+      required: false
