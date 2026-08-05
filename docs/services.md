@@ -53,7 +53,7 @@
 | 集合通信 | cann/hccl | [@jiyuanhao](https://gitcode.com/jiyuanhao) | <jiyuanhao1@huawei.com> |
 | | cann/hcomm | [@jiyuanhao](https://gitcode.com/jiyuanhao) | <jiyuanhao1@huawei.com> |
 | 运行时 | cann/runtime | [@duanpengliang](https://gitcode.com/duanpengliang) | <duanpengliang@huawei.com> |
-| 基础工具 | cann/amct | [@RQL7](https://gitcode.com/RQL7) | <renqilin2@h-partners.com> |
+| 基础工具 | cann/amct | [@fujun19](https://gitcode.com/fujun19) | <fujun19@hisilicon.com> |
 | | cann/oam-tools | [@sinat_31531339](https://gitcode.com/sinat_31531339) | <yuanyue23@huawei.com> |
 | 算法 | cann/cann-recipes-embodied-intelligence | [@rous_zhang](https://gitcode.com/rous_zhang) | <zhangxinfang5@hisilicon.com> |
 | | cann/cann-recipes-harmony-infer | [@rui-zhang](https://gitcode.com/rui-zhang) | <zhangrui329@hisilicon.com> |
