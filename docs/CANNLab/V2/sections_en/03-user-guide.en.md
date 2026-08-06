@@ -125,7 +125,7 @@ The automatically cloned code is from the **master** branch. For other branches,
 
 ### 3.5.3 Git Password-Free Operations
 
-The platform automatically configures SSH public/private keys based on GitCode account binding, making `git clone` / `git push` password-free.
+The platform automatically configures SSH public/private keys based on AtomGit account binding, making `git clone` / `git push` password-free.
 
 ## 3.6 Built-in Development Tools
 

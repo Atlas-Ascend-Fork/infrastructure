@@ -1,8 +1,8 @@
 ## 2.1 Prerequisites
 
-**Register a GitCode Account**
+**Register an AtomGit Account**
 
-1. Visit the [GitCode website](https://gitcode.com)
+1. Visit the [AtomGit website](https://gitcode.com)
 2. Click the **"Register"** button in the upper right corner
 3. Choose a registration method: phone number, email, or WeChat
 4. Complete the registration process as prompted
@@ -64,7 +64,7 @@ After the environment is created successfully, click **"Connect"** and select a 
 
 1. Click **"Connect"** -> Select **"Visual Studio Code"**
 2. On first use, install the AtomGit Dev Space and Remote SSH plugins as prompted.
-3. Click the plugin icon -> "Login", then authorize with your GitCode account in the browser.
+3. Click the plugin icon -> "Login", then authorize with your AtomGit account in the browser.
 
    ![VSCode Plugin Login](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/07_vscode_login.png)
 

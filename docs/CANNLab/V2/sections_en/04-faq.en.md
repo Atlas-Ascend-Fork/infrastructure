@@ -70,7 +70,7 @@ Error prompt 2:
 - Confirm whether this is the first time using VSCode to connect to the development environment.
 - If so, check whether the proxy and remote-ssh configurations of the AtomGit Dev Space plugin are correct.
 
-### Q2: VSCode disconnects after a period of inactivity and requires GitCode authorization again
+### Q2: VSCode disconnects after a period of inactivity and requires AtomGit authorization again
 
 **【Feature Description】**
 
@@ -81,7 +81,7 @@ The developer plugin has an automatic idle logout feature for the developer acco
 
 - If VSCode disconnects frequently, check whether network jitter exists. Possible causes include computer sleep, unstable overseas proxy settings, and other network factors.
 
-- If reconnecting after a VSCode disconnection still redirects to GitCode for login, check:
+- If reconnecting after a VSCode disconnection still redirects to AtomGit for login, check:
    - Whether the plugin version is the latest. Older versions have an idle time of 2 hours.
 
 ## 4.3 Other Issues

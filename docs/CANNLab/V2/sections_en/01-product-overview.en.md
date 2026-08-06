@@ -2,7 +2,7 @@
 
 CANNLab is a one-stop cloud development platform launched by the CANN community, providing NPU computing resources based on the Cloud Developer Space. The platform targets scenarios such as operator development, model training and inference, and AI application development within the CANN ecosystem, offering developers an **out-of-the-box** cloud development environment.
 
-Developers do not need to install the CANN toolchain locally. They can access the platform through the CANN open-source repository entry on [GitCode](https://gitcode.com/cann), apply for computing resources on demand, and develop through WebIDE or local VSCode remote connection.
+Developers do not need to install the CANN toolchain locally. They can access the platform through the CANN open-source repository entry on [AtomGit](https://gitcode.com/cann), apply for computing resources on demand, and develop through WebIDE or local VSCode remote connection.
 
 ## 1.2 Product Features
 

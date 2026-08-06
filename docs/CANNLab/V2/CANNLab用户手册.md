@@ -61,7 +61,7 @@
       - [Q4：页面弹窗报"连接错误"，报错："云开发环境网络连接不稳定，您可以再次尝试连接（或者重启）以恢复连接。"](#q4页面弹窗报连接错误报错云开发环境网络连接不稳定您可以再次尝试连接或者重启以恢复连接)
     - [4.2 VSCode 连接类问题](#42-vscode-连接类问题)
       - [Q1：VSCode右下角报错："WebSocket connection failed"](#q1vscode右下角报错websocket-connection-failed)
-      - [Q2：VSCode 隔一段时间不操作会断连，且需要再次进行 GitCode 授权](#q3vscode-隔一段时间不操作会断连且需要再次进行-gitcode-授权)
+      - [Q2：VSCode 隔一段时间不操作会断连，且需要再次进行 AtomGit 授权](#q2vscode-隔一段时间不操作会断连且需要再次进行-atomgit-授权)
     - [4.3 其它问题](#43-其它问题)
       - [Q1：编译算子时提示找不到头文件](#q1编译算子时提示找不到头文件)
       - [Q2：创建实例时提示资源不足](#q2创建实例时提示资源不足)
@@ -81,7 +81,7 @@
 
 CANNLab 是 CANN 社区推出的基于云开发者空间提供 NPU 算力资源的一站式云开发平台。平台面向 CANN 生态的算子开发、模型训练与推理、AI 应用开发等场景，为开发者提供**开箱即用**的云端开发环境。
 
-开发者无需在本地安装 CANN 工具链，通过 [GitCode](https://gitcode.com/cann) 上的 CANN 开源仓库入口即可进入平台，按需申请算力，使用 WebIDE 或本地 VSCode 远程连接进行开发。
+开发者无需在本地安装 CANN 工具链，通过 [AtomGit](https://gitcode.com/cann) 上的 CANN 开源仓库入口即可进入平台，按需申请算力，使用 WebIDE 或本地 VSCode 远程连接进行开发。
 
 ### 1.2 产品特点
 
@@ -123,9 +123,9 @@ CANNLab 是 CANN 社区推出的基于云开发者空间提供 NPU 算力资源�
 
 ### 2.1 前提条件
 
-**注册 GitCode 账号**
+**注册 AtomGit 账号**
 
-1. 访问 [GitCode 官网](https://gitcode.com)
+1. 访问 [AtomGit 官网](https://gitcode.com)
 2. 点击页面右上角 **"注册"** 按钮
 3. 选择注册方式：支持手机号、邮箱或微信注册
 4. 按提示完成注册流程
@@ -186,7 +186,7 @@ CANNLab 是 CANN 社区推出的基于云开发者空间提供 NPU 算力资源�
 
 1. 点击 **"连接"** -> 选择 **"Visual Studio Code"**
 2. 首次使用需安装 AtomGit Dev Space 和 Remote SSH 插件，根据提示允许即可
-3. 点击插件图标 -> "登录"，在浏览器中选择GitCode账号授权
+3. 点击插件图标 -> "登录"，在浏览器中选择 AtomGit 账号授权
 
    ![VSCode 插件登录界面](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/07_vscode_login.png)
 
@@ -347,7 +347,7 @@ cd /home/developer/.cann
 
 #### 3.5.3 Git 免密操作
 
-平台基于 GitCode 账号绑定自动完成 SSH 公私钥配置，`git clone` / `git push` 全程免密。
+平台基于 AtomGit 账号绑定自动完成 SSH 公私钥配置，`git clone` / `git push` 全程免密。
 
 ### 3.6 内置开发工具
 
@@ -496,7 +496,7 @@ VSCode右下角报错："WebSocket 连接失败"
 - 确认是否为首次使用 VSCode 方式连接开发环境；
 - 若是，检查 AtomGit Dev Space 插件的 proxy 和 remote-ssh 的配置是否正确。
 
-#### Q2：VSCode 隔一段时间不操作会断连，且需要再次进行 GitCode 授权
+#### Q2：VSCode 隔一段时间不操作会断连，且需要再次进行 AtomGit 授权
 
 **【功能说明】**
 
@@ -507,7 +507,7 @@ VSCode 连接服务器通过 remote-ssh 连接，如果出现网络断开，可�
 
 - 如果 VSCode 频繁断连，需要排查是否存在网络抖动。可能原因有：电脑休眠、电脑设置国外代理网络不稳定等诸多因素；
 
-- 如果 VSCode 断连后，重新连接还需要跳转 GitCode 进行登录，需要确认：
+- 如果 VSCode 断连后，重新连接还需要跳转 AtomGit 进行登录，需要确认：
    - 插件版本是否为最新版本，旧版本的闲时时间为2小时；
 
 ### 4.3 其它问题
