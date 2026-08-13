@@ -27,6 +27,7 @@ docs # 存放SIG运作相关的文档，例如关键决策的讨论纪要以及�
 
 | 项目名称|项目功能|代码仓|联系人|
 |-|-|-|-|
+| infrastructure | 社区基础设施信息与文档 | [仓库链接](https://gitcode.com/cann/infrastructure) | Infrastructure SIG |
 
 ## 联系我们
 
