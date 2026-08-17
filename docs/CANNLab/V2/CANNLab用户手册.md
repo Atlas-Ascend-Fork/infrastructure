@@ -28,11 +28,11 @@
         - [2.2.2.2 本地 VSCode 连接](#2222-本地-vscode-连接)
     - [2.3 验证结果](#23-验证结果)
   - [3. 用户指南](#3-用户指南)
-    - [3.1 环境生命周期管理](#31-环境生命周期管理)
-    - [3.2 算力资源管理](#32-算力资源管理)
-      - [3.2.1 资源规格](#321-资源规格)
-      - [3.2.2 使用规则](#322-使用规则)
-      - [3.2.3 资源申请限制](#323-资源申请限制)
+    - [3.1 环境申请](#31-环境申请)
+      - [3.1.1 环境提供的算力规格](#311-环境提供的算力规格)
+      - [3.1.2 使用规则](#312-使用规则)
+      - [3.1.3 资源申请限制](#313-资源申请限制)
+    - [3.2 环境生命周期管理](#32-环境生命周期管理)
     - [3.3 CANN 软件栈管理](#33-cann-软件栈管理)
       - [3.3.1 查询 CANN 版本](#331-查询-cann-版本)
       - [3.3.2 查询驱动版本](#332-查询驱动版本)
@@ -112,9 +112,9 @@ CANNLab 是 CANN 社区推出的提供 NPU 算力资源的一站式云开发平�
 
 | 术语 | 说明 |
 |:---|:---|
-| **实例（Instance）** | CANNLab 提供的云端计算单元，包含 CANN 软件栈及开发工具 |
-| **镜像（Image）** | 预装好开发环境的模板，包含 CANN 基础包、Python 环境及其他内置工具 |
-| **卡时（Card-Hours）** | 算力资源的计量单位，1 卡时 = NPU 卡数量 × 使用时长（小时） |
+| **实例** | CANNLab 提供的云端计算单元，包含 CANN 软件栈及开发工具 |
+| **镜像** | 预装好开发环境的模板，包含 CANN 基础包、Python 环境及其他内置工具 |
+| **卡时** | 算力资源的计量单位，1 卡时 = NPU 卡数量 × 使用时长（小时） |
 | **工作空间** | 挂载在 `/mnt/workspace` 和 `/home` 的持久化存储目录，实例关机后数据保留 |
 | **NPU 实例** | 搭载昇腾 NPU 卡的计算实例，支持 A2 和 A3 |
 | **CPU 仿真环境** | 搭载 ARM CPU 的计算环境，用于无 NPU 依赖的算子逻辑验证与 UT 测试 |
@@ -139,53 +139,52 @@ CANNLab 是 CANN 社区推出的提供 NPU 算力资源的一站式云开发平�
 
 #### 2.2.1 创建环境
 
-1. 进入 CANN 开源组织 https://gitcode.com/cann
-2. 点击导航栏中的 **CANNLab** 页签后，正式进入 CANNLab 主页。
+1. 进入 CANN 开源组织：https://gitcode.com/cann
+2. 点击导航栏中的 **CANNLab** 页签后，正式进入 CANNLab 主页
 
 ![CANN 开源组织](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/01_cannlab_portal_v2.png)
 
-3. 左侧导航栏切换到**我的环境**，点击**新建环境**可创建 NPU 环境，
+3. 左侧导航栏切换到**我的环境**，点击**新建环境**可创建 NPU 环境
 
 ![CANNLab 入口](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/02_cannlab_create_v2.png)
 
-根据需要选择 A2 或者 A3 环境，选择模板和 NPU 规格，
+根据需要选择 A2 或者 A3 环境，选择模板和 NPU 规格
 
 ![CANNLab 入口](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/03_cannlab_createnpuenv_v2.png)
 
-环境创建完成后，NPU 环境会自动启动，可以在**我的环境**页面进行开机/关机/连接/CANN包升级/删除操作。
+环境创建完成后，NPU 环境会自动启动，可以在**我的环境**页面进行开机/关机/连接/CANN包升级/删除操作
 
 ![CANNLab 入口](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/04_cannlab_trnon_connectenv_v2.png)
 
-4. 通过以上方式可以创建 CPU 环境。
+4. 通过以上方式可以创建 CPU 环境
 
 #### 2.2.2 使用环境
 
-![CANNLab 入口](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/05_cannlab_connectenv_v2.png)
-
-环境创建成功后，点击 **"连接"**，选择一种连接方式：
+环境创建完成后，点击 **"连接"**，选择一种连接方式：
 
 | 方式 | 适用场景 | 说明 |
 |:---|:---|:---|
 | **WebIDE** | 轻量开发、跨设备使用 | 浏览器直接打开，无需安装任何软件 |
 | **Visual Studio Code** | 重度开发、习惯本地编辑器 | 需安装连接云端开发环境的插件 |
 
+![连接环境](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/05_cannlab_connectenv_v2.png)
+
 ##### 2.2.2.1 WebIDE 连接
 
-1. 点击 **"连接"** -> 选择 **"WebIDE"**
-2. 等待页面加载完成，即可进入浏览器内 IDE
-3. WebIDE 支持同时开启最多 **3 个**独立工作窗口，但不推荐开启多个工作窗口
-4. 连接成功后，展示如下：
+1. 点击 **"连接"**，选择 **"WebIDE"**，等待页面加载完成即可进入浏览器内 IDE。
+2. 连接成功后，展示如下：
 
    ![WebIDE 连接成功页面](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/06_webide_connected.png)
 
 > **说明**
-> - 目前支持 Chrome 浏览器
+> - 推荐使用 Chrome 浏览器
+> - WebIDE 支持同时开启最多 **3 个**独立工作窗口，但不推荐开启多个工作窗口
 > - 如遇到页面卡住或连接断开，可尝试关机再开机恢复实例
 
 ##### 2.2.2.2 本地 VSCode 连接
 
 1. 点击 **"连接"** -> 选择 **"Visual Studio Code"**
-2. 首次使用需安装 AtomGit Dev Space 和 Remote SSH 插件，根据提示允许即可
+2. 首次使用需安装 AtomGit Dev Space 和 Remote SSH 插件，根据提示依次操作
 3. 点击插件图标 -> "登录"，在浏览器中选择 AtomGit 账号授权
 
    ![VSCode 插件登录界面](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/07_vscode_login.png)
@@ -220,7 +219,33 @@ cat /home/developer/image-version.txt
 
 ## 3. 用户指南
 
-### 3.1 环境生命周期管理
+### 3.1 环境申请
+
+#### 3.1.1 环境提供的算力规格
+
+| 资源类型 | 芯片型号 | 规格选项 | 使用时长 | 说明 |
+|:---|:---|:---|:---|:---|
+| **NPU (A2)** | 昇腾 A2 | 1卡：16vCPUs/32GiB | 100卡时 | 通用 NPU 算力 |
+| | | 1卡：32vCPUs/32GiB | | |
+| | | 8卡：192vCPUs/1536GiB | | |
+| **NPU (A3)** | 昇腾 A3 | 1卡：40vCPUs/240GiB | 100卡时 | 高配 NPU 算力 |
+| | | 8卡：320vCPUs/1920GiB | | |
+| **CPU (ARM)** | 鲲鹏 | 16vCPUs/32GiB | 720核时 | 仅支持 ARM，不支持 x86 |
+
+#### 3.1.2 使用规则
+
+**开发者：**
+- 总计 100 卡时，卡时消耗完将**自动关机**并释放资源
+- 算力消耗以"卡时"为单位，如创建 2 卡实例，最多可用 50 小时
+- **建议闲时及时关机或删除，避免配额无谓消耗**
+
+#### 3.1.3 资源申请限制
+
+- NPU 和 CPU 资源**可各申请一个**
+- NPU 资源类型切换（如 A2 → A3）需关机、删除后重新创建
+- **注意：实例删除时，`/mnt/workspace` 和 `/home` 数据不会保存**
+
+### 3.2 环境生命周期管理
 
 CANNLab 实例存在以下状态：
 
@@ -239,32 +264,6 @@ CANNLab 实例存在以下状态：
 
 > **说明**
 > - NPU 资源类型（A2/A3）不支持直接切换，需关机、删除后重新创建。
-
-### 3.2 算力资源管理
-
-#### 3.2.1 资源规格
-
-| 资源类型 | 芯片型号 | 规格选项 | 使用时长 | 说明 |
-|:---|:---|:---|:---|:---|
-| **NPU (A2)** | 昇腾 A2 | 1卡：16vCPUs/32GiB | 100卡时 | 通用 NPU 算力 |
-| | | 1卡：32vCPUs/32GiB | | |
-| | | 8卡：192vCPUs/1536GiB | | |
-| **NPU (A3)** | 昇腾 A3 | 1卡：40vCPUs/240GiB | 100卡时 | 高配 NPU 算力 |
-| | | 8卡：320vCPUs/1920GiB | | |
-| **CPU (ARM)** | 鲲鹏 | 16vCPUs/32GiB | 720核时 | 仅支持 ARM，不支持 x86 |
-
-#### 3.2.2 使用规则
-
-**开发者：**
-- 总计 100 卡时，卡时消耗完将**自动关机**并释放资源
-- 算力消耗以"卡时"为单位，如创建 2 卡实例，最多可用 50 小时
-- **建议闲时及时关机或删除，避免配额无谓消耗**
-
-#### 3.2.3 资源申请限制
-
-- NPU 和 CPU 资源**可各申请一个**
-- NPU 资源类型切换（如 A2 → A3）需关机、删除后重新创建
-- **注意：实例删除时，`/mnt/workspace` 和 `/home` 数据不会保存**
 
 ### 3.3 CANN 软件栈管理
 
@@ -311,7 +310,7 @@ cd /home/developer/.cann
 
 #### 3.3.4 驱动版本升级
 
-暂不支持个人实例的驱动版本升级，由平台统一规划。如有驱动版本依赖，欢迎在 [infrastructure](https://gitcode.com/cann/infrastructure/issues) 仓库提 Issue 反馈。
+暂不支持个人实例的驱动版本升级，由平台统一规划。如有驱动版本依赖，请参考[问题反馈](#问题反馈)进行反馈。
 
 ### 3.4 数据管理
 
@@ -438,8 +437,7 @@ cat /home/developer/image-version.txt
 **【解决思路】** 确认网络环境是否正常？请从以下几个方面进行排查：
 - 是否使用科学上网软件？**请关闭代理**，确认连接是否恢复正常
 - 尝试更换网络环境（如从 Wi-Fi 切换到有线网络，或切换到手机热点测试）
-- 尝试使用不同浏览器（推荐 Chrome）打开 WebIDE
-- 如果以上方法均无法解决，请反馈当前页面的 URL 和报错截图，联系技术支持
+- 如果以上方法均无法解决，请反馈当前页面的 URL 和报错截图，请参考"问题反馈"咨询
 
 #### Q2：使用过程中，页面突然提示："WebIDE环境准备中，大约需要1-2分钟，请您耐心等待"
 
@@ -451,32 +449,18 @@ cat /home/developer/image-version.txt
 ![shim接口pending状态](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/12_webide_network_pending.png)
 
 - 尝试使用 VSCode 进行连接：
-  - VSCode 连接成功，则说明该实例后台codeArts-server进程被kill，请使用以下方式恢复。
-  - VSCode 连接失败，请您反馈当前页面的URL和报错截图，联系运维人员从后台排查具体原因。
+  - VSCode 连接成功，可以尝试重启 codearts-server 进程。
+  - VSCode 连接失败，可以尝试实例关机再开机后恢复。
 
-**【codearts-server进程被kill的恢复手段】**
-- 【可能原因】
-  - 执行高负载任务导致CPU或者内存被打满，该进程被kill；
-  - codearts-server进程启动时默认的max-memory是4G，单进程超过4G，导致进程退出。
-- 【恢复手段】
-  - 方法一：若使用VSCode可以正常连接，可以通过SSH终端手动拉起该进程，实例无需关机（适用于环境中有重要数据，无法直接关机）
-  - 方法二：实例关机、再开机后可自动拉起该进程，自动恢复（适用于环境中无重要数据的场景。因为关机时，非持久化目录中的数据会丢失）
-  - 【平台建议】建议重新创建实例，使用最新版本的镜像，该镜像已将该进程的max-memory启动参数调大至6G或者8G，后续使用该进程被kill的几率会降低
-
-#### Q3：页面弹窗报"连接错误"，报错："连接被抢占，您可能打开了多个窗口连接，可尝试重新连接。"
-
-![连接被抢占](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/13_webide_preempted.png)
-
-**【解决思路】**
-- 同一个实例最多支持开3个WebIDE窗口，如果超过3个将出现以上提示。请关闭窗口再重试。
-
-#### Q4：页面弹窗报"连接错误"，报错："云开发环境网络连接不稳定，您可以再次尝试连接（或者重启）以恢复连接。"
+#### Q3：页面弹窗报"连接错误"，报错："云开发环境网络连接不稳定，您可以再次尝试连接（或者重启）以恢复连接。"
 
 ![网络连接不稳定](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/14_webide_conn_error.png)
 
 **【解决思路】**
-1. 点击重新连接
-2. 如无法连接，请参考 **Q1** 的排查步骤
+1. 检查网络访问环境，确认满足平台的网络访问要求
+2. 点击"重新连接"，尝试恢复连接
+3. 可能是 GitCode 缓存失效或缓存被误清理，可尝试退出 GitCode 账号并重新登录，重新进入 CANNLab 平台
+4. 如以上方式仍无法解决，请参考"问题反馈"咨询
 
 ### 4.2 VSCode 连接类问题
 
@@ -526,7 +510,7 @@ source /home/developer/Ascend/ascend-toolkit/set_env.sh
 
 #### Q3：找不到代码工程目录
 
-**排查：** 执行 `ls /mnt/workspace` 查看是否存在代码目录。如未自动拉取，请提 Issue 反馈。
+**排查：** 执行 `ls /mnt/workspace` 查看是否存在代码目录。如未自动拉取，请参考[问题反馈](#问题反馈)进行反馈。
 
 ## 5. 问题反馈
 
@@ -534,7 +518,7 @@ source /home/developer/Ascend/ascend-toolkit/set_env.sh
 
 | 用户类型 | 反馈方式 |
 |:---|:---|
-| **社区用户** | 在 [infrastructure](https://gitcode.com/cann/infrastructure/issues) 仓库提 Issue |
+| **社区用户** | 请参考[问题反馈](#问题反馈)进行反馈 |
 
 > **注意：** CANN 开源仓自身的问题（如 ops-math、mindspore 等），请提至对应仓库。
 
