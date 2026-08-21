@@ -63,7 +63,7 @@ After the environment is created successfully, click **"Connect"** and select a 
 #### 2.2.2.2 Local VSCode Connection
 
 1. Click **"Connect"** -> Select **"Visual Studio Code"**
-2. On first use, install the AtomGit Dev Space and Remote SSH plugins as prompted.
+2. On first use, install the CANNLab Dev Space and Remote SSH plugins as prompted.
 3. Click the plugin icon -> "Login", then authorize with your AtomGit account in the browser.
 
    ![VSCode Plugin Login](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/07_vscode_login.png)
@@ -76,7 +76,7 @@ After the environment is created successfully, click **"Connect"** and select a 
 
 6. After successful connection, you will see the following window:
 
-   ![VSCode Connected Window](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/09_vscode_connected.png)
+   ![VSCode Connected Window](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/09_vscode_connected_v2.png)
 
 > **Note**
 > - The plugin's idle logout time is 24 hours; operation within 24 hours will not cause disconnection

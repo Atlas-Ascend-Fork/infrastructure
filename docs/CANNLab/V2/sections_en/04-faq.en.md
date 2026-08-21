@@ -68,7 +68,7 @@ Error prompt 2:
 
 **【Troubleshooting】**
 - Confirm whether this is the first time using VSCode to connect to the development environment.
-- If so, check whether the proxy and remote-ssh configurations of the AtomGit Dev Space plugin are correct.
+- If so, check whether the proxy and remote-ssh configurations of the CANNLab Dev Space plugin are correct.
 
 ### Q2: VSCode disconnects after a period of inactivity and requires AtomGit authorization again
 

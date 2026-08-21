@@ -32,8 +32,8 @@
     - [3.1 环境申请](#31-环境申请)
       - [环境提供的算力规格](#环境提供的算力规格)
       - [使用规则](#使用规则)
-      - [资源申请限制](#资源申请限制)
-    - [3.2 环境生命周期管理](#32-环境生命周期管理)
+      - [环境申请限制](#环境申请限制)
+    - [3.2 环境管理](#32-环境管理)
     - [3.3 CANN 软件栈管理](#33-cann-软件栈管理)
       - [查询 CANN 版本](#查询-cann-版本)
       - [查询驱动版本](#查询驱动版本)
@@ -270,19 +270,21 @@ cat /home/developer/image-version.txt
 
 **NPU 环境：**
 - 总计 100 卡时，卡时消耗完将**自动关机**并释放资源
-- 算力消耗以"卡时"为单位，如创建 2 卡环境，最多可用 50 小时
+- 算力消耗以"卡时"为单位，如创建 1 卡环境，最多可用 100 小时
+- 卡时不足时，可通过参与 CANN 社区任务赚取积分兑换算力（100 积分 = 1 卡时）
+- **环境开机即消耗算力，建议不用时及时关机或删除**
 
 **CPU 环境：**
 - 总计 720 核时，核时消耗完将**自动关机**并释放资源
 - 算力消耗以"核时"为单位，如创建 16vCPUs 环境，最多可用 45 小时
-
 - **环境开机即消耗算力，建议不用时及时关机或删除**
 
 #### 环境申请限制
 
 - NPU 和 CPU 资源**各可申请一个**
-- NPU 资源类型切换（如 A2 → A3）需关机、删除后重新创建
+- NPU 资源类型（A2/A3）不支持直接切换，需关机、删除后重新创建
 - **注意：环境删除时，`/mnt/workspace` 数据不会保存**
+
 
 ### 3.2 环境管理
 
@@ -302,61 +304,10 @@ CANNLab 环境存在以下状态：
 - **开机**：重新启动已关机或休眠的环境。
 - **删除**：彻底销毁环境。**删除后所有数据不可恢复**，请提前备份或 Push 代码至 Git 仓库。
 
-> **说明**
-> - NPU 资源类型（A2/A3）不支持直接切换，需关机、删除后重新创建。
 
-### 3.3 内置CANN软件包查看与升级
+### 3.3 环境数据
 
-#### 查询 CANN 版本
-
-CANN 包已预装，安装路径为 `/home/developer/Ascend`（注意：区别于自行安装的默认路径 `/usr/local/Ascend`）。
-
-**方式一：查询环境变量**
-```bash
-env | grep ASCEND
-```
-
-**方式二：查看版本文件**
-```bash
-cat /home/developer/Ascend/ascend-toolkit/latest/opp/version.info
-```
-
-#### 升级 CANN 版本
-
-**方式一：控制台一键升级（推荐）**
-
-1. 在 CANNLab 环境列表，点击 **"CANN包升级"** 按钮
-2. 选择可升级的 CANN 包版本（如 9.0.0 正式版、master 分支构建版本）
-3. 确认升级结果：
-
-```bash
-cd /home/developer/.cann
-./manage_cann_pkg.sh --version
-```
-
-返回 `task.status = 1` 且 `process = 100%` 表示升级成功。
-
-**方式二：手动安装**
-
-通过WebIDE或者VSCode连接后，在终端中可手动下载安装
-
-### 3.4 内置驱动版本查看与升级
-
-#### 查询驱动版本
-
-当前驱动版本为 **25.5.1**，安装路径为 `/usr/local/Ascend/driver`。
-
-```bash
-cat /usr/local/Ascend/driver/version.info | grep Version
-```
-
-#### 驱动版本升级
-
-暂不支持个人环境的驱动版本升级，由平台统一规划。如有驱动版本依赖，请参考[问题反馈](#问题反馈)进行反馈。
-
-### 3.5 数据管理
-
-#### 持久化存储
+#### 数据持久化存储
 
 | 目录 | 持久化 | 说明 |
 |:---|:---|:---|
@@ -377,7 +328,12 @@ cat /usr/local/Ascend/driver/version.info | grep Version
 
 从 CANN 开源仓库入口创建的环境，会**自动 clone 该仓库的代码**至 `/mnt/workspace`，无需手动拉取。
 
-### 3.6 代码工程管理
+
+### 3.4 代码工程管理
+
+#### Git 免密操作
+
+平台基于 GitCode 账号绑定自动完成 SSH 公私钥配置，`git clone` / `git push` 全程免密。
 
 #### 切换工程目录
 
@@ -385,15 +341,91 @@ cat /usr/local/Ascend/driver/version.info | grep Version
 
 #### 分支管理
 
-当前自动 clone 的代码为 **master** 分支，如需其他分支请手动切换。指定分支的功能已在开发中。
+当前自动 clone 代码时支持选择一个分支，如后续需其他分支请手动切换。
 
-#### Git 免密操作
 
-平台基于 GitCode 账号绑定自动完成 SSH 公私钥配置，`git clone` / `git push` 全程免密。
+### 3.5 镜像管理
 
-### 3.7 内置开发工具
+镜像中内置了 CANN 软件包、Huawei OP DevTools 算子开发插件、PyPTO Toolkit、OpenCode 编码辅助等开发工具。
 
-#### Huawei OP DevTools（算子开发插件）
+#### 查看当前镜像版本
+
+**方式一：** 在 CANNLab 环境列表页，鼠标移至"模板名称"查看详情
+
+**方式二：** 在环境内执行命令：
+
+```bash
+cat /home/developer/image-version.txt
+```
+
+#### 镜像版本更新
+
+| 场景 | 操作方式 |
+|:---|:---|
+| 需要全新环境 | 关机 -> 删除环境 -> 重新创建（注意备份数据） |
+| 仅升级 CANN 包 | 使用"CANN包升级"按钮 |
+| 仅升级算子插件 | WebIDE "扩展"中搜索更新 |
+| 仅升级 OpenCode | WebIDE "扩展"中搜索 "CANNBot Toolkit" 更新 |
+
+> **注意：** 暂不支持直接镜像升级。
+
+---
+
+
+#### 内置CANN软件包查看与升级
+
+**查询 CANN 版本**
+
+CANN 包已预装，安装路径为 `/home/developer/Ascend`（注意：区别于自行安装的默认路径 `/usr/local/Ascend`）。
+
+**方式一：查询环境变量**
+```bash
+env | grep ASCEND
+```
+
+**方式二：查看版本文件**
+```bash
+cat /home/developer/Ascend/ascend-toolkit/latest/opp/version.info
+```
+
+**升级 CANN 版本**
+
+**方式一：控制台一键升级（推荐）**
+
+1. 在 CANNLab 环境列表，点击 **"CANN包升级"** 按钮
+2. 选择可升级的 CANN 包版本（如 9.0.0 正式版、master 分支构建版本）
+3. 确认升级结果：
+
+```bash
+cd /home/developer/.cann
+./manage_cann_pkg.sh --version
+```
+
+返回 `task.status = 1` 且 `process = 100%` 表示升级成功。
+
+**方式二：手动安装**
+
+通过WebIDE或者VSCode连接后，在终端中可手动下载安装
+
+
+### 3.6 环境驱动版本查看与升级
+
+#### 查询驱动版本
+
+当前驱动版本为 **25.5.1**，安装路径为 `/usr/local/Ascend/driver`。
+
+```bash
+cat /usr/local/Ascend/driver/version.info | grep Version
+```
+
+#### 驱动版本升级
+
+暂不支持个人对环境的驱动版本升级，由平台统一规划。
+
+
+#### 内置开发工具
+
+**Huawei OP DevTools（算子开发插件）**
 
 预装于云开发环境中，提供：
 
@@ -409,7 +441,7 @@ cat /usr/local/Ascend/driver/version.info | grep Version
 
 **升级方式：** WebIDE 连接后，左侧栏"扩展"中搜索 "Huawei OP DevTools" 进行版本选择。
 
-#### PyPTO Toolkit
+**PyPTO Toolkit**
 
 预装于云开发环境中，面向 AI 加速器的高性能编程框架，简化复杂融合算子及模型网络的开发流程。
 
@@ -427,7 +459,7 @@ cat /usr/local/Ascend/driver/version.info | grep Version
 - 大模型算子级实现与优化
 - 需要极致性能调优的算子开发
 
-#### OpenCode
+**OpenCode**
 
 终端内置 OpenCode 工具，支持自然语言交互式编码辅助。
 
@@ -469,30 +501,6 @@ opencode --version
 
 **升级方式：** WebIDE 连接后，"扩展"中搜索 "CANNBot Toolkit"，或通过命令行更新。
 
-### 3.8 镜像管理
-
-#### 查看当前镜像版本
-
-**方式一：** 在 CANNLab 环境列表页，鼠标移至"模板名称"查看详情
-
-**方式二：** 在环境内执行命令：
-
-```bash
-cat /home/developer/image-version.txt
-```
-
-#### 镜像版本更新
-
-| 场景 | 操作方式 |
-|:---|:---|
-| 需要全新环境 | 关机 -> 删除环境 -> 重新创建（注意备份数据） |
-| 仅升级 CANN 包 | 使用"CANN包升级"按钮 |
-| 仅升级算子插件 | WebIDE "扩展"中搜索更新 |
-| 仅升级 OpenCode | WebIDE "扩展"中搜索 "CANNBot Toolkit" 更新 |
-
-> **注意：** 暂不支持直接镜像升级。
-
----
 
 ## 4. 常见问题
 
