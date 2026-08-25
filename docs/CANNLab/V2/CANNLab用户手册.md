@@ -310,7 +310,8 @@ CANNLab 环境存在以下状态：
 
 #### 3.4.3 切换工程目录
 
-在 WebIDE 中：文件（File）-> 打开项目（Open Project）-> 选择对应仓库目录。
+- WebIDE：文件（File）-> 打开项目（Open Project）-> 选择对应仓库目录
+- VSCode：文件（File）-> 打开文件夹（Open Folder）-> 选择对应仓库目录
 
 
 #### 3.4.4 分支管理
@@ -451,13 +452,50 @@ cat /usr/local/Ascend/driver/version.info | grep Version
 暂不支持个人对环境的驱动版本升级，由平台统一规划。
 
 
+### 3.7 VSCode连接基本使用
+
+CANNLab 支持通过本地 VSCode 远程连接云开发环境，需要安装 **CANNLab Dev Space** 和 **Remote-SSH** 插件。
+
+#### 3.7.1 登录 GitCode 账号
+
+连接环境前，需先登录 GitCode 账号进行授权。
+
+#### 3.7.2 连接算力环境
+
+点击 CANNLab Dev Space 插件中的环境选项，进行连接。
+
+![连接算力环境](images/35_vscode_connect_env.png)
+
+#### 3.7.3 主动断开SSH连接
+
+点击 VSCode 左下角蓝色光标，选择"关闭远程连接"（Close Remote SSH）。
+
+![断开连接入口](images/36_vscode_disconnect.png)
+
+![关闭远程连接](images/22_vscode_close_remote.png)
+
+#### 3.7.4 退出 GitCode 账号登录
+
+在 CANNLab Dev Space 插件中选择退出登录。
+
+![退出登录1](images/37_vscode_logout1.png)
+
+![退出登录2](images/38_vscode_logout2.png)
+
+#### 3.7.5 重置云环境的SSH凭据
+
+如遇 SSH 连接异常，可在 CANNLab 平台重置 SSH 凭据。
+
+![重置SSH凭据](images/39_vscode_reset_ssh.png)
+
+
 ## 4. 常见问题
 
 ### 4.1 创建环境类问题
 
 #### Q1：创建环境时提示资源不足
 
-**解决：** 当前资源池已无可用资源，请更换算力规格重试。
+**【解决思路】** 当前资源池已无可用资源，请更换算力规格重试。
 
 ### 4.2 WebIDE 连接类问题
 
@@ -479,14 +517,28 @@ cat /usr/local/Ascend/driver/version.info | grep Version
 
 ![WebIDE环境准备中](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/11_webide_preparing.png)
 
+**【问题原因】**
+执行高负载任务导致 CPU 或内存被打满，codearts-server 进程被 kill，WebIDE 无法正常连接。
+
 **【问题排查】**
-- 请使用浏览器F12打开，点击"Network"页签，F5刷新页面，确认：shim接口是否为pending状态，无法调用。
+- 请使用浏览器 F12 打开，点击 "Network" 页签，F5 刷新页面，确认：shim 接口是否为 pending 状态，无法调用。
 
 ![shim接口pending状态](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/12_webide_network_pending.png)
 
-- 尝试使用 VSCode 进行连接：
-  - VSCode 连接成功，可以尝试重启 codearts-server 进程。
-  - VSCode 连接失败，可以尝试环境关机再开机后恢复。
+- 尝试使用 VSCode 进行连接，若连接成功，说明是 codearts-server 进程被 kill，可通过以下方式恢复。
+
+**【恢复手段】**
+- 方法一：通过 VSCode 的 SSH 终端手动拉起该进程
+  ```bash
+  ~/codearts/bin/codearts-server --without-connection-token --locale zh-cn --port 8888 --host 127.0.0.1 >~/code-server.log 2>&1 &
+  ```
+  确认进程启动成功：
+  ```bash
+  ps -ef | grep codearts-server
+  ```
+  确认进程启动成功后，刷新页面即可恢复。
+- 方法二：环境关机、再开机后可自动拉起该进程
+
 
 #### Q3：页面弹窗报"连接错误"，报错："云开发环境网络连接不稳定，您可以再次尝试连接（或者重启）以恢复连接。"
 
@@ -500,35 +552,56 @@ cat /usr/local/Ascend/driver/version.info | grep Version
 
 ### 4.3 VSCode 连接类问题
 
-#### Q1：VSCode右下角报错："WebSocket connection failed"
+#### Q1：VSCode 隔一段时间不操作会断连，且需要再次进行 AtomGit 授权
 
-VSCode右下角报错："WebSocket 连接失败"
+**【问题现象】**
+VSCode 断连后重新连接时需要跳转 AtomGit 进行登录授权。
 
-错误提示一：
-
-![WebSocket连接失败](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/15_vscode_websocket_error.png)
-
-错误提示二：
-
-![WebSocket连接失败2](https://raw.gitcode.com/cann/infrastructure/raw/master/docs/CANNLab/V2/images/16_vscode_websocket_error2.png)
+**【问题原因】**
+VSCode 通过 remote-ssh 连接服务器，网络断开会导致需要重新连接。开发者插件有闲时自动退出登录功能，当前闲时时间为 24 小时，只要 24 小时内有操作，原则上不会断开。
 
 **【解决思路】**
-- 确认是否为首次使用 VSCode 方式连接开发环境；
-- 若是，检查 CANNLab Dev Space 插件的 proxy 和 remote-ssh 的配置是否正确。
+- 如果 VSCode 频繁断连，排查是否存在网络抖动，如电脑休眠、代理网络不稳定等
+- 如果断连后重新连接还需跳转 AtomGit 登录，确认插件是否为最新版本，旧版本闲时时间为 2 小时
 
-#### Q2：VSCode 隔一段时间不操作会断连，且需要再次进行 AtomGit 授权
+#### Q2: VSCode无法连接排查思路
+**【问题现象】** VSCode 无法连接到 CANNLab 环境
 
-**【功能说明】**
-
-VSCode 连接服务器通过 remote-ssh 连接，如果出现网络断开，可能会导致再次打开 VSCode 窗口时需要重新连接远程服务器。
-开发者插件有闲时不操作的自动退出开发者账号功能，当前闲时时间为24小时，因此只要24小时内有操作，原则上不会断开。
 
 **【解决思路】**
+1. 确认是否为首次使用，首次使用需检查 CANNLab Dev Space 插件和 Remote-SSH 配置
+2. 若非首次使用：
+   - 尝试主动断开 SSH 并重新连接（参考 3.7.3）
+   - 使用 WebIDE 连接，若 WebIDE 也无法连接，尝试环境关机再开机
+   - 若 WebIDE 可以连接，说明环境正常，请提供 VSCode 连接报错的具体日志，参考[问题反馈](../CANNLab用户手册.md#问题反馈)进行反馈
+3. 若以上方式均无效，尝试卸载 Remote-SSH 插件后重新连接
 
-- 如果 VSCode 频繁断连，需要排查是否存在网络抖动。可能原因有：电脑休眠、电脑设置国外代理网络不稳定等诸多因素；
+#### Q3: Could not establish connection（多台电脑同时连接）
 
-- 如果 VSCode 断连后，重新连接还需要跳转 AtomGit 进行登录，需要确认：
-   - 插件版本是否为最新版本，旧版本的闲时时间为2小时；
+**【问题现象】** 环境连接成功后 SSH 主动断开，频繁重连。
+
+![连接错误提示](https://raw.gitcode.com/user-images/assets/8739409/b04ac410-3a76-44b6-ba48-2383833f6894/image.png)
+
+日志报错：`ssh: connect to host 127.0.0.1 port 20022: Connection refused`
+
+
+![日志报错](https://raw.gitcode.com/user-images/assets/8739409/4a345337-2919-425d-916a-0284490ea76b/image.png)
+
+**【问题原因】** VSCode 不支持多台电脑同时连接同一环境。
+
+**【解决思路】** 关闭其中一台电脑的连接即可。
+
+#### Q4: Could not establish connection（Bad permissions）
+
+**【问题现象】**
+日志报错：`Bad permissions. Try removing permissions for user: \Everyone (S-1-1-0) on file C:/Users/xxxxx/.ssh/config`
+
+**【解决思路】**
+1. 点击 VSCode 左下角齿轮设置按钮，进入设置
+2. 搜索 `remote ssh`，添加 config 文件路径，如 `C:\Users\xxx\.atomgitdevenv\.ssh\config`
+
+![设置路径](https://raw.gitcode.com/user-images/assets/8739409/2631ef06-469b-4b20-8559-c4f9ecdf17fd/image.png)
+
 
 ### 4.4 其它问题
 
@@ -550,7 +623,7 @@ source /home/developer/Ascend/ascend-toolkit/set_env.sh
 
 | 用户类型 | 反馈方式 |
 |:---|:---|
-| **社区用户** | 请参考[问题反馈](#问题反馈)进行反馈 |
+| **社区用户** | 欢迎向 [cann/infrastructure](https://gitcode.com/cann/infrastructure/issues) 仓库提交 Issue |
 
 > **注意：** CANN 开源仓自身的问题（如 ops-math、mindspore 等），请提至对应仓库。
 
