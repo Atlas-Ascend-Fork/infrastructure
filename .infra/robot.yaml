@@ -1,0 +1,14 @@
+lgtm_need_nums: 2
+approve_need_nums: 1
+
+default_merge_method: squash
+
+require_labels:
+  - label: lgtm
+    operator: "cann-robot"                    
+  - label: approved
+    operator: "cann-robot"
+  - label: ci-pipeline-passed
+    operator: "cann-robot"
+  - label: cann-cla/yes
+    operator: "cann-robot"
