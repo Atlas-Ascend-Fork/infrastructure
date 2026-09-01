@@ -1,4 +1,4 @@
-name: PR-pipeline_infrastructrue
+name: PR-pipeline_infrastructure
 
 concurrency:
   max: 5
