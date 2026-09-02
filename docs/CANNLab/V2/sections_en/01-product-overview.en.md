@@ -35,7 +35,8 @@ Build AI application scenarios such as RAG retrieval-augmented generation, AI Ag
 |:---|:---|
 | **Instance** | Cloud computing unit provided by CANNLab, including CANN software stack and development tools |
 | **Image** | Pre-installed development environment template, including the CANN base package, Python environment, and other built-in tools |
-| **Card-Hours** | Unit of measurement for compute resources. 1 card-hour = number of NPU cards x usage duration (hours) |
+| **Card-Hours** | Unit of measurement for NPU compute resources. 1 card-hour = number of NPU cards x usage duration (hours) |
+| **Core-Hours** | Unit of measurement for CPU compute resources. 1 core-hour = number of vCPUs x usage duration (hours) |
 | **Workspace** | Persistent storage directories mounted at `/mnt/workspace` and `/home`; data is retained after instance shutdown |
 | **NPU Instance** | Computing instance equipped with Ascend NPU cards, supports A2 and A3 |
 | **CPU Simulation Environment** | Computing environment with ARM CPU, used for operator logic verification and UT testing without NPU dependency |

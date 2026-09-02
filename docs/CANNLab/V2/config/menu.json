@@ -82,5 +82,17 @@
                 "ref_en": "master",
                 "file_path_en": "docs/CANNLab/V2/sections_en/07-appendix.en.md",
                 "sort": 130
+        },
+        {
+                "code": "version-history",
+                "name": "版本历程",
+                "name_en": "Version History",
+                "project_id": "7990062",
+                "ref": "master",
+                "file_path": "docs/CANNLab/V2/sections_zh/08-版本历程.md",
+                "project_id_en": "7990062",
+                "ref_en": "master",
+                "file_path_en": "docs/CANNLab/V2/sections_en/08-version-history.en.md",
+                "sort": 140
         }
-]
+        ]
