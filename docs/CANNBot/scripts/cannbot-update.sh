@@ -1,8 +1,10 @@
  #!/bin/bash
 # ============================================================
 #  cannbot-update.sh
-#  自动下载并安装最新版 cannbot-toolkit 插件
-#  用法：bash cannbot-update.sh
+#  下载并安装 cannbot-toolkit 插件
+#  用法：bash cannbot-update.sh [版本号]
+#    示例：bash cannbot-update.sh 2.0.0
+#    不传版本号则自动从远端获取最新版本
 # ============================================================
 
 set -e
@@ -19,23 +21,30 @@ error()   { echo -e "${RED}[ERROR]${NC} $*"; exit 1; }
 
 # ---------- 配置 ----------
 VERSION_URL="https://cannbot-obs.obs.cn-north-4.myhuaweicloud.com/package/version.txt"
+EXT_ID="cann-pub.cannbot-toolkit"
+CODEARTS_EXT_DIR="$HOME/.codearts-server/extensions"
+VSCODE_EXT_DIR="$HOME/.vscode-server/extensions"
+VSCODE_EXT_JSON="$VSCODE_EXT_DIR/extensions.json"
 
-# 自动获取最新版本号
-info "正在获取最新版本号..."
-if command -v curl &>/dev/null; then
-    VSIX_VERSION=$(curl -fsSL "$VERSION_URL" | tr -d '[:space:]') \
-        || error "获取版本号失败，请检查网络或 URL：$VERSION_URL"
-elif command -v wget &>/dev/null; then
-    VSIX_VERSION=$(wget -qO- "$VERSION_URL" | tr -d '[:space:]') \
-        || error "获取版本号失败，请检查网络或 URL：$VERSION_URL"
+# ---------- 获取版本号 ----------
+VSIX_VERSION=""
+if [ -n "$1" ]; then
+    VSIX_VERSION="$1"
+    info "使用命令行指定版本号：$VSIX_VERSION"
 else
-    error "系统中未找到 curl 或 wget，无法获取版本号。"
+    info "正在获取最新版本号..."
+    if command -v curl &>/dev/null; then
+        VSIX_VERSION=$(curl -fsSL "$VERSION_URL" | tr -d '[:space:]')
+    elif command -v wget &>/dev/null; then
+        VSIX_VERSION=$(wget -qO- "$VERSION_URL" | tr -d '[:space:]')
+    else
+        error "系统中未找到 curl 或 wget，无法获取版本号。"
+    fi
+    if [ -z "$VSIX_VERSION" ]; then
+        error "版本号为空，请检查 $VERSION_URL 内容，或手动传入版本号。"
+    fi
+    info "最新版本号：$VSIX_VERSION"
 fi
-
-if [ -z "$VSIX_VERSION" ]; then
-    error "版本号为空，请检查 $VERSION_URL 内容是否正确。"
-fi
-info "最新版本号：$VSIX_VERSION"
 
 # -------------- 检测系统架构 --------------
 ARCH=$(uname -m)
@@ -52,21 +61,17 @@ case "$ARCH" in
 esac
 info "系统架构：${ARCH} -> ${VSIX_ARCH}"
 
-VSIX_FILENAME="cannbot-toolkit-linux-${VSIX_ARCH}-${VSIX_VERSION}.vsix"
+# ---------- 变量 ----------
+VSIX_FILENAME="cannbot-toolkit-${VSIX_VERSION}.vsix"
 VSIX_URL="https://cannbot-obs.obs.cn-north-4.myhuaweicloud.com/package/${VSIX_VERSION}/${VSIX_FILENAME}"
 VSIX_PATH="/tmp/${VSIX_FILENAME}"
-CODEARTS_BIN="$HOME/codearts/bin/codearts-server"
-
-# ---------- 检查 codearts-server ----------
-if [ ! -f "$CODEARTS_BIN" ]; then
-    error "未找到 codearts-server：$CODEARTS_BIN\n       请确认 CodeArts IDE 已正确安装，或修改脚本顶部的 CODEARTS_BIN 路径。"
-fi
+EXT_DIRNAME="${EXT_ID}-${VSIX_VERSION}"
+CODEARTS_EXT_INSTALL_DIR="$CODEARTS_EXT_DIR/$EXT_DIRNAME"
 
 # ---------- 下载 vsix ----------
 info "开始更新 cannbot-toolkit ..."
 info "下载地址：$VSIX_URL"
 
-# 优先用 curl，其次 wget
 if command -v curl &>/dev/null; then
     curl -fSL --progress-bar -o "$VSIX_PATH" "$VSIX_URL" \
         || error "下载失败，请检查网络或 URL 是否可访问。"
@@ -77,7 +82,6 @@ else
     error "系统中未找到 curl 或 wget，无法下载文件。"
 fi
 
-# 验证文件是否下载成功且非空
 if [ ! -s "$VSIX_PATH" ]; then
     error "下载的文件为空，请检查下载地址是否有效。"
 fi
@@ -87,6 +91,15 @@ info "下载完成，文件大小：${FILESIZE}，路径：$VSIX_PATH"
 
 # ---------- 安装插件 ----------
 info "开始安装插件..."
+
+# 清理不完整的临时安装目录（如 .11e3e13c-...）
+find "$CODEARTS_EXT_DIR" -maxdepth 1 -type d -name ".${EXT_DIRNAME}.*" -exec rm -rf {} + 2>/dev/null || true
+
+CODEARTS_BIN="$HOME/codearts/bin/codearts-server"
+if [ ! -f "$CODEARTS_BIN" ]; then
+    error "未找到 codearts-server：$CODEARTS_BIN"
+fi
+
 "$CODEARTS_BIN" --install-extension "$VSIX_PATH" \
     || error "插件安装失败，请查看上方输出信息。"
 
@@ -97,33 +110,24 @@ rm -f "$VSIX_PATH"
 info "已清理临时文件：$VSIX_PATH"
 
 # ---------- 同步到 ~/.vscode-server/extensions ----------
-CODEARTS_EXT_DIR="$HOME/.codearts-server/extensions"
-VSCODE_EXT_DIR="$HOME/.vscode-server/extensions"
-EXT_ID="cann-pub.cannbot-toolkit"
-EXT_DIRNAME="${EXT_ID}-${VSIX_VERSION}"
-
-
-# 确保目标目录存在
 mkdir -p "$VSCODE_EXT_DIR"
 
-# 复制插件目录（覆盖）
-info "正在同步插件目录到 $VSCODE_EXT_DIR ..."
-rm -rf "${VSCODE_EXT_DIR:?}/${EXT_DIRNAME}"
-cp -r "$CODEARTS_EXT_DIR/$EXT_DIRNAME" "$VSCODE_EXT_DIR/$EXT_DIRNAME"
-info "插件目录同步完成"
+if [ -d "$CODEARTS_EXT_INSTALL_DIR" ]; then
+    info "正在同步插件目录到 $VSCODE_EXT_DIR ..."
+    rm -rf "${VSCODE_EXT_DIR:?}/${EXT_DIRNAME}"
+    cp -r "$CODEARTS_EXT_INSTALL_DIR" "$VSCODE_EXT_DIR/$EXT_DIRNAME"
+    info "插件目录同步完成"
+else
+    error "CodeArts 扩展目录不存在：$CODEARTS_EXT_INSTALL_DIR"
+fi
 
 # ---------- 更新 ~/.vscode-server/extensions/extensions.json ----------
-VSCODE_EXT_JSON="$VSCODE_EXT_DIR/extensions.json"
-
-# 如果 extensions.json 不存在则初始化为空数组
 if [ ! -f "$VSCODE_EXT_JSON" ]; then
     echo "[]" > "$VSCODE_EXT_JSON"
 fi
 
-# 获取当前安装时间戳（毫秒）
 TIMESTAMP=$(date +%s%3N)
 
-# JSON 构造完全在 Python 内完成，避免 bash heredoc 变量替换问题
 python3 - "$VSCODE_EXT_JSON" "$EXT_ID" "$VSIX_VERSION" "$VSCODE_EXT_DIR/$EXT_DIRNAME" "$EXT_DIRNAME" "$TIMESTAMP" <<'PYEOF'
 import json, sys
 
@@ -132,10 +136,8 @@ json_path, ext_id, version, ext_path, rel_location, timestamp = sys.argv[1:]
 with open(json_path, "r") as f:
     data = json.load(f)
 
-# 过滤掉旧的同 id 条目
 data = [e for e in data if e.get("identifier", {}).get("id") != ext_id]
 
-# 构造新条目（参考 pypto-toolkit 在 vscode-server 中的格式）
 new_entry = {
     "identifier": {"id": ext_id},
     "version": version,
@@ -156,3 +158,4 @@ with open(json_path, "w") as f:
 PYEOF
 
 info "✅ cannbot-toolkit 更新完成！"
+info "请刷新或重启 CodeArts IDE 以使插件生效。"
