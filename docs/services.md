@@ -11,6 +11,7 @@
 - 漏洞管理服务（cve-manager）
 - CANN数字化协作平台
 - 静态检查
+- AI 技能辅助排障（门禁 CI 失败定位/慢 run 分析）
 
 | 支撑项 | 服务地址 | 使用指导 | GITCODE账号 | 邮箱 |  
 | ------------- | ---------- | ------------------------------------------------------------------------------------- | ---------- | ---------------------- |
@@ -22,6 +23,7 @@
 | 漏洞管理服务 | NA | [使用指导](./cve-manager/manual.md) | [@yangwei999](https://gitcode.com/yangwei999) | <yangwei266@h-partners.com> |
 | CANN数字化协作平台 | [跳转](https://digital.hicann.cn//) | [使用指导](./CANN-Digital-Platform/网站介绍.md) | [@fanxiaotian6](https://gitcode.com/fanxiaotian6) | <fanxiaotian6@huawei.com> |
 | 静态检查 | NA | [使用指导](./SC/CodeArts-Check/CodeArts-Check插件使用指南.md) | [@weixin_39767879](https://gitcode.com/weixin_39767879) | <zhuzheng3@huawei.com> |
+| AI 技能（门禁 CI 排障） | NA | [使用指导](../.agent/README.md) | [@songchangxia](https://gitcode.com/songchangxia) | <songchangxia@huawei.com> |
 
 ---
 
