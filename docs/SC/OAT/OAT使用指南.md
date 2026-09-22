@@ -114,6 +114,25 @@ License: InvalidLicense
 
 ---
 
+## 与 pre-commit 集成（推荐）
+
+业务仓接入 OAT **请使用 compliance 远程 Python hook**，无需在本仓拷贝 `oat_check.sh`：
+
+```yaml
+repos:
+  - repo: https://gitcode.com/HiAgent/compliance
+    rev: v1.0.6
+    hooks:
+      - id: oat-check
+        pass_filenames: true
+        stages: [pre-commit]
+        verbose: true
+```
+
+详细部署与贡献者使用说明见：[pre-commit配置指导书](../pre-commit/pre-commit配置指导书.md)。
+
+---
+
 ## OAT问题确认
 
 开源仓代码扫描时候会根据 OAT 默认规则进行分析，不满足则会在 OAT 扫描报告中呈现出问题。

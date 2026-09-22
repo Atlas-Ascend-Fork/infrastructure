@@ -61,14 +61,12 @@ repos:
       - id: typos
         args: ["--force-exclude"]
 
-  # OAT 合规性检查 (Open Source Audit Tool)
-  - repo: local
+  # OAT 合规性检查 (Open Source Audit Tool) — 远程 Python hook
+  # 无需在本仓拷贝 oat_check.sh；由 compliance 仓安装并执行 oat-precommit
+  - repo: https://gitcode.com/HiAgent/compliance
+    rev: v1.0.6
     hooks:
       - id: oat-check
-        name: OAT Compliance Check
-        entry: bash scripts/oat_check.sh
-        language: system
         pass_filenames: true
-        types: [file]
-        stages: [commit]
+        stages: [pre-commit]
         verbose: true

@@ -14,8 +14,8 @@
 
 **常用镜像仓库对照表**:
 
-| GitHub 原仓库 | GitCode 镜像仓库 | 说明 |
-|--------------|-----------------|------|
+| GitHub 原仓库 / 来源 | GitCode 仓库 | 说明 |
+|---------------------|-------------|------|
 | `https://github.com/pre-commit/pre-commit-hooks` | `https://gitcode.com/pre-commit/pre-commit-hooks` | 基础检查 hooks |
 | `https://github.com/pre-commit/mirrors-clang-format` | `https://gitcode.com/pre-commit-clang/mirrors-clang-format` | C++ 格式化 |
 | `https://github.com/astral-sh/ruff-pre-commit` | `https://gitcode.com/gh_mirrors/ru/ruff-pre-commit` | Python lint/format |
@@ -23,8 +23,9 @@
 | `https://github.com/crate-ci/typos` | `https://gitcode.com/gh_mirrors/ty/typos` | typos 检查 |
 | `https://github.com/pylint-dev/pylint` | `https://gitcode.com/gh_mirrors/pyl/pylint` | Python 代码检查 |
 | `https://github.com/PyCQA/bandit` | `https://gitcode.com/gh_mirrors/ba/bandit` | Python 安全检查 |
+| HiAgent compliance（OAT） | `https://gitcode.com/HiAgent/compliance` | **OAT 远程 pre-commit hook** |
 
-**使用建议**: 在国内开发时，推荐使用 GitCode 镜像仓库，避免网络访问问题。
+**使用建议**: 在国内开发时，推荐使用 GitCode 镜像 / 托管仓库，避免网络访问问题。
 
 ## 2 代码仓中部署pre-commit能力指导
 
@@ -51,26 +52,28 @@ repos:
 - **将".clang-format"配置文件拷贝至代码仓根目录下**
 配套提供的".clang-format"为与CANN社区编程规范配套的格式化模板文件，如果代码仓有与规范不匹配的代码风格，可自主调整配置参数。
 
-3、在".pre-commit-config.yaml"文件中配置OAT扫描能力：
+3、在".pre-commit-config.yaml"文件中配置OAT扫描能力（**推荐：远程 Python hook**）：
 
 - **在".pre-commit-config.yaml"文件添加如下配置：**
 
 ```yaml
-  - repo: local
+  - repo: https://gitcode.com/HiAgent/compliance
+    rev: v1.0.6
     hooks:
       - id: oat-check
-        name: OAT Compliance Check (Python)
-        entry: bash scripts/oat_check.sh
-        language: system
         pass_filenames: true
-        types: [file]
         stages: [pre-commit]
         verbose: true
 ```
 
-- **将"oat_check.sh"脚本拷贝至代码仓中的`scripts/`目录下；**
+- **无需**再将 `oat_check.sh` 拷贝到本仓 `scripts/` 目录。
+- pre-commit 会自动克隆 `compliance` 仓库，在 hook 虚拟环境中安装 OAT，并执行 `oat-precommit`。
+- 建议将项目 `OAT.xml` 放在仓库**根目录**或 `scripts/` 目录（工具会自动查找）。
 
-**说明**："oat_check.sh"脚本如果放在其他路径下，需要在".pre-commit-config.yaml"中的oat-check配置中同步调整执行"oat_check.sh"脚本路径信息。
+**说明**：
+- `rev` 请使用 compliance 仓发布的版本标签（如 `v1.0.6`）；升级 hook 后如本地缓存未更新，可执行 `pre-commit clean` 后再 `pre-commit install`。
+- 完整示例可参考本目录配套的 [`.pre-commit-config.yaml`](./.pre-commit-config.yaml)。
+- 旧版本地脚本方式（`repo: local` + `bash scripts/oat_check.sh`）已废弃，**新接入请统一使用上述远程 hook**。
 
 4、至此将完成在代码仓中配置pre-commit机制下的代码格式化、OAT检查配置，如果还需要其他功能，可继续在".pre-commit-config.yaml"中配置。
 
@@ -118,7 +121,7 @@ git commit --allow-empty -m "test pre-commit"
 
 ### 3.2 OAT使用指导
 
-**OAT（Open Source Audit Tool）Python 版** 是一个开源合规性检查工具，自动集成到 Git 提交流程中。仅依赖 **Python 3.7+**，`oat-py` 包在首次运行时自动安装。
+**OAT（Open Source Audit Tool）Python 版** 通过 **compliance 远程 pre-commit hook**（`oat-check`）集成到 Git 提交流程中。被扫描仓库只需配置 `.pre-commit-config.yaml` 与项目 `OAT.xml`，**无需本仓维护 Bash 脚本**。
 
 #### 3.2.1 检查内容
 
@@ -127,67 +130,54 @@ git commit --allow-empty -m "test pre-commit"
 
 #### 3.2.2 核心特点
 
-- **增量检查** - 仅检查待提交文件，速度快（通常 < 2 秒）
+- **增量检查** - 仅检查 pre-commit / CI 传入的变更文件（`pass_filenames: true`）
 - **自动触发** - 每次 `git commit` 自动运行
-- **详细报告** - 自动生成 `oat_reports/result.txt` 摘要报告
-- **零配置** - 首次运行自动安装 `oat-py`（需可访问 PyPI 或内部镜像）
-- **跨平台** - Windows / Linux / macOS 全支持（只需 Python 3.7+）
+- **详细报告** - 生成 `oat_reports/result.txt` 摘要报告；CI 多批次扫描会自动聚合成一份结果
+- **零拷贝脚本** - 依赖由 pre-commit 从 `compliance` 仓安装到 hook 虚拟环境
+- **跨平台** - Windows / Linux / macOS（Python 3.7+，由 pre-commit 管理 hook 环境）
 
 #### 3.2.3 必需软件
 
 | 软件 | 版本要求 | 用途 | 安装方式 |
 |------|---------|------|----------|
-| **Python** | 3.7+ | 运行 OAT | 通常已安装；参见下方安装指导 |
-| **oat-py** | >=1.0.0 | OAT 核心包 | **首次运行自动安装** |
+| **Python** | 3.7+ | pre-commit / OAT hook 运行时 | 通常已安装；参见下方安装指导 |
 | **Git** | 2.0+ | 版本控制 | 通常已安装 |
 | **pre-commit** | 2.0+ | Hook 框架 | `pip install pre-commit` |
+| **compliance oat-check** | `rev: v1.0.6`（示例） | OAT 远程 hook | 由 `.pre-commit-config.yaml` 引用，首次运行自动拉取安装 |
 
-#### 3.2.4 自动安装支持
+> 说明：无需在业务仓手动 `pip install oat-py`。远程 hook 会从 `https://gitcode.com/HiAgent/compliance` 安装所需依赖。
 
-`oat_check.sh` 脚本在运行时会自动检测并安装 `oat-py`：
-
-| 平台 | Python 检测 | oat-py 安装 | 首次安装时间 |
-|------|------------|------------|-------------|
-| **Linux** | 自动检测 `python3/python/py` | 自动（`pip install`） | < 30 秒 |
-| **macOS** | 自动检测 `python3/python/py` | 自动（`pip install`） | < 30 秒 |
-| **Windows（Git Bash）** | 自动检测 `python3/python/py` | 自动（`pip install`） | < 30 秒 |
-
-#### 3.2.5 重要提示：环境问题自动跳过
-
-**友好的设计**：如果 Python 未找到或 `oat-py` 安装失败，OAT 检查会**自动跳过**，提交仍会继续。
-
-**会自动跳过的场景**
-
-| 场景 | 行为 | 提示 |
-|------|------|------|
-| Python 3.7+ 未安装 | 跳过检查，允许提交 | 提供安装指引 |
-| oat-py 自动安装失败 | 跳过检查，允许提交 | 提示手动安装方法 |
-| OAT 扫描执行异常（退出码非 0/1） | 跳过检查，允许提交 | 提示手动运行命令排查 |
-
-**仍会阻止提交的场景**
-
-| 场景 | 行为 | 原因 |
-|------|------|------|
-| **发现二进制文件** | 阻止提交 | 真正的合规性问题 |
-| **许可证头缺失/错误** | 阻止提交 | 真正的合规性问题 |
-
-**跳过检查的提示示例**
+#### 3.2.4 远程 hook 工作方式（简述）
 
 ```
-[OAT] [WARNING] Python 3.7+ is required but not found. Please install Python 3.7 or later.
-[OAT] Skipping OAT check, continuing commit...
+业务仓 .pre-commit-config.yaml
+  → pre-commit 克隆 compliance（rev 标签）
+  → pip install .（注册 oat-precommit）
+  → 传入变更文件路径（pass_filenames: true）
+  → oat.precommit 增量扫描 + 写入 oat_reports/result.txt
 ```
 
-**后续手动运行检查**
+首次在本机启用时，pre-commit 会下载并安装 hook（通常几十秒，取决于网络）。之后复用本地缓存。
 
-配置好环境后，可以手动运行检查：
+#### 3.2.5 手动运行检查
 
 ```bash
-# 推荐方式
+# 推荐：通过 pre-commit 触发 oat-check
 pre-commit run oat-check
 
-# 或直接运行脚本
-bash scripts/oat_check.sh
+# 对暂存区 / 指定文件
+pre-commit run oat-check --files path/to/file.cpp
+
+# 全量（慎用，仓库很大时较慢）
+pre-commit run oat-check --all-files
+```
+
+升级 `rev` 或远程标签刷新后，如未生效可清理缓存：
+
+```bash
+pre-commit clean
+pre-commit install
+pre-commit run oat-check
 ```
 
 #### 3.2.6 合规性问题（阻止提交）
@@ -204,26 +194,10 @@ bash scripts/oat_check.sh
   OAT: Compliance issues found. Commit blocked.
 ====================================================================
 
-[OAT] Found 1 compliance issue(s):
-  - Invalid File Type:       1
-  - License Header Invalid:  0
+[OAT] Cumulative scan: 1 file(s) checked, 1 issue(s).
 
-[OAT] Details:
-  cat oat_reports/result.txt
-
-Fix the issues and recommit, or skip with:
-  git commit --no-verify
-```
-
-**行为**: **阻止提交，必须修复**
-
-**查看详情**:
-```bash
-cat oat_reports/result.txt
-```
-
-**报告内容示例**:
-```
+[OAT] Report:
+---
 ===================================
 OAT Scan Result Summary
 ===================================
@@ -233,12 +207,21 @@ Files Checked: 1
 
 -----------------------------------
 Invalid File Type Total Count: 1
-lib/libtest.so: BINARY_FILE_TYPE
+...
 
 -----------------------------------
 License Header Invalid Total Count: 0
-
 ===================================
+---
+Fix the issues and recommit, or skip with:
+  git commit --no-verify
+```
+
+**行为**: **阻止提交，必须修复**
+
+**查看详情**:
+```bash
+cat oat_reports/result.txt
 ```
 
 **解决方案**:
@@ -260,42 +243,11 @@ git commit -m "update: add binary files to gitignore"
 
 **场景**: 源代码文件缺少或许可证头格式不正确。
 
-**输出**:
-```
-====================================================================
-  OAT: Compliance issues found. Commit blocked.
-====================================================================
-
-[OAT] Found 2 compliance issue(s):
-  - Invalid File Type:       0
-  - License Header Invalid:  2
-
-[OAT] Details:
-  cat oat_reports/result.txt
-```
-
 **行为**: **阻止提交，必须修复**
 
 **查看详情**:
 ```bash
 cat oat_reports/result.txt
-```
-
-**报告内容示例**:
-```
-===================================
-OAT Scan Result Summary
-===================================
-
------------------------------------
-Invalid File Type Total Count: 0
-
------------------------------------
-License Header Invalid Total Count: 2
-src/main.cpp: MISSING_LICENSE_HEADER
-src/utils.cpp: MISSING_LICENSE_HEADER
-
-===================================
 ```
 
 **解决方案**:
@@ -320,6 +272,8 @@ git add src/main.cpp src/utils.cpp
 git commit -m "fix: add license headers"
 ```
 
+更多告警解读与 `OAT.xml` 配置方法，参见 [OAT使用指南](../OAT/OAT使用指南.md)。
+
 ---
 
 #### 3.2.7 报告查看
@@ -328,9 +282,9 @@ git commit -m "fix: add license headers"
 
 | 报告类型 | 文件路径 | 内容 |
 |---------|---------|------|
-| **摘要报告** | `oat_reports/result.txt` | 关键问题汇总 |
+| **摘要报告** | `oat_reports/result.txt` | 关键问题汇总（多批次 CI 为聚合结果） |
 
-> `oat_reports/` 目录会被脚本自动加入 `.gitignore`，无需手动维护。
+> 建议将 `oat_reports/` 加入仓库 `.gitignore`，避免扫描产物被误提交。
 
 **查看命令**
 
@@ -362,80 +316,55 @@ License Header Invalid Total Count: 0
 ===================================
 ```
 
-#### 3.2.8 环境问题
+#### 3.2.8 环境与安装问题
 
 **1) Python 未安装或版本过低**
 
-**场景**: 系统未安装 Python，或版本低于 3.7。
+**场景**: 系统未安装 Python，或版本低于 3.7，导致 pre-commit / hook 环境无法创建。
 
-**输出**:
-```
-[OAT] [WARNING] Python 3.7+ is required but not found. Please install Python 3.7 or later.
-[OAT] Skipping OAT check, continuing commit...
-```
+**行为**: hook 安装或执行失败，需先安装 Python 3.7+（参见下方《Python 安装指导》）。
 
-**行为**: **跳过检查，允许提交**
+安装完成后验证：
 
-**解决方案**：安装 Python 3.7+，参见下方《Python 安装指导》。安装完成后运行 `pre-commit run oat-check` 验证。
-
----
-
-**2) oat-py 自动安装失败**
-
-**场景**: `pip install oat-py>=1.0.0` 执行失败（网络问题或权限问题）。
-
-**输出**:
-```
-[OAT] oat-py not found. Installing oat-py>=1.0.0 ...
-[OAT] [WARNING] Failed to install oat-py. Please run: pip install oat-py>=1.0.0
-[OAT] Skipping OAT check, continuing commit...
-```
-
-**行为**: **跳过检查，允许提交**
-
-**解决方案**:
 ```bash
-# 手动安装
-pip install oat-py>=1.0.0
-
-# 国内网络使用镜像加速
-pip install oat-py>=1.0.0 -i https://mirrors.huaweicloud.com/repository/pypi/simple/
-
-# 验证安装
-python -m oat -v
-
-# 手动运行检查
 pre-commit run oat-check
 ```
 
 ---
 
+**2) 无法拉取 compliance 远程仓库**
+
+**场景**: 网络或权限导致无法访问 `https://gitcode.com/HiAgent/compliance`。
+
+**解决方案**:
+- 确认可访问 GitCode，并具备对 compliance 仓的只读权限；
+- 检查 `.pre-commit-config.yaml` 中 `repo` / `rev` 是否正确；
+- 清理后重试：`pre-commit clean && pre-commit install`
+
+---
+
 **3) OAT 扫描执行异常**
 
-**场景**: `oat` 命令运行时出现意外错误（退出码非 0 或 1）。
-
-**输出**:
-```
-[OAT] [WARNING] oat exited with unexpected code 2.
-[OAT] Try re-running manually:
-  python -m oat -mode s -s /path/to/repo -r /path/to/repo/oat_reports -n REPO_NAME -w 1 -f file1,file2
-[OAT] Skipping OAT check, continuing commit...
-```
-
-**行为**: **跳过检查，允许提交**
+**场景**: hook 运行时报错，或 `oat_reports/result.txt` 未生成。
 
 **解决方案**:
 ```bash
-# 步骤 1: 手动执行输出的命令，查看详细报错
-python -m oat -mode s -s . -r oat_reports -n CANN -w 1 -f src/foo.cpp
+# 步骤 1: 单独跑 oat-check，查看完整输出
+pre-commit run oat-check --verbose
 
-# 步骤 2: 检查 oat-py 版本
-python -m oat -v
+# 步骤 2: 确认 rev 对应版本可用
+# 打开 https://gitcode.com/HiAgent/compliance 核对标签
 
-# 步骤 3: 重装 oat-py
-pip install --upgrade oat-py
+# 步骤 3: 清理缓存后重装
+pre-commit clean
+pre-commit install
+pre-commit run oat-check
+```
 
-# 步骤 4: 验证
+调试远程 hook 详细日志时可设置：
+
+```bash
+export OAT_PRECOMMIT_VERBOSE=1
 pre-commit run oat-check
 ```
 
@@ -443,7 +372,7 @@ pre-commit run oat-check
 
 ##### Python 安装指导
 
-OAT Python 版需要 **Python 3.7+**，以下提供各平台安装方式。
+OAT / pre-commit 需要 **Python 3.7+**，以下提供各平台安装方式。
 
 **Linux**
 
