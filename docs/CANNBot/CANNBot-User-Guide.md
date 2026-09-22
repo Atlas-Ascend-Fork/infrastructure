@@ -1,23 +1,23 @@
 # CANNWork(全称：CANNLab-WorkAgent)用户使用手册
 ## 目录
 
-- [CANNWork(全称：CANNLab-WorkAgent)用户使用手册](#CANNWork(全称：CANNLab-WorkAgent)用户使用手册)
+- [CANNWork(全称：CANNLab-WorkAgent)用户使用手册](#cannwork全称cannlab-workagent用户使用手册)
   - [目录](#目录)
   - [1. 产品简介](#1-产品简介)
     - [1.1 概述](#11-概述)
     - [1.2 产品功能](#12-产品功能)
     - [1.3 应用场景](#13-应用场景)
   - [2. 安装配置](#2-安装配置)
-    - [2.1 CANNLab云开发平台安装](#21-CANNLab云开发平台安装)
-    - [2.2 VSCode插件市场安装](#22-VSCode插件市场安装)
+    - [2.1 CANNLab 云开发平台安装](#21-cannlab-云开发平台安装)
+    - [2.2 VSCode 插件市场安装](#22-vscode-插件市场安装)
   - [3. 核心功能](#3-核心功能)
     - [3.1 模型配置](#31-模型配置)
       - [3.1.1 内置模型](#311-内置模型)
       - [3.1.2 自定义模型](#312-自定义模型)
     - [3.2 Plan和Build模式](#32-Plan和Build模式)
-      - [3.1.1 Plan模式](#311-Plan模式)
-      - [3.1.2 Build模式](#312-Build模式)
-    - [3.3 Skill配置](#33-Plan模式)
+      - [3.2.1 Plan模式](#321-Plan模式)
+      - [3.2.2 Build模式](#322-Build模式)
+    - [3.3 Skill配置](#33-Skill配置)
       - [3.3.1 添加全局skill](#331-添加全局skill)
       - [3.3.2 添加项目级skill](#332-添加项目级skill)
     - [3.4 MCP配置](#34-MCP配置)
@@ -59,7 +59,7 @@ CANNWork是面向 CANN 生态开发者的 AI 智能编程助手，以 VS Code �
 | 业务 Agent | 内置算子文档开发、算子接口检索、算子编程开发等 CANN 领域业务 Agent，端到端编排领域研发工作流 |
 | 账号体系 | CANN 账号登录，API Key 自动注入，开箱即用 |
  
-### 1.2 应用场景
+### 1.3 应用场景
 **场景一：算子文档开发**
 
 面向 CANN 算子文档写作场景，提供文档生成与文档质检能力。文档生成基于模型 AI 辅助学习，同步生成与软件实现一致的 aclnn API 文档，提升文档写作效率；文档质检提供静态检查（markdownlint
@@ -553,8 +553,8 @@ CANNWork支持多会话并行工作：每个会话拥有独立的对话上下文
 
   检查CANN Ascend C API文档的规范性、正确性、完备性、可读性，写作规范请参见[Tanh样例](https://gitcode.com/cann/asc-devkit/blob/master/docs/api/context/Tanh.md)。
 
-#### 4.1.3 功能使用
-4.1.2 功能使用
+#### 4.1.4 功能使用
+
 
 **1. 进入算子文档生成流程**
 
