@@ -482,7 +482,14 @@ if [ "$ret" -eq 200 ]; then
 fi
 if [ "$ret" -eq 0 ]; then
     compile_package_name=$(ls "${WORKSPACE}/build_out"/*.run 2>/dev/null | head -n1)
-    mv "${compile_package_name}" "${WORKSPACE}/build_out/${package_name}"
+    if [ -z "${compile_package_name}" ]; then
+        echo "compile package (*.run) not found" >&2
+        exit 1
+    fi
+    if ! mv -- "${compile_package_name}" "${WORKSPACE}/build_out/${package_name}"; then
+        echo "failed to rename compile package" >&2
+        exit 1
+    fi
 fi
 echo "ret=$ret" >> "$ATOMGIT_OUTPUT"
 exit "$ret"
