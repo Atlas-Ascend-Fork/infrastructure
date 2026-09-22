@@ -46,8 +46,8 @@ CANN社区采用**CLA（Contributor License Agreement，贡献者许可协议）
 
 ```
 ### 当前PR是否有AI参与:
-[]  否
-[x]  是
+- [ ] 否
+- [x] 是
 __1. Agent平台信息: Claude Code 2.1.156
 __2. 模型信息: DeepSeek-V3
 __3. Prompt摘要: 基于现有代码逻辑，完成代码编写、逻辑优化、异常分支补充及注释完善，协助完成本次功能开发与问题修复
