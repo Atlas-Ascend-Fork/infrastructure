@@ -1,7 +1,7 @@
 # pre-commit配置指导书
 
 [TOC]
--- 
+--
 
 ## 1 概述
 
@@ -125,8 +125,8 @@ git commit --allow-empty -m "test pre-commit"
 
 #### 3.2.1 检查内容
 
-**文件类型检查** - 禁止提交二进制文件（.so, .dll, .exe 等）  
-**许可证头检查** - 验证源代码文件包含合规的许可证声明  
+**文件类型检查** - 禁止提交二进制文件（.so, .dll, .exe 等）
+**许可证头检查** - 验证源代码文件包含合规的许可证声明
 
 #### 3.2.2 核心特点
 
@@ -134,15 +134,15 @@ git commit --allow-empty -m "test pre-commit"
 - **自动触发** - 每次 `git commit` 自动运行
 - **详细报告** - 生成 `oat_reports/result.txt` 摘要报告；CI 多批次扫描会自动聚合成一份结果
 - **零拷贝脚本** - 依赖由 pre-commit 从 `compliance` 仓安装到 hook 虚拟环境
-- **跨平台** - Windows / Linux / macOS（Python 3.7+，由 pre-commit 管理 hook 环境）
+- **跨平台** - Windows / Linux / macOS（Python 3.9+，由 pre-commit 管理 hook 环境）
 
 #### 3.2.3 必需软件
 
 | 软件 | 版本要求 | 用途 | 安装方式 |
 |------|---------|------|----------|
-| **Python** | 3.7+ | pre-commit / OAT hook 运行时 | 通常已安装；参见下方安装指导 |
+| **Python** | 3.9+ | pre-commit / OAT hook 运行时 | 通常已安装；参见下方安装指导 |
 | **Git** | 2.0+ | 版本控制 | 通常已安装 |
-| **pre-commit** | 2.0+ | Hook 框架 | `pip install pre-commit` |
+| **pre-commit** | 4.0+ | Hook 框架 | `pip install pre-commit` |
 | **compliance oat-check** | `rev: v1.0.6`（示例） | OAT 远程 hook | 由 `.pre-commit-config.yaml` 引用，首次运行自动拉取安装 |
 
 > 说明：无需在业务仓手动 `pip install oat-py`。远程 hook 会从 `https://gitcode.com/HiAgent/compliance` 安装所需依赖。
@@ -320,9 +320,9 @@ License Header Invalid Total Count: 0
 
 **1) Python 未安装或版本过低**
 
-**场景**: 系统未安装 Python，或版本低于 3.7，导致 pre-commit / hook 环境无法创建。
+**场景**: 系统未安装 Python，或版本低于 3.9，导致 pre-commit / hook 环境无法创建。
 
-**行为**: hook 安装或执行失败，需先安装 Python 3.7+（参见下方《Python 安装指导》）。
+**行为**: hook 安装或执行失败，需先安装 Python 3.9+（参见下方《Python 安装指导》）。
 
 安装完成后验证：
 
@@ -372,7 +372,7 @@ pre-commit run oat-check
 
 ##### Python 安装指导
 
-OAT / pre-commit 需要 **Python 3.7+**，以下提供各平台安装方式。
+OAT / pre-commit 需要 **Python 3.9+**，以下提供各平台安装方式。
 
 **Linux**
 
@@ -402,7 +402,7 @@ python3 --version
 **方式一：官网安装包（推荐）**
 
 1. 访问 [https://www.python.org/downloads/windows/](https://www.python.org/downloads/windows/)
-2. 下载最新 Python 3.x（3.7 及以上均可）的 **Windows installer (64-bit)**
+2. 下载最新 Python 3.x（3.9 及以上均可）的 **Windows installer (64-bit)**
 3. 双击安装，**务必勾选"Add Python to PATH"**
 4. 安装完成后重启终端，验证：
    ```powershell
@@ -430,5 +430,5 @@ python --version
 winget install Python.Python.3.11
 ```
 
-> **国内网络备用下载**：  
+> **国内网络备用下载**：
 > 华为镜像：[https://mirrors.huaweicloud.com/python/](https://mirrors.huaweicloud.com/python/)
