@@ -116,13 +116,16 @@ body:
     validations:
       required: false
 
-  - type: checkboxes
+  - type: dropdown
     attributes:
       label: 后续CI配置确认
       description: 仓库创建完成后，是否需要立即配置CI门禁？
+      multiple: false
       options:
-        - label: 是，建仓完成后立即提交CI集成申请
-        - label: 否，稍后自行提交CI集成申请
+        - 是，建仓完成后立即提交CI集成申请
+        - 否，稍后自行提交CI集成申请
+    validations:
+      required: true
 
   - type: input
     attributes:
