@@ -287,7 +287,7 @@ git log --pretty=fuller
 |------|----------|----------|
 | commit邮箱与Gitcode提交邮箱一致 | 使用该邮箱重新签署 | 用commit邮箱重新签署CLA |
 | 希望使用commit邮箱签署 | 调整Gitcode设置 | 在Gitcode设置中添加commit邮箱并设为提交邮箱 |
-| 希望使用Gitcode提交邮箱签署 | 调整本地git配置 | 使用`git config --global user.email "邮箱"`修改配置 |
+| 希望使用Gitcode提交邮箱签署 | 调整本地git配置 | 使用`git config --local user.email "邮箱"`修改配置 |
 
 **修正commit邮箱命令：**
 

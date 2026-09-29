@@ -287,7 +287,7 @@ Sub-situation B1: Commit email is inconsistent with CLA email
 |------|----------|----------|
 | Commit email is consistent with Gitcode submission email | Re-sign using this email | Re-sign CLA using the commit email |
 | Want to sign using the commit email | Adjust Gitcode settings | Add the commit email in Gitcode settings and set it as the submission email |
-| Want to sign using the Gitcode submission email | Adjust local git configuration | Use `git config --global user.email "email"` to modify the configuration |
+| Want to sign using the Gitcode submission email | Adjust local git configuration | Use `git config --local user.email "email"` to modify the configuration |
 
 **Commands to correct commit email:**
 
