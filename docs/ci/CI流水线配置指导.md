@@ -40,11 +40,11 @@
 on:
   pr_comment:
     types: [ created ]
-    keyword: '^(?:\/)?compile*'
+    keyword: '^(?:\/)?compile$'
   pull_request_comment:
     types: [created]
     branches: [ '*' ]
-    comments: [ '^(?:\/)?compile*' ]
+    comments: [ '^(?:\/)?compile$' ]
 ```
 
 > 两个事件作用不同，需同时配置：
@@ -238,11 +238,11 @@ name: <repo>_action
 on:
   pr_comment:
     types: [ created ]
-    keyword: '^(?:\/)?compile*'
+    keyword: '^(?:\/)?compile$'
   pull_request_comment:
     types: [created]
     branches: [ '*' ]
-    comments: [ '^(?:\/)?compile*' ]
+    comments: [ '^(?:\/)?compile$' ]
 
 env:
   org_name: "cann"
