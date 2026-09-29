@@ -27,7 +27,8 @@ Codex）在处理社区 CI 问题时按需加载，也供开发者作为排障�
 
 ```bash
 # 单技能链接（推荐）
-ln -s $(pwd)/.agent/pipeline-layered-localizer ~/.opencode/skills/pipeline-layered-localizer
+mkdir -p ~/.config/opencode/skills
+ln -s $(pwd)/.agent/pipeline-layered-localizer ~/.config/opencode/skills/pipeline-layered-localizer
 ```
 
 **人工阅读**：直接打开对应技能的 `SKILL.md`（方法论总纲），深入细节看 `references/`
