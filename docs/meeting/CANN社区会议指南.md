@@ -265,6 +265,43 @@ Time时间：<HH>:<MM>~<HH>:<MM>  #请更新为具体会议时间，更新后可
 
 ![](figures/meeting_recording_page.png)
 
+### 7.会议纪要
+
+会议结束后并且在对应的Etherpad中有更新会议纪要，在次日9点会向会议创建者发送会议纪要提醒邮件，邮件正文即Etherpad更新的会议纪要。（创建者需提前绑定个人邮箱，见7.1）
+
+#### 7.1 绑定个人邮箱
+
+为保障会议纪要提醒邮件能够准确送达，会议创建者需提前在个人中心绑定个人邮箱；未绑定邮箱的创建者将无法收到会议纪要提醒邮件。注意：此处的个人邮箱绑定与「三、如何组织会议」中的 gitcode 账号-华为账号绑定相互独立，需分别完成。
+
+1. 登录[社区会议平台](https://meeting.osinfra.cn/cann)，进入个人中心，找到邮箱绑定入口。
+
+![](figures/meeting-bind-email.png)
+
+2. 在弹出的邮箱绑定表单中填写个人邮箱并完成验证。
+
+![](figures/meeting-bind-email-form.png)
+
+绑定成功后，系统会在会议结束后次日9点向该邮箱发送会议纪要提醒邮件。
+
+#### 7.2 收到提示邮件的通知
+
+会议创建者会收到上述会议纪要提醒邮件，邮件正文即会议纪要内容。收到提示邮件后，可直接查看纪要，并按需进行编辑或发送给参会人员。
+
+![](figures/receive_notify.png)
+
+同时在我的会议页面，点击【会议纪要】按钮也可以查看该会议的会议纪要。
+
+![](figures/meeting-minutes-2.png)
+
+![](figures/meeting-minutes.png)
+
+用户可以对会议纪要进行编辑，并发送纪要给参会人员。
+
+![](figures/meeting-minutes-edit.png)
+
+发送会议纪要成功后会形成发送记录，用户可以查看发送邮件的详情信息。
+
+![](figures/meeting-minutes-email.png)
 
 ## 四、FAQ
 
