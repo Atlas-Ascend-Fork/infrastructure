@@ -15,6 +15,7 @@
 import sys
 import os
 import argparse
+import json
 from pathlib import Path
 
 from .logger import info, ok, warn, error, debug, has_error, error_exit, register_cleanup_callback, set_software_info
@@ -79,25 +80,25 @@ or directories and generates a standardized Readme.opensource file.
 
 场景1: 完全自动提取
   cret -t package.zip -n "MyLib" -v "1.0.0"
-  
+
   说明: 工具自动扫描并提取所有版权和许可证信息
   Note: Tool automatically scans and extracts all copyright and license info
 
 场景2: 指定许可证名称
   cret -t package.zip -n "MyLib" -v "1.0.0" -l "MIT"
-  
+
   说明: 当已知许可证名称时，可指定以获得更准确的结果
   Note: Specify license name when known for more accurate results
 
 场景3: 指定许可证文件路径
   cret -t package.zip -n "MyLib" -v "1.0.0" -p "LICENSE"
-  
+
   说明: 当已知许可证文件位置时，可指定路径
   Note: Specify license file path when known
 
 场景4: 同时指定许可证名称和路径 (推荐 / Recommended)
   cret -t package.zip -n "MyLib" -v "1.0.0" -l "MIT" -p "LICENSE"
-  
+
   说明: 同时提供名称和路径，跳过自动检测，结果最准确
   Note: Provide both to skip automatic detection, most accurate results
 
@@ -187,7 +188,7 @@ Run 'cret --guide' for detailed usage instructions.
 运行 'cret --guide' 查看详细使用指南。
         """
     )
-    
+
     # 必填参数
     parser.add_argument(
         "-t", "--target",
@@ -204,7 +205,7 @@ Run 'cret --guide' for detailed usage instructions.
         required=True,
         help="Software version / 软件版本号 (required)"
     )
-    
+
     # 可选参数
     parser.add_argument(
         "-l", "--license",
@@ -229,42 +230,137 @@ Run 'cret --guide' for detailed usage instructions.
         action="store_true",
         help="Show detailed usage guide / 显示详细使用指南"
     )
-    
+
     # 先检查是否只是要显示指南（在解析必填参数之前）
     if "--guide" in sys.argv or "-g" in sys.argv:
         print_guide()
         sys.exit(0)
-    
+
     args = parser.parse_args()
-    
+
     return args
+
+
+def _log_software_info(software_name, software_version, license_name, license_path):
+    # 设置软件信息（用于错误日志输出）
+    set_software_info(software_name, software_version)
+
+    info(f"Software Name: {software_name}")
+    info(f"Software Version: {software_version}")
+    info(f"License Name: {license_name or 'Not provided'}")
+    info(f"License Path: {license_path or 'Not provided'}")
+
+
+def _scan_source(scan_target, result_json):
+    check_scancode_available()
+    run_scancode(scan_target, result_json, scan_license=True)
+    with result_json.open("r", encoding="utf-8") as file:
+        return json.load(file)
+
+
+def _write_reports(scan_data, scan_target, software_info, output_files, license_path):
+    software_name, software_version, license_name = software_info
+    _, output_copyright, output_license, output_readme = output_files
+    # 提取copyright信息
+    copyright_records = extract_and_duplicate_copyright(scan_data, output_copyright)
+
+    # 处理license信息（始终调用process_license_params以执行校验）
+    license_records = process_license_params(
+        data=scan_data,
+        root_path=scan_target,
+        license_name=license_name,
+        license_path=license_path,
+    )
+
+    # 检查是否有错误发生（用于非error_exit方式的错误）
+    if has_error():
+        error_exit("Errors occurred during processing, aborting.")
+
+    # 写入license报告
+    write_license_report(
+        output_txt=output_license,
+        software_name=software_name,
+        software_version=software_version,
+        license_records=license_records,
+    )
+
+    # 生成Readme.opensource文件
+    write_readme_opensource(
+        output_path=output_readme,
+        software_name=software_name,
+        software_version=software_version,
+        copyright_records=copyright_records,
+        license_records=license_records,
+        root_path=scan_target,
+    )
+
+
+def _prepare_scan_target(target):
+    extract_dir = None
+    scan_target = target
+    if target.is_file():
+        extract_dir = run_extractcode(target)
+        # 检测嵌套目录：如果解压根目录下只有一个子目录，进入该目录作为真正的根目录
+        scan_target = extract_dir
+        try:
+            items = list(extract_dir.iterdir())
+            if len(items) == 1 and items[0].is_dir():
+                scan_target = items[0]
+                info(f"Detected nested directory, using as root: {scan_target}")
+        except Exception:
+            pass
+
+    return extract_dir, scan_target
+
+
+def _normalize_license_path(scan_target, license_path):
+    # 验证用户提供的license路径是否存在
+    if license_path:
+        # 标准化路径：移除前导斜杠，统一路径分隔符
+        # 避免 /LICENSES/MIT.txt 被解析为绝对路径
+        normalized_license_path = license_path.lstrip("/").replace("\\", "/")
+        license_full_path = (scan_target / normalized_license_path).resolve()
+        try:
+            license_full_path.relative_to(scan_target.resolve())
+        except ValueError:
+            error_exit(f"License file must be inside the target: {license_path}")
+        if not license_full_path.is_file():
+            error_exit(f"License file not found: {license_path}")
+
+        # 标准化后的路径用于后续处理
+        license_path = normalized_license_path
+
+    return license_path
 
 
 def main():
     args = parse_args()
-    
+    software_name, software_version = args.name, args.version
+    license_name, license_path = args.license_name, args.license_path
+
     # 解析目标路径
     target = Path(args.target).resolve()
     if not target.exists():
         error_exit(f"Target does not exist: {target}")
-    
+
     # 确定输出目录
     if args.output_dir:
         output_dir = Path(args.output_dir).resolve()
         output_dir.mkdir(parents=True, exist_ok=True)
     else:
         output_dir = target.parent if target.is_file() else target
-    
+
     # 输出文件路径
     result_json = output_dir / "result.json"
     output_copyright = output_dir / f"{target.stem}_copyright"
     output_license = output_dir / f"{target.stem}_license"
     output_readme = output_dir / "Readme.opensource"
-    
+    output_files = (result_json, output_copyright, output_license, output_readme)
+
     # 用于清理的变量
     extract_dir = None
     scan_target = target
-    
+
     # 定义清理函数
     def cleanup():
         """清理过程文件和临时目录"""
@@ -281,90 +377,21 @@ def main():
         nonlocal extract_dir
         if extract_dir:
             cleanup_extract_dir(extract_dir)
-    
+
     # 注册清理回调
     register_cleanup_callback(cleanup)
-    
+
     # 软件信息
-    software_name = args.name
-    software_version = args.version
-    license_name = args.license_name
-    license_path = args.license_path
-    
-    # 设置软件信息（用于错误日志输出）
-    set_software_info(software_name, software_version)
-    
-    info(f"Software Name: {software_name}")
-    info(f"Software Version: {software_version}")
-    info(f"License Name: {license_name or 'Not provided'}")
-    info(f"License Path: {license_path or 'Not provided'}")
-    
+    _log_software_info(software_name, software_version, license_name, license_path)
+
     try:
-        if target.is_file():
-            extract_dir = run_extractcode(target)
-            # 检测嵌套目录：如果解压根目录下只有一个子目录，进入该目录作为真正的根目录
-            scan_target = extract_dir
-            try:
-                items = list(extract_dir.iterdir())
-                if len(items) == 1 and items[0].is_dir():
-                    scan_target = items[0]
-                    info(f"Detected nested directory, using as root: {scan_target}")
-            except Exception:
-                pass
-        
-        # 验证用户提供的license路径是否存在
-        if license_path:
-            # 标准化路径：移除前导斜杠，统一路径分隔符
-            # 避免 /LICENSES/MIT.txt 被解析为绝对路径
-            normalized_license_path = license_path.lstrip("/").replace("\\", "/")
-            license_full_path = scan_target / normalized_license_path
-            if not license_full_path.exists():
-                error_exit(f"License file not found: {license_path}")
-            
-            # 标准化后的路径用于后续处理
-            license_path = normalized_license_path
-        
-        # 执行scancode扫描（始终扫描license，用于校验用户提供的参数）
-        check_scancode_available()
-        run_scancode(scan_target, result_json, scan_license=True)
-        
-        # 读取scancode结果JSON文件（只读取一次，避免重复IO）
-        import json
-        with result_json.open("r", encoding="utf-8") as f:
-            scan_data = json.load(f)
-        
-        # 提取copyright信息
-        copyright_records = extract_and_duplicate_copyright(scan_data, output_copyright)
-        
-        # 处理license信息（始终调用process_license_params以执行校验）
-        license_records = process_license_params(
-            data=scan_data,
-            root_path=scan_target,
-            license_name=license_name,
-            license_path=license_path,
-        )
-        
-        # 检查是否有错误发生（用于非error_exit方式的错误）
-        if has_error():
-            error_exit("Errors occurred during processing, aborting.")
-        
-        # 写入license报告
-        write_license_report(
-            output_txt=output_license,
-            software_name=software_name,
-            software_version=software_version,
-            license_records=license_records,
-        )
-        
-        # 生成Readme.opensource文件
-        write_readme_opensource(
-            output_path=output_readme,
-            software_name=software_name,
-            software_version=software_version,
-            copyright_records=copyright_records,
-            license_records=license_records,
-            root_path=scan_target,
-        )
+        extract_dir, scan_target = _prepare_scan_target(target)
+
+        license_path = _normalize_license_path(scan_target, license_path)
+
+        scan_data = _scan_source(scan_target, result_json)
+        _write_reports(scan_data, scan_target,
+                       (software_name, software_version, license_name), output_files, license_path)
 
     except Exception as e:
         error("Pipeline failed, extracted directory will be kept for debugging.")

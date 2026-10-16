@@ -33,7 +33,7 @@ cret -t <target> -n <software_name> -v <software_version> [可选参数]
 | 参数 | 长参数 | 说明 |
 |------|--------|------|
 | `-l` | `--license` | License名称，**必须使用SPDX许可证标识符**（如：MIT, Apache-2.0） |
-| `-p` | `--license-path` | License文件相对路径（相对于代码根目录） |
+| `-p` | `--license-path` | License文件相对路径（相对于代码根目录；不能指向根目录外） |
 | `-o` | `--output-dir` | 输出目录，默认为被测目标同级目录 |
 | `--guide` | | 显示详细使用指南 |
 
@@ -369,4 +369,3 @@ OSSinfo_extraction/
 ## 许可证
 
 本项目采用 Apache License 2.0 许可证。
-
