@@ -6,7 +6,10 @@ body:
   - type: markdown
     attributes:
       value: |
-        感谢你的反馈，请根据提示补充以下信息，以便我们能快速准确的部署代码仓门禁/版本集成能力
+        感谢你的反馈，请根据提示按分类补充以下信息，以便我们能快速准确的部署代码仓门禁/版本集成能力
+  - type: markdown
+    attributes:
+      value: "## 一、基础信息"
   - type: input
     attributes:
       label: 代码仓地址
@@ -14,34 +17,10 @@ body:
       placeholder: 请输入代码仓地址，例如：https://gitcode.com/cann/<repo_name>.git
     validations:
       required: true
-  - type: input
+  - type: markdown
     attributes:
-      label: 代码分支
-      description: 代码主分支
-      placeholder: 请输入主分支名称，如：main
-    validations:
-      required: true    
-  - type: input
-    attributes:
-      label: 代码编译指导
-      description: 请给出工程的编译脚本及运行方式
-      placeholder: 编译的脚本及运行方式，以ops-math仓编译为例，编译命令：bash build.sh --pkg
-    validations:
-      required: true
-  - type: input
-    attributes:
-      label: UT运行指导
-      description: 请给出UT代码运行的脚本及调用方式
-      placeholder: UT脚本及运行方式，以ops-math仓运行UT为例，UT执行命令：bash build.sh  -u --ophost
-    validations:
-      required: true
-  - type: input
-    attributes:
-      label: 门禁触发命令
-      description: 命令内容支持定制，默认在PR评论中使用/compile触发门禁
-      placeholder: /compile
-    validations:
-      required: false
+      value: |
+        **代码主分支**：统一为 `master`（不支持定制），门禁与版本集成均基于 master 配置，无需在此填写。
   - type: input
     attributes:
       label: CI工程师信息
@@ -49,3 +28,71 @@ body:
       placeholder: zhangshan;zhangshan@xxx.com
     validations:
       required: true
+  - type: markdown
+    attributes:
+      value: "## 二、构建与门禁"
+  - type: input
+    attributes:
+      label: 代码编译指导
+      description: 请给出工程的编译脚本及运行方式
+      placeholder: 编译的脚本及运行方式，以ops-math仓编译为例，编译命令：bash build.sh --pkg
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        **门禁触发方式**：统一为 PR 评论 `/compile` 触发（当前不支持定制触发命令），无需在此填写。
+  - type: markdown
+    attributes:
+      value: "## 三、UT 配置（无 UT 的仓库可跳过本节）"
+  - type: dropdown
+    attributes:
+      label: 是否需要配置 UT
+      description: 部分仓库无 UT 或暂不纳入门禁，选"否"可跳过本节其余字段
+      options:
+        - "是（请填写本节其余字段）"
+        - "否（本仓不配置 UT）"
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: UT运行指导
+      description: 仅填写 UT 执行的脚本及调用方式；UT 的环境与镜像要求请在"四、环境配套"统一说明
+      placeholder: UT脚本及运行方式，以ops-math仓运行UT为例，UT执行命令：bash build.sh  -u --ophost
+    validations:
+      required: false
+  - type: dropdown
+    attributes:
+      label: UT 运行硬件需求
+      description: UT 是否需要 NPU 设备；纯 CPU（x86）用标准 CPU runner，需要 NPU 时注明卡型
+      options:
+        - 不适用（本仓不配置 UT）
+        - 纯 CPU（x86，无需 NPU）
+        - 需要 NPU（请在此后补充卡型/驱动要求）
+        - 混合（部分用例需 NPU）
+    validations:
+      required: false
+  - type: markdown
+    attributes:
+      value: "## 四、环境配套（编译与 UT 统一在此说明）"
+  - type: textarea
+    attributes:
+      label: 构建环境配套关系（CI 镜像要求）
+      description: 请统一说明编译与 UT 所需环境：基础镜像/Dockerfile 或所需预置组件（CANN toolkit 版本、交叉编译 SDK、UT 依赖、三方库预置方式）。若无现成镜像，请给出依赖清单，CI 侧据此准备或与你确认镜像方案
+      placeholder: |
+        例：
+        - 基础镜像：已有 swr 镜像 xxx:tag / 需新制（附 Dockerfile）
+        - CANN toolkit：需要，版本 9.x.x（compile 与 UT 需 source set_env.sh）
+        - 交叉编译：无需 / 需要 OHOS SDK（版本、sysroot 路径）
+        - UT 依赖：stub NDK / pytest 纯 CPU / 其他
+        - 三方库：预置于镜像 / 构建前脚本拉取（给出拉取命令及下载源）
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 构建工具版本要求
+      description: 编译/UT 依赖的工具链版本约束（cmake/gcc/python/pip 源等），缺省按 CI 标准镜像工具
+      placeholder: |
+        例：cmake >= 3.20；gcc >= 9；python 3.10 + torch >= 2.4（pip 源）；java（签名用 JRE）
+    validations:
+      required: false
