@@ -23,7 +23,7 @@ Job 名兜底：`(?i)^(?:Compile|Build)(?:[-_\s]|$)`；Job 名改判：`(?i)^(?:
 
 | 判据（正则） | 说明 |
 | --- | --- |
-| `(?:\S+\.(?:cpp|cc|cxx|h|hpp)):\d+:\d+:\s*(?:fatal\s+)?error` | 源文件编译报错 |
+| `(?:\S+\.(?:cpp\|cc\|cxx\|h\|hpp)):\d+:\d+:\s*(?:fatal\s+)?error` | 源文件编译报错 |
 | `undefined reference to` | 链接符号未定义 |
 | `multiple definition of `([^']+)'` | 符号重复定义 |
 | `cannot find -l(\S+)` / `library not found for -l(\S+)` | 链接库缺失 |
@@ -33,7 +33,7 @@ Job 名兜底：`(?i)^(?:Compile|Build)(?:[-_\s]|$)`；Job 名改判：`(?i)^(?:
 | `internal compiler error` | 编译器内部崩溃 |
 | `Exception occured, \(\{'errCode': '[^']*', 'op_name': '(\w+)'` | 算子 TBE 参数校验异常 |
 | `exe_task: build kernel FAILED, op name: (\S+)\.` | 算子 kernel 编译失败（总结性，仅兜底） |
-| `(?:cc1plus?|cicc|ccec|bisheng|clang|gcc)[^\n]{0,80}[Ss]egmentation fault` | 编译器段错误 |
+| `(?:cc1plus?\|cicc\|ccec\|bisheng\|clang\|gcc)[^\n]{0,80}[Ss]egmentation fault` | 编译器段错误 |
 | `make\[?\d*\]?:\s*\*\*\*.{0,80}Error` | make 失败（总结性，仅兜底） |
 | `cp: cannot stat '([^']+)'` | 构建产物未生成（上游未产出） |
 
