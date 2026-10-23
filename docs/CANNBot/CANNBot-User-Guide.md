@@ -14,22 +14,22 @@
     - [3.1 模型配置](#31-模型配置)
       - [3.1.1 内置模型](#311-内置模型)
       - [3.1.2 自定义模型](#312-自定义模型)
-    - [3.2 Plan和Build模式](#32-Plan和Build模式)
-      - [3.2.1 Plan模式](#321-Plan模式)
-      - [3.2.2 Build模式](#322-Build模式)
-    - [3.3 Skill配置](#33-Skill配置)
+    - [3.2 Plan和Build模式](#32-plan和build模式)
+      - [3.2.1 Plan模式](#321-plan模式)
+      - [3.2.2 Build模式](#322-build模式)
+    - [3.3 Skill配置](#33-skill配置)
       - [3.3.1 添加全局skill](#331-添加全局skill)
       - [3.3.2 添加项目级skill](#332-添加项目级skill)
-    - [3.4 MCP配置](#34-MCP配置)
-      - [3.4.1 添加全局MCP](#341-添加全局MCP)
-      - [3.4.2 添加项目级MCP](#342-添加项目级MCP)
+    - [3.4 MCP配置](#34-mcp配置)
+      - [3.4.1 添加全局MCP](#341-添加全局mcp)
+      - [3.4.2 添加项目级MCP](#342-添加项目级mcp)
     - [3.5 权限配置](#35-权限配置)
       - [3.5.1 默认权限](#351-默认权限)
       - [3.5.2 完全访问](#352-完全访问)
-    - [3.6 会话Session管理](#36-会话Session管理)
+    - [3.6 会话Session管理](#36-会话session管理)
       - [3.6.1 新建会话](#361-新建会话)
       - [3.6.2 查看会话](#362-查看会话)
-  - [4. 业务Agent功能介绍](#4-业务Agent功能介绍)
+  - [4. 业务Agent功能介绍](#4-业务agent功能介绍)
     - [4.1 算子文档开发](#41-算子文档开发)
       - [4.1.1 功能介绍](#411-功能介绍)
       - [4.1.2 工具配置](#412-工具配置)
@@ -386,17 +386,17 @@ CANNWork支持多会话并行工作：每个会话拥有独立的对话上下文
 
   |检查项|说明|
   |-----|-----|
-  |[StaticCheck_markdownlint](#StaticCheck_markdownlint)|Markdown基础语法检查|
-  |[StaticCheck_tag_closed](#StaticCheck_tag_closed)|HTML标签闭合语法检查|
-  |[StaticCheck_link_validity](#StaticCheck_link_validity)|链接可访问性检查|
-  |[StaticCheck_resource_existence](#StaticCheck_resource_existence)|资源有效性检查|
-  |[StaticCheck_codespell](#StaticCheck_codespell)|单词拼写检查|
-  |[StaticCheck_filename](#StaticCheck_filename)|Markdown文件命名规范检查|
-  |[StaticCheck_punctuation](#StaticCheck_punctuation)|标点符号检查|
-  |[StaticCheck_compliance](#StaticCheck_compliance)|合规性检查|
-  |[AICheck](#AICheck)|上下文语义基础检查|
-  |[DomainCheck_aclnn_API](#DomainCheck_aclnn_API)|aclnn API文档检查|
-  |[DomainCheck_AscendC_API](#DomainCheck_AscendC_API)|Ascend C API文档检查|
+  |[StaticCheck_markdownlint](#staticcheck_markdownlint)|Markdown基础语法检查|
+  |[StaticCheck_tag_closed](#staticcheck_tag_closed)|HTML标签闭合语法检查|
+  |[StaticCheck_link_validity](#staticcheck_link_validity)|链接可访问性检查|
+  |[StaticCheck_resource_existence](#staticcheck_resource_existence)|资源有效性检查|
+  |[StaticCheck_codespell](#staticcheck_codespell)|单词拼写检查|
+  |[StaticCheck_filename](#staticcheck_filename)|Markdown文件命名规范检查|
+  |[StaticCheck_punctuation](#staticcheck_punctuation)|标点符号检查|
+  |[StaticCheck_compliance](#staticcheck_compliance)|合规性检查|
+  |[AICheck](#aicheck)|上下文语义基础检查|
+  |[DomainCheck_aclnn_API](#domaincheck_aclnn_api)|aclnn API文档检查|
+  |[DomainCheck_AscendC_API](#domaincheck_ascendc_api)|Ascend C API文档检查|
   
 #### 4.1.2 工具配置
 
