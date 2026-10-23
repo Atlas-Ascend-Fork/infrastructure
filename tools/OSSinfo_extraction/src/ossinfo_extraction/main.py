@@ -15,7 +15,6 @@
 import sys
 import os
 import argparse
-import json
 from pathlib import Path
 
 from .logger import info, ok, warn, error, debug, has_error, error_exit, register_cleanup_callback, set_software_info
@@ -171,6 +170,72 @@ or directories and generates a standardized Readme.opensource file.
     print(guide)
 
 
+def _add_required_args(parser):
+    """添加必填参数"""
+    parser.add_argument(
+        "-t", "--target",
+        required=True,
+        help="Target file or directory to analyze / 目标文件或目录路径 (e.g., package.zip)"
+    )
+    parser.add_argument(
+        "-n", "--name",
+        required=True,
+        help="Software name / 软件名称 (required)"
+    )
+    parser.add_argument(
+        "-v", "--version",
+        required=True,
+        help="Software version / 软件版本号 (required)"
+    )
+
+
+def _add_license_args(parser):
+    """添加license相关可选参数"""
+    parser.add_argument(
+        "-l", "--license",
+        dest="license_name",
+        default=None,
+        help="License name (SPDX identifier) / 许可证名称，如 MIT, Apache-2.0"
+    )
+    parser.add_argument(
+        "-p", "--license-path",
+        dest="license_path",
+        default=None,
+        help="Relative path to license file / 许可证文件相对路径"
+    )
+
+
+def _add_output_args(parser):
+    """添加输出相关可选参数"""
+    parser.add_argument(
+        "-o", "--output-dir",
+        dest="output_dir",
+        default=None,
+        help="Output directory for results / 输出目录 (default: same as target)"
+    )
+    parser.add_argument(
+        "--guide",
+        action="store_true",
+        help="Show detailed usage guide / 显示详细使用指南"
+    )
+
+
+def _add_scancode_args(parser):
+    """添加ScanCode相关可选参数"""
+    parser.add_argument(
+        "-j", "--jobs",
+        type=int,
+        default=4,
+        help="Number of parallel ScanCode processes / ScanCode并行进程数 (default: 4)"
+    )
+    parser.add_argument(
+        "--max-in-memory",
+        type=int,
+        default=2000,
+        help="Max files cached in memory by ScanCode / ScanCode内存缓存文件数 (default: 2000)"
+    )
+
+
 def parse_args():
     """解析命令行参数"""
     parser = argparse.ArgumentParser(
@@ -189,50 +254,13 @@ Run 'cret --guide' for detailed usage instructions.
         """
     )
 
-    # 必填参数
-    parser.add_argument(
-        "-t", "--target",
-        required=True,
-        help="Target file or directory to analyze / 目标文件或目录路径 (e.g., package.zip)"
-    )
-    parser.add_argument(
-        "-n", "--name",
-        required=True,
-        help="Software name / 软件名称 (required)"
-    )
-    parser.add_argument(
-        "-v", "--version",
-        required=True,
-        help="Software version / 软件版本号 (required)"
-    )
-
-    # 可选参数
-    parser.add_argument(
-        "-l", "--license",
-        dest="license_name",
-        default=None,
-        help="License name (SPDX identifier) / 许可证名称，如 MIT, Apache-2.0"
-    )
-    parser.add_argument(
-        "-p", "--license-path",
-        dest="license_path",
-        default=None,
-        help="Relative path to license file / 许可证文件相对路径"
-    )
-    parser.add_argument(
-        "-o", "--output-dir",
-        dest="output_dir",
-        default=None,
-        help="Output directory for results / 输出目录 (default: same as target)"
-    )
-    parser.add_argument(
-        "--guide",
-        action="store_true",
-        help="Show detailed usage guide / 显示详细使用指南"
-    )
+    _add_required_args(parser)
+    _add_license_args(parser)
+    _add_output_args(parser)
+    _add_scancode_args(parser)
 
     # 先检查是否只是要显示指南（在解析必填参数之前）
-    if "--guide" in sys.argv or "-g" in sys.argv:
+    if "--guide" in sys.argv:
         print_guide()
         sys.exit(0)
 
@@ -251,11 +279,11 @@ def _log_software_info(software_name, software_version, license_name, license_pa
     info(f"License Path: {license_path or 'Not provided'}")
 
 
-def _scan_source(scan_target, result_json):
+def _scan_source(scan_target, result_json, jobs, max_in_memory):
     check_scancode_available()
-    run_scancode(scan_target, result_json, scan_license=True)
-    with result_json.open("r", encoding="utf-8") as file:
-        return json.load(file)
+    # run_scancode直接返回解析后的JSON数据（扫描失败但已生成部分有效结果时，告警后继续）
+    return run_scancode(scan_target, result_json, scan_license=True,
+                        jobs=jobs, max_in_memory=max_in_memory)
 
 
 def _write_reports(scan_data, scan_target, software_info, output_files, license_path):
@@ -295,20 +323,57 @@ def _write_reports(scan_data, scan_target, software_info, output_files, license_
     )
 
 
+def _single_subdir(current: Path):
+    """
+    若目录下仅包含一个子目录则返回该子目录，否则返回None。
+
+    Args:
+        current: 待检查的目录
+
+    Returns:
+        Path或None: 唯一的子目录；不存在唯一子目录时返回None
+    """
+    items = list(current.iterdir())
+    if len(items) == 1 and items[0].is_dir():
+        return items[0]
+    return None
+
+
+def _detect_nested_root(extract_dir: Path) -> Path:
+    """
+    循环递归检测嵌套目录：只要当前目录下只有一个子目录就继续深入，
+    直到找到真正的项目根目录（包含多个文件/子目录的层级）。
+
+    Args:
+        extract_dir: 解压后的根目录
+
+    Returns:
+        Path: 检测到的项目根目录（可能等于extract_dir）
+    """
+    current = extract_dir
+    try:
+        while True:
+            sub = _single_subdir(current)
+            if sub is None:
+                break
+            current = sub
+    except Exception:
+        # 检测过程出现异常时放弃嵌套检测，保持解压根目录
+        return extract_dir
+    return current
+
+
 def _prepare_scan_target(target):
     extract_dir = None
     scan_target = target
     if target.is_file():
         extract_dir = run_extractcode(target)
-        # 检测嵌套目录：如果解压根目录下只有一个子目录，进入该目录作为真正的根目录
+        # 检测嵌套目录：循环递归，直到找到真正的项目根目录
         scan_target = extract_dir
-        try:
-            items = list(extract_dir.iterdir())
-            if len(items) == 1 and items[0].is_dir():
-                scan_target = items[0]
-                info(f"Detected nested directory, using as root: {scan_target}")
-        except Exception:
-            pass
+        nested_root = _detect_nested_root(extract_dir)
+        if nested_root != extract_dir:
+            scan_target = nested_root
+            info(f"Detected nested directory, using as root: {scan_target}")
 
     return extract_dir, scan_target
 
@@ -348,7 +413,7 @@ def main():
         output_dir = Path(args.output_dir).resolve()
         output_dir.mkdir(parents=True, exist_ok=True)
     else:
-        output_dir = target.parent if target.is_file() else target
+        output_dir = target.parent
 
     # 输出文件路径
     result_json = output_dir / "result.json"
@@ -389,7 +454,7 @@ def main():
 
         license_path = _normalize_license_path(scan_target, license_path)
 
-        scan_data = _scan_source(scan_target, result_json)
+        scan_data = _scan_source(scan_target, result_json, args.jobs, args.max_in_memory)
         _write_reports(scan_data, scan_target,
                        (software_name, software_version, license_name), output_files, license_path)
 

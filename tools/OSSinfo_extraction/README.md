@@ -35,7 +35,15 @@ cret -t <target> -n <software_name> -v <software_version> [可选参数]
 | `-l` | `--license` | License名称，**必须使用SPDX许可证标识符**（如：MIT, Apache-2.0） |
 | `-p` | `--license-path` | License文件相对路径（相对于代码根目录；不能指向根目录外） |
 | `-o` | `--output-dir` | 输出目录，默认为被测目标同级目录 |
+| `-j` | `--jobs` | ScanCode并行进程数，默认4（内存不足时可降低） |
+| | `--max-in-memory` | ScanCode内存缓存文件数，默认2000；设为0表示不限制内存使用（禁用磁盘缓存）；设为-1表示仅使用磁盘缓存（最小化内存占用） |
 | `--guide` | | 显示详细使用指南 |
+
+### ⚠️ 建议：使用 `-o` 指定独立输出目录
+
+工具默认将输出文件（`result.json`、`Readme.opensource` 及 `*_copyright`/`*_license` 报告）生成在被测目标同级目录下。提取过程中若发生异常或校验失败，工具会清理本次运行涉及的输出文件；若默认输出位置中已存在同名文件（如上次运行生成的 `Readme.opensource`），会被清理逻辑一并删除。
+
+**建议始终使用 `-o` 参数指定独立的输出目录**（如 `-o ./output`），将输出文件与被测目标目录隔离，既避免上述文件丢失风险，也保持被测目录整洁。
 
 ### ⚠️ 重要提示：License名称必须使用SPDX标识符
 
@@ -62,6 +70,9 @@ cret -t package.zip -n "MySoftware" -v "1.0.0" -l "MIT" -p "LICENSE"
 
 # 指定输出目录
 cret -t package.zip -n "MySoftware" -v "1.0.0" -o "./output"
+
+# 调整ScanCode性能参数（适用于大项目或内存有限的机器）
+cret -t package.zip -n "MySoftware" -v "1.0.0" -j 2 --max-in-memory 1000
 
 # 显示详细使用指南
 cret --guide
