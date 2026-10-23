@@ -844,6 +844,37 @@ stage4:
 >
 > **镜像引用**：stage4 的 `container.image` 应通过 `${{ jobs.JOB_image.outputs.UT_Test_report }}` 引用 stage1 解析的镜像，而非硬编码。需在 `images.yaml` 中为 `UT_Test_report` stage 配置镜像。
 
+### 3.9 覆盖率分类规则文件
+
+使用 `ut-cov-report` 的 `cov_mode: cov`（增量覆盖率打包）时，需在仓库根目录放置 `classify_rule.yaml`，定义各组件的源码与测试目录映射，供增量覆盖率统计按责任田过滤：
+
+```yaml
+# classify_rule.yaml — 覆盖率分类规则（放仓库根目录）
+component_name:          # 组件名（与 ut-cov-report 的 ut_type 对应）
+  src:
+    release:             # 参与增量覆盖率的源码目录/文件
+      - src/module_a/
+      - src/common/utils.cpp
+    unrelease:           # 排除目录（测试/文档/示例等）
+      - test/
+      - docs/
+      - examples/
+```
+
+**字段说明**：
+
+| 字段 | 说明 |
+|------|------|
+| `component_name` | 组件名，对应 Workflow 中 `ut_type` 参数 |
+| `src.release` | 参与增量覆盖率的源码路径（目录递归展开，文件精确匹配） |
+| `src.unrelease` | 从 release 中排除的路径（支持 glob 通配符） |
+
+**规则**：
+- 仅 `.c / .cpp / .cc / .h` 文件参与统计（Python 项目按 `.py`）
+- `release` 中的路径相对于仓库根目录
+- `unrelease` 支持 `*` 通配符（如 `*/test` 匹配任意一级子目录下的 test 目录）
+- 未在 `classify_rule.yaml` 中声明的文件不参与增量覆盖率计算
+
 ---
 
 ## 4. 官方 Action 使用
