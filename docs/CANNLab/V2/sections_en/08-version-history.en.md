@@ -1,11 +1,20 @@
 ## 8.1 Version History
 
+### October 2026
+
+- **[2026/10/20]** Version 1030 released with the following features:
+  - Super portal: built-in [cann-judge](https://cannjudge.cn/home) portal, providing competition-training integration and supporting cann-judge operator development exercises on this platform
+  - Single-card NPU environment: automatically shuts down after 30 minutes of continuous idle time
+
+### September 2026
+
+- **[2026/09/30]** Version 930 released with the following features:
+  - Super portal: built-in [cann-learning-hub](https://gitcode.com/cann/cann-learning-hub), providing learning-training integration and supporting on-platform tutorial execution
+
 ### August 2026
 
 - **[2026/08/31]** Version 830 released with the following features:
   - Added split-image environments: one CPU + one NPU environment with shared data, enabling CPU development and NPU verification
-  - WebIDE environment includes built-in [cann-learning-hub](https://gitcode.com/cann/cann-learning-hub) and [cann-judge](https://gitcode.com/cann/cann-judge) portals, supporting on-platform tutorials and one-click access to cann-judge for operator development practice
-  - Single-card NPU environment: automatically shuts down after 30 minutes of continuous idle time
   - A5 simulation (CPU) environment default user changed to developer (was root user before version 830)
   - Enhanced image capabilities: ①Added built-in triton-ascend and tilelang wheel packages; ②Upgraded built-in development plugins; ③ Git configuration optimization: ~/.gitconfig now includes user.name and user.email information
 - **[2026/08/03]** CANNLab new version fully launched:

@@ -30,6 +30,7 @@ CANNLab instances have the following states:
 | **NPU (A3)** | Ascend A3 | 1-card: 40vCPUs/240GiB | 100 card-hours | High-end NPU computing |
 | | | 8-card: 320vCPUs/1920GiB | | |
 | **CPU (ARM)** | Kunpeng | 16vCPUs/32GiB | 720 core-hours | ARM only, x86 not supported |
+| | | 32vCPUs/64GiB | | |
 
 ### 3.2.2 Usage Rules
 

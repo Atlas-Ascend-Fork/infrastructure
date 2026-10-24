@@ -233,6 +233,7 @@ cat /home/developer/image-version.txt
 | **NPU (A3)** | 昇腾 A3 | 1卡：40vCPUs/240GiB | 100卡时 | 高配 NPU 算力 |
 | | | 8卡：320vCPUs/1920GiB | | |
 | **CPU (ARM)** | 鲲鹏 | 16vCPUs/32GiB | 720核时 | 仅支持 ARM，不支持 x86 |
+| | | 32vCPUs/64GiB | | |
 
 #### 3.1.2 使用规则
 
@@ -659,12 +660,21 @@ source /home/developer/Ascend/ascend-toolkit/set_env.sh
 
 ### 8.1 版本历程
 
+### 2026年10月
+
+- **[2026/10/20]** 1030版本发布，主要特性有：
+  - 超级入口：内置[cann-judge](https://cannjudge.cn/home)入口，提供赛训一体功能，支持在本平台进行cann-judge算子开发题目练习
+  - 单卡NPU环境：持续空闲超过30分钟时，自动关机
+
+### 2026年9月
+
+- **[2026/09/30]** 930版本发布，主要特性有：
+  - 超级入口：内置[cann-learning-hub](https://gitcode.com/cann/cann-learning-hub)，提供学训一体功能，支持在本平台运行教程
+
 ### 2026年8月
 
 - **[2026/08/31]** 830版本发布，主要特性有：
   - 新增分设镜像：一个CPU+一个NPU环境，数据互通共享，CPU开发，NPU验证
-  - WebIDE环境内置[cann-learning-hub](https://gitcode.com/cann/cann-learning-hub)和[cann-judge](https://gitcode.com/cann/cann-judge)入口，支持在本平台运行教程和一键到cann-judge练习算子开发
-  - 单卡NPU环境：持续空闲超过30分钟时，自动关机
   - A5仿真（CPU）环境默认用户更改为 developer（830前为root用户）
   - 镜像能力增强：①新增内置triton-ascend和tilelang的whl包；②内置开发插件升级；③ Git免配置优化：~/.gitconfig内置user.name，user.email信息
 - **[2026/08/03]** CANNLab新版本全面上线开放：
