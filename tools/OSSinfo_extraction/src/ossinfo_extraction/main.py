@@ -286,7 +286,7 @@ def _scan_source(scan_target, result_json, jobs, max_in_memory):
                         jobs=jobs, max_in_memory=max_in_memory)
 
 
-def _write_reports(scan_data, scan_target, software_info, output_files, license_path):
+def _write_reports(scan_data, scan_target, software_info, output_files, license_path, license_full_path):
     software_name, software_version, license_name = software_info
     _, output_copyright, output_license, output_readme = output_files
     # 提取copyright信息
@@ -298,6 +298,7 @@ def _write_reports(scan_data, scan_target, software_info, output_files, license_
         root_path=scan_target,
         license_name=license_name,
         license_path=license_path,
+        license_full_path=license_full_path,
     )
 
     # 检查是否有错误发生（用于非error_exit方式的错误）
@@ -392,10 +393,10 @@ def _normalize_license_path(scan_target, license_path):
         if not license_full_path.is_file():
             error_exit(f"License file not found: {license_path}")
 
-        # 标准化后的路径用于后续处理
-        license_path = normalized_license_path
+        # 相对路径用于日志提示，绝对路径用于后续精确匹配，避免重复进行路径清理
+        return normalized_license_path, license_full_path
 
-    return license_path
+    return license_path, None
 
 
 def main():
@@ -452,11 +453,12 @@ def main():
     try:
         extract_dir, scan_target = _prepare_scan_target(target)
 
-        license_path = _normalize_license_path(scan_target, license_path)
+        license_path, license_full_path = _normalize_license_path(scan_target, license_path)
 
         scan_data = _scan_source(scan_target, result_json, args.jobs, args.max_in_memory)
         _write_reports(scan_data, scan_target,
-                       (software_name, software_version, license_name), output_files, license_path)
+                       (software_name, software_version, license_name), output_files,
+                       license_path, license_full_path)
 
     except Exception as e:
         error("Pipeline failed, extracted directory will be kept for debugging.")

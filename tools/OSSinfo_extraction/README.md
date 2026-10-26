@@ -93,6 +93,10 @@ cret --guide
 2. **license一致性检查**：验证指定路径的文件是否与指定的license名称匹配
 3. **不匹配提示**：如果检测到不匹配，会输出警告提示用户人工核对
 
+指定`-p`时，扫描记录按命令入口规范化校验得到的license文件绝对路径精确匹配，
+只会选中该文件自身的记录，不会误选`docs/LICENSE`、`LICENSES/LICENSE`等
+嵌套同名文件的扫描记录。
+
 ```bash
 # 示例：指定license名称和路径
 cret -t package.zip -n "MySoftware" -v "1.0.0" -l "MIT" -p "LICENSE"
