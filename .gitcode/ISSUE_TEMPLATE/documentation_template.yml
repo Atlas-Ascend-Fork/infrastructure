@@ -1,0 +1,65 @@
+name: 文档反馈与改进
+description: 对CANN文档（cann/docs仓、各仓README与操作指导等）有缺陷修正、内容补充或新增建议时，请使用此模板。
+title: "[文档]: "
+labels: ["文档", "infrastructure"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您帮助改进CANN文档！请填写以下信息，便于文档SIG快速定位与处理。
+
+        - 文档缺陷类（链接失效、命令错误、示例跑不通等）将优先处理
+        - 内容建议类将纳入文档迭代规划
+
+  - type: dropdown
+    attributes:
+      label: 文档类型
+      description: 反馈的类别
+      options:
+        - 缺陷修正（链接失效/命令错误/示例失败/描述不准确）
+        - 内容补充（缺少关键说明/步骤缺失）
+        - 新增文档
+        - 结构优化（目录调整/重复内容整合）
+        - 其它（请在备注说明）
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: 涉及文档路径或链接
+      description: 文档所在仓库及路径，或文档站点链接
+      placeholder: 例如 https://gitcode.com/cann/docs/blob/master/xxx.md
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 问题描述
+      description: 现有内容、问题位置（章节/行号）、错误信息或缺失的信息
+      placeholder: ""
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 期望内容
+      description: 期望的正确表述或希望补充的内容
+      placeholder: ""
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 截图/复现步骤/相关资料
+      description: 有助于定位问题的截图、完整复现步骤或参考链接
+      placeholder: ""
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: 备注
+      description: 其他您认为需要补充的信息
+      placeholder: ""
+    validations:
+      required: false

@@ -1,0 +1,101 @@
+name: 需求申请
+description: 希望CANN社区新增或增强某项能力时，请使用此模板提交需求。建议提交前先在对应SIG渠道预沟通。
+title: "[需求]: "
+labels: ["需求", "infrastructure"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢您向CANN社区提出需求！请尽可能完整地填写以下信息，便于需求进入社区需求池并安排评审排期。
+
+        - 建议先到对应SIG的例会或讨论区预沟通，确认无重复需求
+        - 需求经SIG/TSC评审通过后将进入版本规划，评审结论会回帖同步
+
+  - type: dropdown
+    attributes:
+      label: 需求类型
+      description: 需求的总体类别
+      options:
+        - 新功能
+        - 能力增强
+        - 性能优化
+        - 易用性改进
+        - 兼容性扩展
+        - 其它（请在备注说明）
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: 所属SIG
+      description: 需求归属的SIG组，用于路由评审
+      options:
+        - ops-math
+        - ops-nn
+        - ops-transformer
+        - ops-cv
+        - ops-basic
+        - runtime
+        - ge
+        - hccl
+        - ascendc
+        - pto
+        - driver
+        - infrastructure
+        - security
+        - QA
+        - doc
+        - tools
+        - framework-adapter
+        - recipes
+        - 其它（请在备注说明）
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 需求背景与使用场景
+      description: 什么业务/开发场景下需要此能力，当前为什么不能满足（可附示例代码或数据）
+      placeholder: ""
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 期望的功能描述
+      description: 希望新增/增强的能力，包括期望的接口形式、输入输出示例
+      placeholder: ""
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: 现有替代方案
+      description: 当前如何绕过此问题，为什么不满足要求
+      placeholder: ""
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: 期望收益与影响范围
+      description: 受益的组件/仓库/用户群体，以及可量化的收益（性能数据、开发效率等）
+      placeholder: ""
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: 关联issue/PR/资料
+      description: 相关的历史issue、PR、设计文档或第三方参考链接
+      placeholder: ""
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: 备注
+      description: 其他您认为需要补充的信息（期望交付时间、优先级等）
+      placeholder: ""
+    validations:
+      required: false
