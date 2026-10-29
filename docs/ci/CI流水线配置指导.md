@@ -452,7 +452,7 @@ jobs:
 cd "${WORKSPACE}"
 
 # gcc 版本：ubuntu24 用 gcc-14，否则用 devtoolset-7
-echo $(grep -E "^VERSION_ID=" /etc/os-release | cut -d'"' -f2)
+grep -E "^VERSION_ID=" /etc/os-release | cut -d'"' -f2 || true
 if [[ "${task_name}" == *ubuntu24* ]]; then
     sudo update-alternatives --set gcc /usr/bin/gcc-14
     package_name="<repo>_linux-x86_64_ubuntu24.run"
@@ -740,7 +740,7 @@ UT 逻辑抽取到 `.gitcode/scripts/ut.sh` 中，通过 `ut_type` 环境变量�
 set +e
 
 # gcc 切换 + CANN 环境
-echo $(grep -E "^VERSION_ID=" /etc/os-release | cut -d'"' -f2)
+grep -E "^VERSION_ID=" /etc/os-release | cut -d'"' -f2 || true
 sudo update-alternatives --set gcc /usr/bin/gcc-14
 gcc --version
 source /home/jenkins/Ascend/cann/bin/setenv.bash
