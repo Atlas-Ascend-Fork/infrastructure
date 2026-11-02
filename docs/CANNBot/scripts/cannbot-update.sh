@@ -1,4 +1,4 @@
- #!/bin/bash
+#!/bin/bash
 # ============================================================
 #  cannbot-update.sh
 #  下载并安装 cannbot-toolkit 插件
