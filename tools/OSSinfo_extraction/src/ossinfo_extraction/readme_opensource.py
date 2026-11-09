@@ -32,7 +32,104 @@ Readme.opensource 文件生成模块
 from pathlib import Path
 from typing import List, Dict, Any
 
+import chardet
+
 from .logger import info, debug
+
+# chardet判定为这些多字节编码且严格解码成功时，解码结果才视为可信；
+# 单字节猜测编码（latin-1/windows-125x/koi8等）对任意字节总能"严格
+# 成功"，不代表编码判断正确（GBK字节被判成Windows-1252时中文已乱码），
+# 调用方（如license重扫）不应据此覆盖第一遍结果。
+_TRUSTED_MULTIBYTE_ENCODINGS = {
+    "gb2312",
+    "gbk",
+    "gb18030",
+    "big5",
+    "big5-hkscs",
+    "euc-jp",
+    "shift-jis",
+    "iso-2022-jp",
+    "euc-kr",
+    "uhc",
+    "johab",
+    "utf-16",
+    "utf-16be",
+    "utf-16le",
+    "utf-32",
+    "utf-32be",
+    "utf-32le",
+}
+
+
+def _is_trusted_decoding(encoding: str) -> bool:
+    """判断chardet识别出的编码是否足以信任解码结果。"""
+    return encoding.lower().replace("_", "-") in _TRUSTED_MULTIBYTE_ENCODINGS
+
+
+def _decode_license_text_with_status(raw: bytes):
+    """
+    解码license文件内容，并返回解码是否精确。
+
+    Returns:
+        tuple[str, bool]: (解码文本, 解码结果是否可信)。替换解码、或
+        chardet仅给出单字节猜测编码（对任意字节都能"严格成功"，不代表
+        编码正确）时为False，调用方据此判断能否信任该文本（例如重扫
+        license）。
+    """
+    text = None
+    exact = False
+    # 无BOM的UTF-16字节常含NUL，此时跳过UTF-8快路径
+    if b"\x00" not in raw:
+        try:
+            text = raw.decode("utf-8-sig")
+            exact = True
+        except UnicodeDecodeError:
+            pass
+
+    if text is None:
+        detected = chardet.detect(raw).get("encoding") or "utf-8"
+        candidates = [detected]
+        if detected.lower() in ("gb2312", "gbk"):
+            candidates.append("gb18030")
+
+        # 记录最后一个可用的编码，严格解码失败时用它做替换解码，
+        # 避免整份非UTF-8文件被当作UTF-8而全部变成替换符
+        last_valid = "utf-8"
+        for encoding in candidates:
+            try:
+                text = raw.decode(encoding)
+                exact = _is_trusted_decoding(encoding)
+                break
+            except UnicodeDecodeError:
+                last_valid = encoding
+            except LookupError:
+                continue
+        else:
+            text = raw.decode(last_valid, errors="replace")
+            exact = False
+
+    return text.replace("\r\n", "\n").replace("\r", "\n"), exact
+
+
+def _decode_license_text(raw: bytes) -> str:
+    """
+    自动识别license文件编码并解码。
+
+    优先按UTF-8（含BOM）严格解码，避免chardet把以ASCII为主、仅含少量
+    非ASCII字符的UTF-8文本误判为Latin-1/Windows-1252。UTF-8快路径未成功
+    （解码失败或内容含NUL）时交给chardet识别；GB2312/GBK结果再尝试其超集
+    GB18030。全部严格解码失败时，用最后识别到的编码做替换解码，尽量保留
+    可读内容，最后退回UTF-8替换模式。解码后统一换行为LF。
+
+    已知限制：无BOM的UTF-16、极短的GBK扩展字文本可能被chardet误判。
+
+    Args:
+        raw: license文件原始字节
+
+    Returns:
+        str: 解码并统一换行后的文本
+    """
+    return _decode_license_text_with_status(raw)[0]
 
 
 def _read_license_text(full_license_path: Path):
@@ -46,8 +143,7 @@ def _read_license_text(full_license_path: Path):
         str或None: 文件全文；读取失败时返回None
     """
     try:
-        with full_license_path.open("r", encoding="utf-8", errors="replace") as lf:
-            return lf.read()
+        return _decode_license_text(full_license_path.read_bytes())
     except Exception as e:
         debug(f"Failed to read license file {full_license_path}: {e}")
         return None
@@ -233,7 +329,8 @@ def _clean_license_path(license_file_path: str, root_path: Path) -> str:
     for i, part in enumerate(path_parts):
         if part == root_name:
             # 返回该位置之后的路径
-            return "/".join(path_parts[i+1:])
+            start = i + 1
+            return "/".join(path_parts[start:])
 
     # 如果没找到，尝试查找常见的解压目录模式
     start_idx = 0
