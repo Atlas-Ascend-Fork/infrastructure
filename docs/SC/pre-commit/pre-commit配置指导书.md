@@ -119,6 +119,28 @@ git commit --allow-empty -m "test pre-commit"
 
 后续在提交代码前会自动进行代码格式化处理及触发OAT检查。
 
+#### 3.1.1 修改文件存在历史格式差异时的处理
+
+`pre-commit` 根据暂存文件或 `--files` 参数选择检查对象。`ruff format`、`clang-format`、`fix end of files` 等自动修复 hook 会处理选中文件的完整内容。因此，即使业务改动只有一行，也可能同时产生多行格式调整。
+
+社区当前要求对本次修改涉及的文件完整应用格式修复。请使用目标仓库的 `.pre-commit-config.yaml` 运行检查，保留自动修复结果，并按以下步骤完成提交前验证：
+
+```bash
+# 检查本次修改的文件；将示例路径替换为实际路径
+pre-commit run --files path/to/file.py
+
+# 查看功能改动及 hook 产生的完整文件差异
+git diff HEAD -- path/to/file.py
+
+# 应用修复后重新运行，确认检查通过
+pre-commit run --files path/to/file.py
+
+# 重新暂存包含格式修复的文件
+git add -- path/to/file.py
+```
+
+首次执行出现 `files were modified by this hook` 表示 hook 已改写文件。查看差异并确认内容后，重新运行检查；其余检查错误按输出逐项修复。自动格式化完成后，执行与功能改动相关的验证，并在 PR 中说明格式调整涉及的文件及验证结果，便于检视。
+
 ### 3.2 OAT使用指导
 
 **OAT（Open Source Audit Tool）Python 版** 通过 **compliance 远程 pre-commit hook**（`oat-check`）集成到 Git 提交流程中。被扫描仓库只需配置 `.pre-commit-config.yaml` 与项目 `OAT.xml`，**无需本仓维护 Bash 脚本**。
