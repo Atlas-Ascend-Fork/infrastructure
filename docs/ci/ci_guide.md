@@ -70,5 +70,5 @@
 
 ## 四、求助渠道
 - 若FAQ 中未覆盖相关错误，可按 FAQ 文档中的反馈渠道提交问题，也可以联系我们支撑人员进行处理
-1. 根据[CIE支撑矩阵](https://gitcode.com/cann/infrastructure/blob/main/docs/services.md#%E4%BA%8C%E7%BB%84%E4%BB%B6%E4%BB%93%E5%BA%93-cie-%E6%94%AF%E6%92%91%E7%9F%A9%E9%98%B5)联系对应的CIE处理解决
-2. 联系[基础设施团队](https://gitcode.com/cann/infrastructure/blob/main/docs/services.md#%E4%B8%80%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E6%94%AF%E6%92%91%E7%9F%A9%E9%98%B5)支撑
+1. 根据[CIE支撑矩阵](https://gitcode.com/cann/infrastructure/blob/master/docs/services.md#%E4%BA%8C%E7%BB%84%E4%BB%B6%E4%BB%93%E5%BA%93-cie-%E6%94%AF%E6%92%91%E7%9F%A9%E9%98%B5)联系对应的CIE处理解决
+2. 联系[基础设施团队](https://gitcode.com/cann/infrastructure/blob/master/docs/services.md#%E4%B8%80%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD%E6%94%AF%E6%92%91%E7%9F%A9%E9%98%B5)支撑
