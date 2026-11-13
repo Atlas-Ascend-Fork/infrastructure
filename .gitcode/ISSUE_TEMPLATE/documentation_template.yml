@@ -1,7 +1,7 @@
 name: 文档反馈与改进
 description: 对CANN文档（cann/docs仓、各仓README与操作指导等）有缺陷修正、内容补充或新增建议时，请使用此模板。
 title: "[文档]: "
-labels: ["文档", "infrastructure"]
+labels: ["documentation", "infrastructure"]
 body:
   - type: markdown
     attributes:
