@@ -14,8 +14,8 @@ CANN社区中所有项目均由Bot维护，这意味着开发人员可以在每�
 | /compile | compile | Pull Request | 触发编译CodeArts流水线。编译通过后，该Pull Request会被打上ci-pipeline-passed的标签。若编译失败，该Pull Request会被打上ci-pipeline-failed的标签。 | 所有开发者 | 所有仓库 |
 | /lgtm | /lgtm | Pull Request | 添加用于代表代码已经评审过的标签 lgtm。 | 仓库所属sig组的committer | 所有仓库 |
 | /lgtm cancel | /lgtm cancel | Pull Request | 移除用于代表代码已经评审过的标签 lgtm。 | 仓库所属sig组的committer | 所有仓库 |
-| /approve | /approve | Pull Request | 添加用于代表committers同意合并的标签 approved, 默认采取squash合并方式来合并PR。 | 仓库所属sig组的committers | 所有仓库 |
-| /approve cancel | /approve cancel | Pull Request | 移除用于代表committers同意合并的标签 approved。 | 仓库所属sig组的committers | 所有仓库 |
+| /approve | /approve | Pull Request | 添加用于代表maintainer或committer同意合并的标签 approved, 默认采取squash合并方式来合并PR。 | 仓库所属SIG的maintainer/committer；组织级治理PR按对应治理文档执行 | 所有仓库 |
+| /approve cancel | /approve cancel | Pull Request | 移除用于代表maintainer或committer同意合并的标签 approved。 | 仓库所属SIG的maintainer/committer；组织级治理PR按对应治理文档执行 | 所有仓库 |
 | /check-pr | /check-pr | Pull Request | 检查Pull Request中的标签是否满足条件，如果满足条件，则合并Pull Request。 | 任何人都可以在Pull Request上触发此命令 | 所有仓库 |
 | /merge | /merge | Pull Request | 添加用于代表branch_keeper同意合并的标签 keeper_approved。 | 仓库对应分支的branch_keeper | 所有仓库 |
 | /kind ** | /kind bug, **可接受大小写字母、数字、中划线、下划线，对于下面的规则通用** | Pull Request <br> Issue | 添加标签 kind/bug。 | 仓库管理员可以直接添加；其他人可以使用评论添加标签，如kind/AI，前提是仓库中必须存在此标签，否则添加不上 | 所有仓库 |
@@ -29,6 +29,7 @@ CANN社区中所有项目均由Bot维护，这意味着开发人员可以在每�
 | /label add ** | /label add bug <br> 支持一次添加多个标签，标签名之间用空格分隔，比如/label add bug resolved  | Pull Request <br> Issue | 添加指定的标签。 | 所有人 | 所有仓库 |
 | /label remove ** | /label remove bug <br> 支持一次删除多个标签，标签名之间用空格分隔，比如/label remove bug resolved  | Pull Request <br> Issue | 删除指定的标签。 | 所有人 | 所有仓库 |
 
+> 组织级治理PR（如新建SIG、SIG成员变更、PMC/TSC成员变更）的`/approve`执行人，以[社区治理文档](https://gitcode.com/cann/community/blob/master/contributor/organization.md)中规定的`tsc_members`、`pmc_members`或对应SIG maintainers为准。
 
 ## 🔍 FAQ
 
@@ -43,7 +44,7 @@ CANN社区中所有项目均由Bot维护，这意味着开发人员可以在每�
 
     **注意：** 需要仔细对比评论人的gitcode-id 和 sig-info.yaml里填写的gitcode-id，并且id区分大小写；若id不一致，会导致无法打上对应的标签，请提PR修改sig-info.yaml里对应的id，PR合入10min后权限生效，权限生效后，重新给PR评论/lgtm和/approve即可
 
-2. 然后检查评论各模块/lgtm和/approve数量是否足够，一般情况下PR涉及的每个模块都需要1个committer/maintainer评论/lgtm和1个committer评论/approve才能打上lgtm标签和approved标签；
+2. 然后检查评论各模块/lgtm和/approve数量是否足够，一般情况下PR涉及的每个模块都需要1个maintainer/committer评论/lgtm和1个maintainer或committer评论/approve才能打上lgtm标签和approved标签；组织级治理PR的批准人以上方社区治理文档为准；
 
 3. 对比检查评论/lgtm和/approve的时间和PR最新的一个commit的时间，如果评论时间早于commit的时间，则评论无效，如下图所示：
 
