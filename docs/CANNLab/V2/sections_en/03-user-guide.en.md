@@ -45,6 +45,20 @@ CANNLab instances have the following states:
 - Switching NPU resource types (e.g., A2 → A3) requires stopping, deleting, and recreating the instance.
 - **Note: When an instance is deleted, `/mnt/workspace` and `/home` data are not retained.**
 
+### 3.2.4 Automatic Shutdown of Idle Environments
+
+**Idle time:** A period during which the platform determines that an environment is not in active use based on multiple activity and workload indicators. These include, but are not limited to, user operations in VSCode or WebIDE, active CPU workloads, tasks running on the NPU, and activities such as code compilation and file downloads. The platform assesses these indicators together rather than relying on a single metric.
+
+To reduce idle resource usage, the platform automatically shuts down environments and releases their computing resources when the following continuous idle-time limits are exceeded:
+
+- **Single-card NPU environments:** More than **30 minutes** of continuous idle time.
+- **CPU environments:** More than **3 days (72 hours)** of continuous idle time.
+
+- **Data retention:** After automatic shutdown, saved data under `/mnt/workspace` and `/home` is persisted; data in other directories is lost.
+- **Resume use:** Find the instance in the CANNLab instance list, click **Start**, and reconnect after the instance starts.
+
+> **Note:** Automatic shutdown interrupts running processes in the environment. Save your files promptly and store important data in persistent directories.
+
 ## 3.3 CANN Software Stack Management
 
 ### 3.3.1 Check CANN Version
@@ -109,6 +123,8 @@ Personal instance driver version upgrades are not currently supported; upgrades 
 ### 3.4.2 File Upload and Download
 
 File upload/download is supported directly via the WebIDE interface or VSCode plugin.
+
+> **File size limits:** Each uploaded file must not exceed **50 MB**, and each downloaded file must not exceed **80 MB**.
 
 ### 3.4.3 Automatic Code Pull
 
