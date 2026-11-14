@@ -2,6 +2,7 @@ name: 新建仓申请
 description: 如希望新建仓库向社区贡献，请在TSC会议评审通过后使用此模板申请执行仓库创建。建仓流程指导可查看：https://gitcode.com/cann/community/blob/master/contributor/repository/new-repo-operation-guide.md
 title: "[新建仓申请]: "
 labels: ["新建仓", "infrastructure"]
+type: "需求"
 body:
   - type: markdown
     attributes:

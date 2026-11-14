@@ -2,6 +2,7 @@ name: 双语校验模板 | Bilingual Documentation Gate Application
 description: 各仓库申请新增 Markdown 文件英文化质量拦截门禁。Apply to add bilingual documentation quality gate for Markdown files.
 title: "[双语校验门禁 | Bilingual Doc Gate]: "
 labels: ["双语校验", "CI", "infrastructure"]
+type: "需求"
 body:
   - type: markdown
     attributes:

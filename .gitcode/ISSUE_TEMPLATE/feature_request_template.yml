@@ -2,6 +2,7 @@ name: 需求申请
 description: 希望CANN社区新增或增强某项能力时，请使用此模板提交需求。建议提交前先在对应SIG渠道预沟通。
 title: "[需求]: "
 labels: ["需求", "infrastructure"]
+type: "需求"
 body:
   - type: markdown
     attributes:

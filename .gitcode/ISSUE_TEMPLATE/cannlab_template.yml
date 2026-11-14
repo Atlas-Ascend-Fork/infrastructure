@@ -2,6 +2,7 @@ name: CANNLab问题咨询与反馈
 description: 当您在使用CANNLab时，有问题需要咨询或者缺陷需要反馈时，请使用此模板。
 title: "[CANNLab]: "
 labels: [""]
+type: "咨询"
 body:
   - type: markdown
     attributes:
