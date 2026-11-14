@@ -1,5 +1,5 @@
 name: CANNLab问题咨询与反馈
-description: 当您在使用CANNLab时，有问题需要咨询或者缺陷需要反馈时，请使用此模板。
+description: 当您在使用CANNLab时，有问题需要咨询或者缺陷需要反馈时，请使用此模板（实例被删除/无法启动等环境异常请用「CANNLab环境与实例异常」模板；卡数/规格缺失或白名单申请请用「CANNLab资源规格与白名单申请」模板）。
 title: "[CANNLab]: "
 labels: [""]
 type: "咨询"

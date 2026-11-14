@@ -1,0 +1,106 @@
+name: CANNLab环境与实例异常
+description: 当您的CANNLab云开发实例被删除/回收、无法启动或环境状态异常时，请使用此模板（一般性使用咨询请用「CANNLab问题咨询与反馈」模板）。
+title: "[CANNLab异常]: "
+labels: [""]
+type: "缺陷"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! 为了避免多轮澄清，请尽量完整填写以下结构化信息。
+        平台已知会导致实例不可见的场景（供自查，不影响后续提交）：
+        1. 启航营/CANN算子挑战赛等活动资源会**定期清理**；
+        2. 2026年7月前创建的实例因平台系统升级仍留在**老环境**，新入口不可见。
+        如属于以上场景，可在问题描述中注明，处理会更快。
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: 问题类型 / Issue Type (Mandatory / 必填)
+      options:
+        - 实例被自动删除/回收
+        - 实例无法启动
+        - 实例数据或配置丢失
+        - 其他环境异常
+    validations:
+      required: true
+  - type: dropdown
+    id: chip_type
+    attributes:
+      label: 芯片/环境规格 / Chip Type (Mandatory / 必填)
+      description: 申请环境时选择的规格
+      options:
+        - A2
+        - A3
+        - A5 (Atlas 500 A2)
+        - 910B
+        - 950DT
+        - 其他/不记得
+    validations:
+      required: true
+  - type: input
+    id: env_name
+    attributes:
+      label: 开发环境名称或实例ID / Environment Name or Instance ID (Mandatory / 必填)
+      description: 控制台「云开发环境」列表中的环境名称或实例标识，便于平台侧定位（可截图）
+      placeholder: 例如：cannlab-a2-xxxx
+    validations:
+      required: true
+  - type: input
+    id: last_used
+    attributes:
+      label: 最后一次正常使用的日期 / Last Used Date (Mandatory / 必填)
+      description: 具体到日期（"时间长了"无法用于界定闲置回收场景）
+      placeholder: 例如：2026-11-05
+    validations:
+      required: true
+  - type: input
+    id: found_date
+    attributes:
+      label: 发现问题的日期 / Issue Found Date (Mandatory / 必填)
+      placeholder: 例如：2026-11-08
+    validations:
+      required: true
+  - type: dropdown
+    id: recycle_notice
+    attributes:
+      label: 是否收到过实例回收/删除通知 / Recycle Notice Received (Mandatory / 必填)
+      options:
+        - 是（邮件通知）
+        - 是（站内信/短信）
+        - 否
+        - 不确定
+    validations:
+      required: true
+  - type: dropdown
+    id: activity_resource
+    attributes:
+      label: 资源来源 / Resource Origin (Mandatory / 必填)
+      description: 活动资源存在定期清理机制
+      options:
+        - 启航营资源
+        - CANN算子挑战赛资源
+        - 普通申请使用
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: Describe the current behavior / 问题描述 (Mandatory / 必填)
+      description: 发生了什么，以及发现前后您的操作记录（如重启实例、变更配置等）
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Describe the expected behavior / 预期结果 (Mandatory / 必填)
+      description: 您期望的正确行为是什么
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Related log / screenshot / 日志 / 截图 (Optional / 选填)
+      description: 控制台截图、通知截图、实例列表截图等
+    validations:
+      required: false

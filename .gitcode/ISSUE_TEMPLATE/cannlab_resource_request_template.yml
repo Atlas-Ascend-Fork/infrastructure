@@ -1,0 +1,85 @@
+name: CANNLab资源规格与白名单申请
+description: 当申请或新建CANNLab环境时卡数/规格选项缺失、算力资源受限需开白名单试点时，请使用此模板（实例被删除或无法启动请用「CANNLab环境与实例异常」模板，一般性使用咨询请用「CANNLab问题咨询与反馈」模板）。
+title: "[CANNLab资源]: "
+labels: [""]
+type: "需求"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! 多卡（如8卡）等高规格资源需单独开白名单试点，
+        **使用场景与负载描述**是审批的核心依据，请如实、具体填写，可显著减少澄清轮次。
+  - type: dropdown
+    id: issue_type
+    attributes:
+      label: 问题类型 / Issue Type (Mandatory / 必填)
+      options:
+        - 卡数选项缺失（如无8卡选项）
+        - 规格/模板不可选
+        - 算力时长不足
+        - 白名单试点申请
+        - 其他资源问题
+    validations:
+      required: true
+  - type: dropdown
+    id: desired_spec
+    attributes:
+      label: 期望规格 / Desired Spec (Mandatory / 必填)
+      options:
+        - 单卡
+        - 2卡
+        - 4卡
+        - 8卡
+        - 16卡及以上
+        - 其他
+    validations:
+      required: true
+  - type: input
+    id: current_options
+    attributes:
+      label: 当前页面可选规格 / Currently Available Options (Mandatory / 必填)
+      description: 新建环境页面实际可选的卡数/规格（截图可附在末尾截图栏）
+      placeholder: 例如：仅单卡可选
+    validations:
+      required: true
+  - type: dropdown
+    id: chip_type
+    attributes:
+      label: 芯片/环境规格 / Chip Type (Mandatory / 必填)
+      options:
+        - A2
+        - A3
+        - A5 (Atlas 500 A2)
+        - 910B
+        - 950DT
+        - 其他/不记得
+    validations:
+      required: true
+  - type: input
+    id: env_name
+    attributes:
+      label: 已有环境名称 / Existing Environment Name (Optional / 选填)
+      description: 如尚未创建环境可留空
+      placeholder: 例如：cannlab-a2-xxxx
+  - type: textarea
+    id: workload
+    attributes:
+      label: 使用场景与负载描述 / Use Case and Workload (Mandatory / 必填)
+      description: 多卡白名单按此评审，请说明：用途（科研/教学/工程）、模型与规模（如 qwen 7B RL 训练）、预计卡时与周期
+      placeholder: 例如：学生科研，qwen3 8B 的 RL 训练与推理，预计每周约 40 卡时，周期一学期
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Describe the expected behavior / 预期结果 (Mandatory / 必填)
+      description: 您期望的正确行为是什么（如：新建页应出现 8 卡选项）
+    validations:
+      required: true
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Related screenshot / 相关截图 (Optional / 选填)
+      description: 新建环境页面、控制台规格列表等截图
+    validations:
+      required: false
