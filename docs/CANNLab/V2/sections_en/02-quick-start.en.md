@@ -45,7 +45,6 @@ After the environment is created successfully, click **"Connect"** and select a 
 |:---|:---|:---|
 | **WebIDE** | Lightweight development, cross-device use | Open directly in browser, no software installation required |
 | **Visual Studio Code** | Heavy development, prefer local editor | Requires plugins for connecting to the cloud development environment |
-|
 
 #### 2.2.2.1 WebIDE Connection
 
