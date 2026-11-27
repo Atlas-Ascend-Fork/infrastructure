@@ -1,5 +1,15 @@
 ## 8.1 Version History
 
+### November 2026
+
+- **[2026/11/09]** Version 1107 released with the following features:
+  - Environment management supports "restart": resources are not released during restart, enabling second-level self-service recovery after an "abnormal" environment status
+  - Environment management provides environment "collaboration": supports environment sharing and collaborative use via WebIDE access, with up to 5 users
+  - Added idle detection in the image: automatic shutdown after 3 days of inactivity for CPU environments and 30 minutes for NPU environments
+  - Added the "CANN Resource Monitor" plugin in the image: monitors CPU, memory, and disk of the environment container, with pop-up alerts when thresholds are exceeded to prevent environment failures caused by resource overload
+  - Optimized slow downloads of plugins such as CANNWork and Ascend C Toolkits in the WebIDE environment, enabling minute-level updates
+  - Limited single-file upload and download sizes in the WebIDE environment (max 80M for download, max 50M for upload)
+
 ### October 2026
 
 - **[2026/10/20]** Version 1030 released with the following features:
